@@ -65,6 +65,7 @@ dependencies {
 
     // Compose
     implementation(platform(libs.androidx.compose.bom))
+implementation("androidx.compose.material3:material3:1.5.0-alpha27")   
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
