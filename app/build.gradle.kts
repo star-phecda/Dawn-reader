@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.emptycastle.novery"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         // Intentionally retained for local data continuity with the original app.
