@@ -26,6 +26,8 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -82,6 +84,7 @@ import com.emptycastle.novery.ui.theme.DawnCyan
 import com.emptycastle.novery.ui.theme.DawnNavy
 import com.emptycastle.novery.ui.theme.DawnPanel
 import com.emptycastle.novery.ui.theme.DawnViolet
+import com.emptycastle.novery.ui.theme.DawnMagenta
 import com.emptycastle.novery.ui.theme.NoveryTheme
 import com.emptycastle.novery.util.calculateGridColumns
 
