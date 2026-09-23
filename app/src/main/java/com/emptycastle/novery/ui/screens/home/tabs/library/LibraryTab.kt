@@ -116,11 +116,18 @@ fun LibraryTab(
                 viewModel.hideActionSheet()
                 onNavigateToDetails(data.novel.url, data.novel.apiName)
             },
-            onContinueReading = {
+     onContinueReading = {
     viewModel.hideActionSheet()
     LibraryStateHolder.getLibraryItem(data.novel.url)?.lastReadPosition?.let {
-        onNavigateToReader(it.chapterUrl, data.novel.url, data.novel.apiName)
-    } ?: onNavigateToDetails(data.novel.url, data.novel.apiName)
+        onNavigateToReader(
+            it.chapterUrl,
+            data.novel.url,
+            data.novel.apiName
+        )
+    } ?: onNavigateToDetails(
+        data.novel.url,
+        data.novel.apiName
+    )
 },
             },
             onAddToLibrary = null,
