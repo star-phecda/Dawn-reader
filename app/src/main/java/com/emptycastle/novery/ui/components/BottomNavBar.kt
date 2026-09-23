@@ -1,14 +1,14 @@
 package com.emptycastle.novery.ui.components
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -35,17 +35,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.animation.animateContentSize
+import com.emptycastle.novery.ui.theme.DawnBlue
+import com.emptycastle.novery.ui.theme.DawnCyan
+import com.emptycastle.novery.ui.theme.DawnMagenta
+import com.emptycastle.novery.ui.theme.DawnNavy
+import com.emptycastle.novery.ui.theme.DawnViolet
 
-/**
- * Navigation item data used by Dawn's floating navigation bar.
- */
+/** Dawn's signature floating expressive navigation capsule. */
 data class BottomNavItem(
     val route: String,
     val label: String,
@@ -61,10 +63,6 @@ val bottomNavItems = listOf(
     BottomNavItem("more", "More", Icons.Filled.MoreHoriz, Icons.Outlined.MoreHoriz)
 )
 
-/**
- * Floating Material 3 Expressive-inspired navigation capsule.
- * The selected destination expands to reveal its label while inactive items remain compact.
- */
 @Composable
 fun NoveryBottomNavBar(
     selectedRoute: String,
@@ -72,32 +70,25 @@ fun NoveryBottomNavBar(
     modifier: Modifier = Modifier
 ) {
     val normalizedSelectedRoute = selectedRoute.removePrefix("tab_")
-
     Surface(
-        modifier = modifier
-            .fillMaxWidth(0.97f)
-            .widthIn(max = 520.dp)
-            .animateContentSize(
-                animationSpec = spring(
-                    dampingRatio = 0.82f,
-                    stiffness = Spring.StiffnessLow
-                )
-            ),
+        modifier = modifier.widthIn(max = 430.dp),
         shape = RoundedCornerShape(30.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.97f),
+        color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.96f),
         contentColor = MaterialTheme.colorScheme.onSurface,
         shadowElevation = 12.dp,
-        tonalElevation = 5.dp
+        tonalElevation = 4.dp
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(3.dp),
+            modifier = Modifier
+                .padding(horizontal = 7.dp, vertical = 7.dp)
+                .animateContentSize(animationSpec = spring(stiffness = 500f)),
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             bottomNavItems.forEach { item ->
-                BottomNavItemView(
+                DawnNavItem(
                     item = item,
-                    isSelected = item.route == normalizedSelectedRoute,
+                    selected = item.route == normalizedSelectedRoute,
                     onClick = { onItemSelected(item.route) }
                 )
             }
@@ -106,72 +97,56 @@ fun NoveryBottomNavBar(
 }
 
 @Composable
-private fun BottomNavItemView(
+private fun DawnNavItem(
     item: BottomNavItem,
-    isSelected: Boolean,
+    selected: Boolean,
     onClick: () -> Unit
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
-
-    val iconColor by animateColorAsState(
-        targetValue = if (isSelected) {
-            MaterialTheme.colorScheme.onPrimaryContainer
-        } else {
-            MaterialTheme.colorScheme.onSurfaceVariant
-        },
-        animationSpec = spring(stiffness = Spring.StiffnessLow),
-        label = "nav_icon_color"
-    )
-
-    val containerColor by animateColorAsState(
-        targetValue = if (isSelected) {
-            MaterialTheme.colorScheme.primaryContainer
-        } else {
-            Color.Transparent
-        },
-        animationSpec = spring(stiffness = Spring.StiffnessLow),
-        label = "nav_container_color"
+    val source = remember { MutableInteractionSource() }
+    val tint by animateColorAsState(
+        targetValue = if (selected) DawnNavy else MaterialTheme.colorScheme.onSurfaceVariant,
+        animationSpec = spring(stiffness = 650f),
+        label = "dawn_nav_tint"
     )
 
     Surface(
-        modifier = Modifier
-            .clip(RoundedCornerShape(22.dp))
-            .clickableWithoutRipple(
-                interactionSource = interactionSource,
-                onClick = onClick
-            ),
-        shape = RoundedCornerShape(22.dp),
-        color = containerColor
+        modifier = Modifier.clickable(
+            interactionSource = source,
+            indication = null,
+            onClick = onClick
+        ),
+        shape = RoundedCornerShape(23.dp),
+        color = Color.Transparent
     ) {
         Row(
             modifier = Modifier
-                .animateContentSize(
-                    animationSpec = spring(
-                        dampingRatio = 0.82f,
-                        stiffness = Spring.StiffnessLow
-                    )
+                .then(
+                    if (selected) {
+                        Modifier.background(
+                            Brush.horizontalGradient(
+                                listOf(DawnCyan, DawnBlue, DawnMagenta)
+                            ),
+                            RoundedCornerShape(23.dp)
+                        )
+                    } else Modifier
                 )
-                .padding(horizontal = if (isSelected) 15.dp else 13.dp, vertical = 10.dp),
-            horizontalArrangement = Arrangement.spacedBy(if (isSelected) 8.dp else 0.dp),
+                .padding(horizontal = if (selected) 15.dp else 12.dp, vertical = 10.dp),
+            horizontalArrangement = Arrangement.spacedBy(if (selected) 7.dp else 0.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                imageVector = if (isSelected) item.selectedIcon else item.unselectedIcon,
+                imageVector = if (selected) item.selectedIcon else item.unselectedIcon,
                 contentDescription = item.label,
-                modifier = Modifier.size(23.dp),
-                tint = iconColor
+                modifier = Modifier.size(22.dp),
+                tint = tint
             )
-
-            AnimatedContent(
-                targetState = isSelected,
-                label = "nav_label"
-            ) { selected ->
-                if (selected) {
+            AnimatedContent(targetState = selected, label = "dawn_nav_label") { showLabel ->
+                if (showLabel) {
                     Text(
                         text = item.label,
-                        style = MaterialTheme.typography.labelLarge.copy(fontSize = 13.sp),
-                        fontWeight = FontWeight.SemiBold,
-                        color = iconColor,
+                        color = tint,
+                        style = MaterialTheme.typography.labelLarge.copy(fontSize = 12.sp),
+                        fontWeight = FontWeight.Bold,
                         maxLines = 1
                     )
                 }
@@ -180,23 +155,6 @@ private fun BottomNavItemView(
     }
 }
 
-/**
- * Avoid ripple noise in the persistent floating nav while preserving accessibility semantics.
- */
-private fun Modifier.clickableWithoutRipple(
-    interactionSource: MutableInteractionSource,
-    onClick: () -> Unit
-): Modifier = this.then(
-    Modifier.clickable(
-        interactionSource = interactionSource,
-        indication = null,
-        onClick = onClick
-    )
-)
-
-/**
- * Keeps the capsule floating above the system gesture area.
- */
 @Composable
 fun NoveryBottomNavBarWithInsets(
     selectedRoute: String,
@@ -206,7 +164,7 @@ fun NoveryBottomNavBarWithInsets(
     Box(
         modifier = modifier
             .navigationBarsPadding()
-            .padding(horizontal = 12.dp, vertical = 10.dp),
+            .padding(horizontal = 12.dp, vertical = 9.dp),
         contentAlignment = Alignment.Center
     ) {
         NoveryBottomNavBar(

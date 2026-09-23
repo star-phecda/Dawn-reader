@@ -4,9 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.spring
@@ -21,7 +19,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -54,8 +51,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
-import androidx.compose.ui.draw.BlurredEdgeTreatment
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.draw.shadow
@@ -208,27 +203,10 @@ private fun ComfortableNovelCard(
 ) {
     val haptic = LocalHapticFeedback.current
     val interactionSource = remember { MutableInteractionSource() }
-    val isPressed by interactionSource.collectIsPressedAsState()
-
-    val scale by animateFloatAsState(
-        targetValue = if (isPressed) NovelCardTokens.Animation.PressScale else 1f,
-        animationSpec = spring(stiffness = Spring.StiffnessHigh),
-        label = "card_scale"
-    )
-
-    val elevation by animateDpAsState(
-        targetValue = when {
-            isPressed -> NovelCardTokens.Elevation.Pressed
-            isSelected -> 6.dp
-            else -> NovelCardTokens.Elevation.Resting
-        },
-        animationSpec = spring(stiffness = Spring.StiffnessMedium),
-        label = "card_elevation"
-    )
+    val elevation = if (isSelected) 4.dp else 1.dp
 
     Card(
         modifier = modifier
-            .graphicsLayer { scaleX = scale; scaleY = scale }
             .then(
                 if (isSelected) {
                     Modifier.border(
@@ -342,24 +320,11 @@ private fun CompactNovelCard(
 ) {
     val haptic = LocalHapticFeedback.current
     val interactionSource = remember { MutableInteractionSource() }
-    val isPressed by interactionSource.collectIsPressedAsState()
-
-    val scale by animateFloatAsState(
-        targetValue = if (isPressed) NovelCardTokens.Animation.PressScale else 1f,
-        animationSpec = spring(stiffness = Spring.StiffnessHigh),
-        label = "card_scale"
-    )
-
-    val elevation by animateDpAsState(
-        targetValue = if (isPressed) NovelCardTokens.Elevation.Pressed else NovelCardTokens.Elevation.Resting,
-        animationSpec = spring(stiffness = Spring.StiffnessMedium),
-        label = "card_elevation"
-    )
+    val elevation = if (isSelected) 4.dp else 1.dp
 
     Card(
         modifier = modifier
             .aspectRatio(NovelCardTokens.AspectRatio)
-            .graphicsLayer { scaleX = scale; scaleY = scale }
             .then(
                 if (isSelected) {
                     Modifier.border(
@@ -707,9 +672,8 @@ private fun StatusBadge(
             ) {
                 Box(
                     modifier = Modifier
-                        .size(12.dp)
-                        .blur(4.dp, BlurredEdgeTreatment.Unbounded)
-                        .background(statusColor.copy(alpha = 0.5f), CircleShape)
+                        .size(14.dp)
+                        .background(statusColor.copy(alpha = 0.22f), CircleShape)
                 )
                 Box(
                     modifier = Modifier
@@ -933,49 +897,8 @@ private fun CompactSkeleton(modifier: Modifier = Modifier) {
 // Shimmer Effect
 // ══════════════════════════════════════════════════════════════════════════════
 
-fun Modifier.shimmerEffect(): Modifier = composed {
-    var size by remember { mutableStateOf(IntSize.Zero) }
-
-    val transition = rememberInfiniteTransition(label = "shimmer")
-    val translateAnim by transition.animateFloat(
-        initialValue = 0f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(
-                durationMillis = NovelCardTokens.Animation.ShimmerDuration,
-                easing = LinearEasing
-            ),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "shimmer_translate"
-    )
-
-    val shimmerColors = listOf(
-        MaterialTheme.colorScheme.surfaceContainerHighest,
-        MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.7f),
-        MaterialTheme.colorScheme.surfaceContainerHighest
-    )
-
-    this
-        .onGloballyPositioned { size = it.size }
-        .drawWithCache {
-            val width = size.width.toFloat()
-            val height = size.height.toFloat()
-            val shimmerWidth = width * 0.4f
-            val startX = -shimmerWidth + (width + shimmerWidth * 2) * translateAnim
-
-            val brush = Brush.linearGradient(
-                colors = shimmerColors,
-                start = Offset(startX, 0f),
-                end = Offset(startX + shimmerWidth, height)
-            )
-
-            onDrawBehind {
-                drawRect(brush)
-            }
-        }
-}
-
+fun Modifier.shimmerEffect(): Modifier =
+    this.background(MaterialTheme.colorScheme.surfaceContainerHigh)
 @Composable
 private fun Modifier.border(
     width: Dp,

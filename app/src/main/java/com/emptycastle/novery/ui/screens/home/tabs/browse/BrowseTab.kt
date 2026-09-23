@@ -136,36 +136,9 @@ import kotlinx.coroutines.launch
 // Shimmer Effect Extension
 // ============================================================================
 
-fun Modifier.shimmerEffect(): Modifier = composed {
-    val transition = rememberInfiniteTransition(label = "shimmer")
-    val translateAnimation by transition.animateFloat(
-        initialValue = 0f,
-        targetValue = 1000f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 1200, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "shimmer_translate"
-    )
+fun Modifier.shimmerEffect(): Modifier =
+    this.background(MaterialTheme.colorScheme.surfaceContainerHigh)
 
-    val shimmerColors = listOf(
-        MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.9f),
-        MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.5f),
-        MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.9f)
-    )
-
-    this.drawWithContent {
-        drawContent()
-        drawRect(
-            brush = Brush.linearGradient(
-                colors = shimmerColors,
-                start = Offset(translateAnimation - 500f, 0f),
-                end = Offset(translateAnimation, 0f)
-            ),
-            blendMode = BlendMode.SrcAtop
-        )
-    }
-}
 
 // ============================================================================
 // Provider Colors

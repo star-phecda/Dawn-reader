@@ -96,7 +96,7 @@ fun SplashScreen(visible: Boolean = true) {
             }
 
             Text(
-                text = "v1.0.2",
+                text = "0.2.0",
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier

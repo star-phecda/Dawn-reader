@@ -1,6 +1,7 @@
 package com.emptycastle.novery.ui.screens.home
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -9,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -16,6 +18,9 @@ import com.emptycastle.novery.domain.model.AppSettings
 import com.emptycastle.novery.recommendation.TagNormalizer
 import com.emptycastle.novery.ui.components.NoveryBottomNavBarWithInsets
 import com.emptycastle.novery.ui.navigation.HomeTabs
+import com.emptycastle.novery.ui.theme.DawnBlue
+import com.emptycastle.novery.ui.theme.DawnMagenta
+import com.emptycastle.novery.ui.theme.DawnViolet
 import com.emptycastle.novery.ui.navigation.rememberTabNavigationState
 import com.emptycastle.novery.ui.screens.home.shared.LibraryStateHolder
 import com.emptycastle.novery.ui.screens.home.tabs.browse.BrowseTab
@@ -79,6 +84,16 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .background(
+                    Brush.radialGradient(
+                        colors = listOf(
+                            DawnViolet.copy(alpha = 0.055f),
+                            DawnBlue.copy(alpha = 0.025f),
+                            androidx.compose.ui.graphics.Color.Transparent
+                        ),
+                        radius = 900f
+                    )
+                )
         ) {
             NavHost(
                 navController = tabNavState.navController,

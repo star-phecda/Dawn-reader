@@ -2,58 +2,95 @@ package com.emptycastle.novery.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-/** Dawn's warm sunrise palette and deep reading tones. */
-val Dawn50 = Color(0xFFFFF9F5)
-val Dawn100 = Color(0xFFFFEDE5)
-val Dawn200 = Color(0xFFFFD8CA)
-val Dawn300 = Color(0xFFFFBFA9)
-val Dawn400 = Color(0xFFFF9C7C)
-val Dawn500 = Color(0xFFFF7B5F)
-val Dawn600 = Color(0xFFE9684F)
-val Dawn700 = Color(0xFFC94F3D)
-val Dawn800 = Color(0xFFA33F33)
-val Dawn900 = Color(0xFF7F332D)
+// Dawn — deep night + electric sunrise palette.
+val DawnNavy = Color(0xFF060A18)
+val DawnNavy2 = Color(0xFF0A1023)
+val DawnNavy3 = Color(0xFF10172E)
+val DawnPanel = Color(0xFF111A33)
+val DawnPanelHi = Color(0xFF17213F)
 
-val Lavender300 = Color(0xFFB9ACFF)
-val Lavender400 = Color(0xFF9C8DFF)
-val Lavender500 = Color(0xFF806DFF)
-val Lavender700 = Color(0xFF5C4CC0)
+val DawnCyan = Color(0xFF5CE7FF)
+val DawnBlue = Color(0xFF62A8FF)
+val DawnViolet = Color(0xFF8F7CFF)
+val DawnMagenta = Color(0xFFFF65C7)
+val DawnPink = Color(0xFFFF4FA3)
+val DawnLavender = Color(0xFFB7A8FF)
 
-val SunGold300 = Color(0xFFFFD37A)
-val SunGold500 = Color(0xFFF4B942)
+// Backwards-compatible names used by the original codebase.
+val Dawn50 = Color(0xFFF8FAFF)
+val Dawn100 = Color(0xFFE8EEFF)
+val Dawn200 = Color(0xFFD2DFFF)
+val Dawn300 = Color(0xFFB8C9FF)
+val Dawn400 = DawnCyan
+val Dawn500 = DawnMagenta
+val Dawn600 = DawnPink
+val Dawn700 = Color(0xFFD83D8D)
+val Dawn800 = Color(0xFF9A2D67)
+val Dawn900 = Color(0xFF671D48)
 
-val Ink50 = Color(0xFFF8F6FA)
-val Ink100 = Color(0xFFEDEAF1)
-val Ink200 = Color(0xFFD9D3E0)
-val Ink300 = Color(0xFFB7AFC0)
-val Ink400 = Color(0xFF918899)
-val Ink500 = Color(0xFF706778)
-val Ink600 = Color(0xFF564E5E)
-val Ink700 = Color(0xFF413A49)
-val Ink800 = Color(0xFF2C2732)
-val Ink900 = Color(0xFF1E1A22)
-val Ink950 = Color(0xFF131016)
+val Lavender300 = DawnLavender
+val Lavender400 = DawnViolet
+val Lavender500 = DawnViolet
+val Lavender700 = Color(0xFF5F53BE)
 
-val Success = Color(0xFF4DAE7B)
-val SuccessLight = Color(0xFF74C89A)
-val Error = Color(0xFFD95C63)
-val ErrorLight = Color(0xFFE98489)
+val SunGold300 = Color(0xFFFFDB82)
+val SunGold500 = Color(0xFFFFBE55)
+
+val Ink50 = Color(0xFFF7F8FC)
+val Ink100 = Color(0xFFE9ECF5)
+val Ink200 = Color(0xFFD2D7E5)
+val Ink300 = Color(0xFFB7BDCE)
+val Ink400 = Color(0xFF969EB4)
+val Ink500 = Color(0xFF737C95)
+val Ink600 = Color(0xFF59627B)
+val Ink700 = Color(0xFF404960)
+val Ink800 = DawnPanel
+val Ink900 = Color(0xFF0D1325)
+val Ink950 = DawnNavy
+
+// Original palette aliases retained so non-redesigned utility screens keep compiling.
+val Zinc50 = Color(0xFFF7F8FC)
+val Zinc100 = Color(0xFFE9ECF5)
+val Zinc200 = Color(0xFFD2D7E5)
+val Zinc300 = Color(0xFFBEC5D7)
+val Zinc400 = Color(0xFF989FB5)
+val Zinc500 = Color(0xFF767F96)
+val Zinc600 = Color(0xFF5A637A)
+val Zinc700 = Color(0xFF444D63)
+val Zinc800 = Color(0xFF2C354B)
+val Zinc900 = Color(0xFF171F34)
+val Zinc950 = DawnNavy
+val Orange50 = Color(0xFFFFEFF9)
+val Orange100 = Color(0xFFFFD9EE)
+val Orange200 = Color(0xFFFFB8E0)
+val Orange300 = Color(0xFFFF93D1)
+val Orange400 = DawnMagenta
+val Orange500 = DawnMagenta
+val Orange600 = DawnPink
+val Orange700 = Color(0xFFD83D8D)
+val Orange800 = Color(0xFF9A2D67)
+val Orange900 = Color(0xFF671D48)
+
+val Success = Color(0xFF56E3A1)
+val SuccessLight = Color(0xFF8AF0C1)
+val Error = Color(0xFFFF6B8A)
+val ErrorLight = Color(0xFFFF9AAF)
 val Warning = SunGold500
-val Info = Color(0xFF6F92E8)
+val Info = DawnBlue
 
-val StatusReading = Info
-val StatusSpicy = Dawn500
+val StatusReading = DawnBlue
+val StatusSpicy = DawnMagenta
 val StatusCompleted = Success
 val StatusOnHold = Warning
-val StatusPlanToRead = Lavender500
+val StatusPlanToRead = DawnViolet
 val StatusDROPPED = Error
 
-val ReaderDarkBackground = Ink950
+val ReaderDarkBackground = DawnNavy
 val ReaderDarkText = Ink100
 val ReaderDarkSecondary = Ink400
-val ReaderLightBackground = Dawn50
-val ReaderLightText = Ink900
-val ReaderLightSecondary = Ink600
+val ReaderLightBackground = Color(0xFFF8FAFF)
+val ReaderLightText = Color(0xFF12192C)
+val ReaderLightSecondary = Color(0xFF5D6578)
 val ReaderSepiaBackground = Color(0xFFF4ECD8)
 val ReaderSepiaText = Color(0xFF5B4636)
 val ReaderSepiaSecondary = Color(0xFF8B7355)

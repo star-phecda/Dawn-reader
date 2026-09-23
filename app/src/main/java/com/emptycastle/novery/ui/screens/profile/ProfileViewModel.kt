@@ -378,7 +378,7 @@ class ProfileViewModel : ViewModel() {
             }
 
             appendLine()
-            appendLine("Reading with Novery 📱")
+            appendLine("Reading with Dawn 📱")
         }
     }
 

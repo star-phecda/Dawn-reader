@@ -4,7 +4,10 @@ import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.MaterialExpressiveTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MotionScheme
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -13,6 +16,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
@@ -24,38 +29,38 @@ import com.emptycastle.novery.domain.model.ThemeMode
  * Dark color scheme - Primary theme for Novery
  */
 private val DarkColorScheme = darkColorScheme(
-    primary = Dawn400,
-    onPrimary = Ink950,
-    primaryContainer = Color(0xFF5F2D27),
-    onPrimaryContainer = Dawn100,
-    secondary = Lavender300,
-    onSecondary = Ink950,
-    secondaryContainer = Color(0xFF3A3452),
-    onSecondaryContainer = Color(0xFFEAE5FF),
-    tertiary = SunGold300,
-    onTertiary = Ink950,
-    tertiaryContainer = Color(0xFF4A3B22),
-    onTertiaryContainer = Color(0xFFFFE7B0),
-    background = Ink950,
+    primary = DawnCyan,
+    onPrimary = DawnNavy,
+    primaryContainer = Color(0xFF163B50),
+    onPrimaryContainer = DawnCyan,
+    secondary = DawnMagenta,
+    onSecondary = DawnNavy,
+    secondaryContainer = Color(0xFF4A1F43),
+    onSecondaryContainer = Color(0xFFFFBCE8),
+    tertiary = DawnViolet,
+    onTertiary = DawnNavy,
+    tertiaryContainer = Color(0xFF29234F),
+    onTertiaryContainer = Color(0xFFD4CCFF),
+    background = DawnNavy,
     onBackground = Ink100,
-    surface = Color(0xFF18141B),
+    surface = DawnNavy2,
     onSurface = Ink100,
-    surfaceVariant = Color(0xFF2B2630),
+    surfaceVariant = DawnNavy3,
     onSurfaceVariant = Ink300,
-    surfaceContainerLowest = Ink950,
-    surfaceContainerLow = Color(0xFF18141B),
-    surfaceContainer = Color(0xFF211C25),
-    surfaceContainerHigh = Color(0xFF2A2430),
-    surfaceContainerHighest = Color(0xFF352E3A),
+    surfaceContainerLowest = DawnNavy,
+    surfaceContainerLow = Color(0xFF0B1228),
+    surfaceContainer = DawnPanel,
+    surfaceContainerHigh = DawnPanelHi,
+    surfaceContainerHighest = Color(0xFF202B4B),
     inverseSurface = Ink100,
-    inverseOnSurface = Ink900,
-    inversePrimary = Dawn700,
+    inverseOnSurface = Color(0xFF111729),
+    inversePrimary = Color(0xFF00677B),
     error = Error,
     onError = Color.White,
-    errorContainer = Color(0xFF5C2027),
-    onErrorContainer = Color(0xFFFFDAD9),
-    outline = Ink600,
-    outlineVariant = Ink700,
+    errorContainer = Color(0xFF551D2D),
+    onErrorContainer = Color(0xFFFFB8C5),
+    outline = Color(0xFF384763),
+    outlineVariant = Color(0xFF27344D),
     scrim = Color.Black
 )
 
@@ -76,35 +81,35 @@ private val AmoledDarkColorScheme = DarkColorScheme.copy(
  * Light color scheme
  */
 private val LightColorScheme = lightColorScheme(
-    primary = Dawn600,
+    primary = Color(0xFF006B7A),
     onPrimary = Color.White,
-    primaryContainer = Dawn100,
-    onPrimaryContainer = Dawn900,
-    secondary = Lavender500,
+    primaryContainer = Color(0xFFC4F3FA),
+    onPrimaryContainer = Color(0xFF00434E),
+    secondary = Color(0xFF9E2675),
     onSecondary = Color.White,
-    secondaryContainer = Color(0xFFEAE5FF),
-    onSecondaryContainer = Color(0xFF3B2E70),
-    tertiary = SunGold500,
-    onTertiary = Ink900,
-    tertiaryContainer = Color(0xFFFFEDC2),
-    onTertiaryContainer = Color(0xFF5A4300),
-    background = Dawn50,
-    onBackground = Ink900,
-    surface = Color.White,
-    onSurface = Ink900,
-    surfaceVariant = Dawn100,
-    onSurfaceVariant = Ink600,
+    secondaryContainer = Color(0xFFFFD8EC),
+    onSecondaryContainer = Color(0xFF6C094C),
+    tertiary = Color(0xFF6253C7),
+    onTertiary = Color.White,
+    tertiaryContainer = Color(0xFFE7E2FF),
+    onTertiaryContainer = Color(0xFF2B236F),
+    background = Color(0xFFF7F8FF),
+    onBackground = Color(0xFF11172A),
+    surface = Color(0xFFFFFFFF),
+    onSurface = Color(0xFF11172A),
+    surfaceVariant = Color(0xFFE8EBF7),
+    onSurfaceVariant = Color(0xFF565E73),
     surfaceContainerLowest = Color.White,
-    surfaceContainerLow = Color(0xFFFFF7F3),
-    surfaceContainer = Color(0xFFFFEFEA),
-    surfaceContainerHigh = Color(0xFFFFE6DE),
-    surfaceContainerHighest = Color(0xFFFFDCD1),
+    surfaceContainerLow = Color(0xFFF0F2FB),
+    surfaceContainer = Color(0xFFE9ECF8),
+    surfaceContainerHigh = Color(0xFFE0E5F4),
+    surfaceContainerHighest = Color(0xFFD7DDEF),
     error = Error,
     onError = Color.White,
-    errorContainer = Color(0xFFFFDAD9),
-    onErrorContainer = Color(0xFF6A2028),
-    outline = Dawn300,
-    outlineVariant = Dawn200
+    errorContainer = Color(0xFFFFD9E1),
+    onErrorContainer = Color(0xFF6A1A2D),
+    outline = Color(0xFF8E96AC),
+    outlineVariant = Color(0xFFC7CCDA)
 )
 
 /**
@@ -260,8 +265,16 @@ private fun Color.compositeOver(background: Color): Color {
     }
 }
 
+private val DawnShapes = Shapes(
+    extraSmall = RoundedCornerShape(10.dp),
+    small = RoundedCornerShape(16.dp),
+    medium = RoundedCornerShape(22.dp),
+    large = RoundedCornerShape(28.dp),
+    extraLarge = RoundedCornerShape(34.dp)
+)
+
 /**
- * Main theme composable for Novery with settings support
+ * Main theme composable for Dawn with Material 3 Expressive motion and shapes.
  */
 @Composable
 fun NoveryTheme(
@@ -348,8 +361,10 @@ fun NoveryTheme(
 
     // Provide dimensions based on density
     ProvideDimensions(density = appSettings.uiDensity) {
-        MaterialTheme(
+        MaterialExpressiveTheme(
             colorScheme = colorScheme,
+            motionScheme = MotionScheme.expressive(),
+            shapes = DawnShapes,
             typography = NoveryTypography,
             content = content
         )

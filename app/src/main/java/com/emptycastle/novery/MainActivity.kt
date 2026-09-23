@@ -91,7 +91,7 @@ class MainActivity : ComponentActivity() {
                 AppLoadState.isLoading.set(false) // Exit system splash
 
                 // Show custom splash for a bit, then transition
-                delay(2000) // Show custom splash for 2 seconds
+                delay(850) // Keep startup branding brief; the app should feel immediate
                 showCustomSplash = false
             }
 

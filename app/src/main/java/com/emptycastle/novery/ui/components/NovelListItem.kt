@@ -1,13 +1,10 @@
 package com.emptycastle.novery.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -52,8 +49,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.BlurredEdgeTreatment
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.draw.shadow
@@ -597,12 +592,11 @@ private fun ListStatusDot(
             modifier = Modifier.padding(5.dp),
             contentAlignment = Alignment.Center
         ) {
-            // Glow effect
+            // Cheap halo effect; avoid per-card blur on low-end devices.
             Box(
                 modifier = Modifier
-                    .size(12.dp)
-                    .blur(4.dp, BlurredEdgeTreatment.Unbounded)
-                    .background(statusColor.copy(alpha = 0.5f), CircleShape)
+                    .size(14.dp)
+                    .background(statusColor.copy(alpha = 0.22f), CircleShape)
             )
             // Solid dot
             Box(
@@ -658,20 +652,8 @@ private fun ListNewChaptersBadge(
         }
     }
 
-    // Subtle pulse animation
-    val infiniteTransition = rememberInfiniteTransition(label = "badge_pulse")
-    val pulseAlpha by infiniteTransition.animateFloat(
-        initialValue = 0.85f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(800),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "pulse_alpha"
-    )
-
     Surface(
-        modifier = modifier.graphicsLayer { alpha = pulseAlpha },
+        modifier = modifier,
         shape = if (compact) CircleShape else RoundedCornerShape(6.dp),
         color = MaterialTheme.colorScheme.primary,
         shadowElevation = ListItemTokens.Elevation.Badge

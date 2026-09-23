@@ -257,15 +257,15 @@ private fun AppHeaderCard(currentVersion: String) {
         ) {
             Surface(
                 shape = CircleShape,
-                color = MaterialTheme.colorScheme.primaryContainer,
-                modifier = Modifier.size(88.dp)
+                color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                modifier = Modifier.size(92.dp)
             ) {
                 Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                     Image(
-                        painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                        painter = painterResource(id = R.drawable.dawn_launcher_round),
                         contentDescription = "App logo",
-                        modifier = Modifier.size(56.dp),
-                        contentScale = ContentScale.Fit
+                        modifier = Modifier.size(78.dp),
+                        contentScale = ContentScale.Crop
                     )
                 }
             }

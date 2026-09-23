@@ -15,8 +15,8 @@ android {
         applicationId = "com.emptycastle.novery"
         minSdk = 26
         targetSdk = 36
-        versionCode = 3
-        versionName = "0.1.0"
+        versionCode = 4
+        versionName = "0.2.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -45,11 +45,6 @@ android {
         compose = true
     }
 
-    // Ensure the Compose compiler plugin version is set to match your Compose libraries
-    composeOptions {
-        // Pick a compiler extension version compatible with your Compose UI / Material versions
-        kotlinCompilerExtensionVersion = "1.5.3"
-    }
 }
 
 dependencies {
@@ -62,23 +57,19 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.1.1")
 
     // Kotlin Serialization
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
     // Compose
+    implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation("androidx.compose.material3:material3:1.4.0")
+    implementation("androidx.compose.material3:material3:1.5.0-alpha28")
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.34.0")
 
-    implementation("androidx.compose.foundation:foundation")
     implementation(libs.androidx.palette.ktx)
 
     implementation(libs.androidx.compose.foundation)
-    implementation("androidx.compose.foundation:foundation:1.7.0")
     // System UI Controller
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.34.0")
-
     // Navigation
     implementation("androidx.navigation:navigation-compose:2.8.4")
 
@@ -89,7 +80,6 @@ dependencies {
     // Room Database
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
-    implementation(libs.androidx.palette.ktx)
     implementation(libs.androidx.room.common.jvm)
     implementation(libs.androidx.adapters)
     implementation(libs.androidx.compose.animation)
@@ -105,8 +95,6 @@ dependencies {
 
     // Image Loading
     implementation("io.coil-kt:coil-compose:2.7.0")
-    implementation("androidx.compose.animation:animation:1.6.1")
-    implementation("androidx.compose.animation:animation-core:1.6.1")
 
     // EPUB Generation
     implementation("org.redundent:kotlin-xml-builder:1.9.1")
@@ -123,7 +111,6 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.7.1")
     implementation("com.google.android.material:material:1.12.0")
     implementation("sh.calvin.reorderable:reorderable:2.4.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
 
     // Icons
     implementation("androidx.compose.material:material-icons-extended:1.7.5")
