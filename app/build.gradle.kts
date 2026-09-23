@@ -83,14 +83,14 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
 
     // Room Database
-    implementation("androidx.room:room-runtime:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
-    implementation(libs.androidx.room.common.jvm)
-    implementation(libs.androidx.adapters)
-    implementation(libs.androidx.compose.animation)
-    implementation(libs.androidx.animation)
-    ksp("androidx.room:room-compiler:2.6.1")
-
+    // Room Database
+implementation("androidx.room:room-runtime:2.8.4")
+implementation("androidx.room:room-ktx:2.8.4")
+implementation(libs.androidx.room.common.jvm)   // already 2.8.4, leave as-is
+implementation(libs.androidx.adapters)
+implementation(libs.androidx.compose.animation)
+implementation(libs.androidx.animation)
+ksp("androidx.room:room-compiler:2.8.4")
     // Networking
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
