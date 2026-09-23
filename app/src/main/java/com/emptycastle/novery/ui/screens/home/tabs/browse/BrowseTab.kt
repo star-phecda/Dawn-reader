@@ -136,9 +136,9 @@ import kotlinx.coroutines.launch
 // Shimmer Effect Extension
 // ============================================================================
 
+@Composable
 fun Modifier.shimmerEffect(): Modifier =
     this.background(MaterialTheme.colorScheme.surfaceContainerHigh)
-
 
 // ============================================================================
 // Provider Colors
