@@ -63,7 +63,7 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation("androidx.compose.material3:material3:1.5.0-alpha28")
+    implementation("androidx.compose.material3:material3")
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.34.0")
 
     implementation(libs.androidx.palette.ktx)
