@@ -129,7 +129,7 @@ fun LibraryTab(
         data.novel.apiName
     )
 },
-            },
+           
             onAddToLibrary = null,
             onRemoveFromLibrary = { viewModel.removeFromLibrary(data.novel.url) },
             onRemoveFromHistory = null,
