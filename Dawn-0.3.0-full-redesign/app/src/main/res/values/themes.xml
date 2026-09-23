@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.Dawn" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.Dawn.Splash" parent="Theme.SplashScreen">
+        <!-- App logo shown during system splash -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/dawn_launcher_round</item>
+        <!-- Background color behind the logo while splash is visible -->
+        <item name="windowSplashScreenBackground">@color/dawn_splash</item>
+        <!-- Also set windowBackground to avoid flicker on some devices -->
+        <item name="android:windowBackground">@color/dawn_splash</item>
+        <!-- Make the entry animation slightly more visible -->
+        <item name="windowSplashScreenAnimationDuration">700</item>
+        <!-- Theme to switch to after splash exit -->
+        <item name="postSplashScreenTheme">@style/Theme.Dawn</item>
+    </style>
+</resources>
