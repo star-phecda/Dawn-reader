@@ -74,6 +74,7 @@ import com.emptycastle.novery.R
 import com.emptycastle.novery.data.repository.LibraryItem
 import com.emptycastle.novery.domain.model.AppSettings
 import com.emptycastle.novery.domain.model.DisplayMode
+import com.emptycastle.novery.ui.screens.home.shared.LibraryStateHolder
 import com.emptycastle.novery.domain.model.LibraryFilter
 import com.emptycastle.novery.ui.components.DawnPill
 import com.emptycastle.novery.ui.components.DawnSectionHeader
