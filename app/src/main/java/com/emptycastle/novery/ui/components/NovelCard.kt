@@ -897,6 +897,7 @@ private fun CompactSkeleton(modifier: Modifier = Modifier) {
 // Shimmer Effect
 // ══════════════════════════════════════════════════════════════════════════════
 
+@Composable
 fun Modifier.shimmerEffect(): Modifier =
     this.background(MaterialTheme.colorScheme.surfaceContainerHigh)
 @Composable
