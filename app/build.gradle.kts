@@ -14,7 +14,7 @@ android {
         // Intentionally retained for local data continuity with the original app.
         applicationId = "com.emptycastle.novery"
         minSdk = 26
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 4
         versionName = "0.2.0"
 
