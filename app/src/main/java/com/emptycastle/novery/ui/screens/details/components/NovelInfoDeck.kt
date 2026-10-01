@@ -62,9 +62,9 @@ fun NovelInfoDeck(
                 }
 
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-                    InfoStat(Icons.Rounded.AutoStories, "${details.chapters.size}", "chapters")
-                    details.rating?.let { InfoStat(Icons.Rounded.Star, String.format("%.1f", it / 100f), "rating") }
-                    details.views?.let { InfoStat(Icons.Rounded.Visibility, compactNumber(it), "views") }
+                    InfoStat(Icons.Rounded.AutoStories, "${details.chapters.size}", "chapters", Modifier.weight(1f))
+                    details.rating?.let { InfoStat(Icons.Rounded.Star, String.format("%.1f", it / 100f), "rating", Modifier.weight(1f)) }
+                    details.views?.let { InfoStat(Icons.Rounded.Visibility, compactNumber(it), "views", Modifier.weight(1f)) }
                 }
 
                 if (!details.synopsis.isNullOrBlank()) {
@@ -79,8 +79,8 @@ fun NovelInfoDeck(
 }
 
 @Composable
-private fun InfoStat(icon: androidx.compose.ui.graphics.vector.ImageVector, value: String, label: String) {
-    Surface(shape = RoundedCornerShape(16.dp), color = MaterialTheme.colorScheme.surfaceContainer, modifier = Modifier.weight(1f)) {
+private fun InfoStat(icon: androidx.compose.ui.graphics.vector.ImageVector, value: String, label: String, modifier: Modifier = Modifier) {
+    Surface(shape = RoundedCornerShape(16.dp), color = MaterialTheme.colorScheme.surfaceContainer, modifier = modifier) {
         Row(modifier = Modifier.padding(horizontal = 10.dp, vertical = 9.dp), horizontalArrangement = Arrangement.spacedBy(7.dp), verticalAlignment = Alignment.CenterVertically) {
             Icon(icon, null, tint = MaterialTheme.colorScheme.primary)
             Column {

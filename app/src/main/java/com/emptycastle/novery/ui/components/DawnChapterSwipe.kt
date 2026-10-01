@@ -41,7 +41,7 @@ import kotlin.math.abs
 /**
  * Dawn's physical chapter gesture.
  *
- * Horizontal intent is handled with Compose's draggable modifier, while the
+ * Vertical chapter intent is handled as a continuous drag, while the
  * ReaderContainer underneath remains a normal vertical LazyColumn. This is
  * deliberately a drag, not a simple swipe detector: the chapter follows the
  * finger continuously and springs back when the threshold is not reached.
@@ -135,8 +135,8 @@ fun DawnChapterSwipeSurface(
                         scaleX = 1f - lift
                         scaleY = 1f - lift
                         rotationZ = when {
-                            offsetX.value < 0f -> -progress * 1.25f
-                            offsetX.value > 0f -> progress * 1.25f
+                            offsetY.value < 0f -> -progress * 1.25f
+                            offsetY.value > 0f -> progress * 1.25f
                             else -> 0f
                         }
                         shadowElevation = progress * 16f
