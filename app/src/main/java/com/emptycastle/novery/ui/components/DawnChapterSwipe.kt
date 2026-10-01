@@ -4,13 +4,15 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -21,26 +23,27 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 import com.emptycastle.novery.ui.theme.DawnCyan
 import com.emptycastle.novery.ui.theme.DawnMagenta
+import kotlinx.coroutines.launch
+import kotlin.math.abs
 
 /**
- * Physical horizontal chapter transition for Dawn.
+ * Dawn's physical chapter gesture.
  *
- * Horizontal dragging moves the current chapter with the finger. The adjacent
- * direction is revealed underneath. Vertical movement is deliberately ignored
- * so ordinary LazyColumn reading scroll remains natural.
+ * Horizontal intent is handled with Compose's draggable modifier, while the
+ * ReaderContainer underneath remains a normal vertical LazyColumn. This is
+ * deliberately a drag, not a simple swipe detector: the chapter follows the
+ * finger continuously and springs back when the threshold is not reached.
  */
 @Composable
 fun DawnChapterSwipeSurface(
@@ -54,10 +57,13 @@ fun DawnChapterSwipeSurface(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
-    BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
+    BoxWithConstraints(
+        modifier = modifier.fillMaxSize()
+    ) {
         val widthPx = constraints.maxWidth.toFloat().coerceAtLeast(1f)
         val thresholdPx = maxOf(96f, widthPx * 0.22f)
         val offsetX = remember { Animatable(0f) }
+        val scope = rememberCoroutineScope()
         val haptics = LocalHapticFeedback.current
         var crossedThreshold by remember(chapterKey) { mutableStateOf(false) }
 
@@ -66,7 +72,7 @@ fun DawnChapterSwipeSurface(
             crossedThreshold = false
         }
 
-        val progress = (kotlin.math.abs(offsetX.value) / thresholdPx).coerceIn(0f, 1f)
+        val progress = (abs(offsetX.value) / thresholdPx).coerceIn(0f, 1f)
         val direction = when {
             offsetX.value < 0f -> -1
             offsetX.value > 0f -> 1
@@ -79,18 +85,38 @@ fun DawnChapterSwipeSurface(
         }
         val accent = if (direction < 0) DawnCyan else DawnMagenta
 
-        Box(modifier = Modifier.fillMaxWidth()) {
+        val dragState = rememberDraggableState { delta ->
+            val candidate = (offsetX.value + delta).coerceIn(-widthPx, widthPx)
+            val allowed = when {
+                candidate < 0f -> hasNextChapter
+                candidate > 0f -> hasPreviousChapter
+                else -> true
+            }
+
+            if (allowed) {
+                scope.launch {
+                    offsetX.snapTo(candidate)
+                }
+
+                val nowCrossed = abs(candidate) >= thresholdPx
+                if (nowCrossed && !crossedThreshold) {
+                    crossedThreshold = true
+                    haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                } else if (!nowCrossed) {
+                    crossedThreshold = false
+                }
+            }
+        }
+
+        Box(modifier = Modifier.fillMaxSize()) {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .padding(horizontal = 12.dp, vertical = 12.dp),
+                modifier = Modifier.fillMaxSize(),
                 contentAlignment = if (direction < 0) Alignment.CenterEnd else Alignment.CenterStart
             ) {
                 if (direction != 0 && canNavigate) {
                     Surface(
                         shape = RoundedCornerShape(28.dp),
-                        color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.95f),
+                        color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.96f),
                         border = BorderStroke(1.dp, accent.copy(alpha = 0.72f)),
                         tonalElevation = 4.dp
                     ) {
@@ -101,7 +127,9 @@ fun DawnChapterSwipeSurface(
                         ) {
                             Text(
                                 text = if (direction < 0) "NEXT" else "PREVIOUS",
-                                style = MaterialTheme.typography.labelLarge.copy(letterSpacing = 1.15.sp),
+                                style = MaterialTheme.typography.labelLarge.copy(
+                                    letterSpacing = 1.15.sp
+                                ),
                                 color = accent
                             )
                             Text(
@@ -116,7 +144,7 @@ fun DawnChapterSwipeSurface(
 
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxSize()
                     .graphicsLayer {
                         translationX = offsetX.value
                         val lift = progress * 0.018f
@@ -129,66 +157,40 @@ fun DawnChapterSwipeSurface(
                         }
                         shadowElevation = progress * 16f
                     }
-                    .pointerInput(enabled, chapterKey, hasPreviousChapter, hasNextChapter) {
-                        if (!enabled) return@pointerInput
+                    .draggable(
+                        state = dragState,
+                        orientation = Orientation.Horizontal,
+                        enabled = enabled,
+                        onDragStopped = { _ ->
+                            val finalOffset = offsetX.value
+                            val goNext = finalOffset <= -thresholdPx && hasNextChapter
+                            val goPrevious = finalOffset >= thresholdPx && hasPreviousChapter
 
-                        coroutineScope {
-                            detectHorizontalDragGestures(
-                                onHorizontalDrag = { change, dragAmount ->
-                                    val candidate = (offsetX.value + dragAmount).coerceIn(-widthPx, widthPx)
-                                    val allowed = when {
-                                        candidate < 0f -> hasNextChapter
-                                        candidate > 0f -> hasPreviousChapter
-                                        else -> true
-                                    }
-
-                                    change.consume()
-
-                                    if (allowed) {
-                                        launch { offsetX.snapTo(candidate) }
-
-                                        val nowCrossed = kotlin.math.abs(candidate) >= thresholdPx
-                                        if (nowCrossed && !crossedThreshold) {
-                                            crossedThreshold = true
-                                            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
-                                        } else if (!nowCrossed) {
-                                            crossedThreshold = false
-                                        }
-                                    }
-                                },
-                                onDragEnd = {
-                                    val finalOffset = offsetX.value
-                                    val goNext = finalOffset <= -thresholdPx && hasNextChapter
-                                    val goPrevious = finalOffset >= thresholdPx && hasPreviousChapter
-
-                                    launch {
-                                        if (goNext || goPrevious) {
-                                            offsetX.animateTo(
-                                                targetValue = if (goNext) -widthPx else widthPx,
-                                                animationSpec = if (reduceMotion) tween(140) else spring(stiffness = 700f)
-                                            )
-                                            if (goNext) onNext() else onPrevious()
+                            scope.launch {
+                                if (goNext || goPrevious) {
+                                    offsetX.animateTo(
+                                        targetValue = if (goNext) -widthPx else widthPx,
+                                        animationSpec = if (reduceMotion) {
+                                            tween(140)
                                         } else {
-                                            offsetX.animateTo(
-                                                targetValue = 0f,
-                                                animationSpec = if (reduceMotion) tween(110) else spring(stiffness = 850f)
-                                            )
+                                            spring(stiffness = 700f)
                                         }
-                                        crossedThreshold = false
-                                    }
-                                },
-                                onDragCancel = {
-                                    launch {
-                                        offsetX.animateTo(
-                                            targetValue = 0f,
-                                            animationSpec = if (reduceMotion) tween(110) else spring(stiffness = 850f)
-                                        )
-                                        crossedThreshold = false
-                                    }
+                                    )
+                                    if (goNext) onNext() else onPrevious()
+                                } else {
+                                    offsetX.animateTo(
+                                        targetValue = 0f,
+                                        animationSpec = if (reduceMotion) {
+                                            tween(110)
+                                        } else {
+                                            spring(stiffness = 850f)
+                                        }
+                                    )
                                 }
-                            )
+                                crossedThreshold = false
+                            }
                         }
-                    }
+                    )
             ) {
                 content()
             }
