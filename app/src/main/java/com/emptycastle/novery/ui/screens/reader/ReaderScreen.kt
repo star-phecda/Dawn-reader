@@ -58,7 +58,7 @@ import com.emptycastle.novery.domain.model.TapAction
 import com.emptycastle.novery.service.TTSStatus
 import com.emptycastle.novery.tts.VoiceInfo
 import com.emptycastle.novery.ui.components.ChapterListSheet
-import com.emptycastle.novery.ui.components.DawnChapterAdvancePull
+import com.emptycastle.novery.ui.components.DawnChapterSwipeSurface
 import com.emptycastle.novery.ui.components.ReaderBottomBar
 import com.emptycastle.novery.ui.components.TTSPlayer
 import com.emptycastle.novery.ui.components.TTSSettingsPanel
@@ -818,23 +818,39 @@ private fun ReaderScreenContent(
                                 }
                             }
                     ) {
-                        ReaderContainer(
-                            uiState = uiState,
-                            colors = colors,
-                            listState = listState,
-                            isScrollBounded = isScrollBounded,
-                            highlightedDisplayIndex = highlightedDisplayIndex,
-                            ensureVisibleIndex = ensureVisibleIndex,
-                            onEnsureVisibleHandled = onEnsureVisibleHandled,
-                            onSentenceBoundsUpdated = { displayIndex, top, bottom ->
-                                onSentenceBoundsUpdated(displayIndex, top, bottom)
-                            },
-                            currentSentenceBounds = currentSentenceBounds,
+                        DawnChapterSwipeSurface(
+                            chapterKey = uiState.currentChapterUrl,
+                            enabled = contentVisible &&
+                                    uiState.isContentReady &&
+                                    !uiState.showControls &&
+                                    !uiState.showTTSSettings &&
+                                    !uiState.showChapterList &&
+                                    !uiState.isTTSActive,
+                            hasPreviousChapter = uiState.currentChapterIndex > 0,
+                            hasNextChapter = uiState.currentChapterIndex < uiState.allChapters.lastIndex,
+                            reduceMotion = uiState.settings.reduceMotion,
                             onPrevious = onPrevious,
                             onNext = onNext,
-                            onBack = onBack,
-                            onRetryChapter = onRetryChapter
-                        )
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            ReaderContainer(
+                                uiState = uiState,
+                                colors = colors,
+                                listState = listState,
+                                isScrollBounded = isScrollBounded,
+                                highlightedDisplayIndex = highlightedDisplayIndex,
+                                ensureVisibleIndex = ensureVisibleIndex,
+                                onEnsureVisibleHandled = onEnsureVisibleHandled,
+                                onSentenceBoundsUpdated = { displayIndex, top, bottom ->
+                                    onSentenceBoundsUpdated(displayIndex, top, bottom)
+                                },
+                                currentSentenceBounds = currentSentenceBounds,
+                                onPrevious = onPrevious,
+                                onNext = onNext,
+                                onBack = onBack,
+                                onRetryChapter = onRetryChapter
+                            )
+                        }
                     }
 
                 }
@@ -889,20 +905,6 @@ private fun ReaderScreenContent(
                         )
                     }
 
-                    // Manual chapter switching is deliberately separated from normal reading
-                    // scroll. It appears only at the end of a chapter and requires an explicit
-                    // upward pull past a threshold. It stays hidden while controls are open.
-                    DawnChapterAdvancePull(
-                        visible = contentVisible &&
-                                !uiState.showControls &&
-                                !uiState.showTTSSettings &&
-                                !uiState.showChapterList &&
-                                uiState.isContentReady &&
-                                chapterProgress >= 0.96f,
-                        hasNextChapter = uiState.currentChapterIndex < uiState.allChapters.lastIndex,
-                        onTrigger = onNext,
-                        modifier = Modifier.align(Alignment.BottomCenter)
-                    )
                 }
             }
         }
