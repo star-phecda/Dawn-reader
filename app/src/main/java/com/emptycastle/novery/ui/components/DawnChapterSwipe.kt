@@ -4,14 +4,15 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clipToBounds
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.gestures.awaitEachGesture
-import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -21,7 +22,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,20 +33,18 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.emptycastle.novery.ui.theme.DawnSiteCream
 import com.emptycastle.novery.ui.theme.DawnSiteGold
-import com.emptycastle.novery.ui.theme.DawnSiteInk
 import com.emptycastle.novery.ui.theme.DawnSitePink
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.coroutineScope
 import kotlin.math.abs
 
 /**
- * Dawn's physical chapter gesture.
+ * Dawn's horizontal chapter gesture.
  *
- * Vertical chapter intent is handled as a continuous drag, while the
- * ReaderContainer underneath remains a normal vertical LazyColumn. This is
- * deliberately a drag, not a simple swipe detector: the chapter follows the
- * finger continuously and springs back when the threshold is not reached.
+ * A deliberate horizontal drag from anywhere in the reader moves the current
+ * chapter with the finger. Vertical movement is left alone for normal reading
+ * scroll. Crossing the threshold gives haptic feedback; releasing commits the
+ * chapter change or springs the page back into place.
  */
 @Composable
 fun DawnChapterSwipeSurface(
@@ -61,29 +59,30 @@ fun DawnChapterSwipeSurface(
     onNext: () -> Unit,
     onTap: (Offset, Float, Float) -> Unit,
     modifier: Modifier = Modifier,
-    edgeZoneRatio: Float = 0.22f,
     content: @Composable () -> Unit
 ) {
-    BoxWithConstraints(modifier = modifier.fillMaxSize()) {
+    BoxWithConstraints(
+        modifier = modifier
+            .fillMaxSize()
+            .clipToBounds()
+    ) {
         val widthPx = constraints.maxWidth.toFloat().coerceAtLeast(1f)
         val heightPx = constraints.maxHeight.toFloat().coerceAtLeast(1f)
-        val thresholdPx = maxOf(110f, heightPx * 0.18f)
         val touchSlopPx = 8.dp.value * LocalDensity.current.density
-        val edgeZonePx = heightPx * edgeZoneRatio.coerceIn(0.12f, 0.35f)
-        val offsetY = remember { Animatable(0f) }
-        val scope = rememberCoroutineScope()
+        val thresholdPx = maxOf(96f, widthPx * 0.24f)
+        val offsetX = remember { Animatable(0f) }
         val haptics = LocalHapticFeedback.current
         var crossedThreshold by remember(chapterKey) { mutableStateOf(false) }
 
         LaunchedEffect(chapterKey) {
-            offsetY.snapTo(0f)
+            offsetX.snapTo(0f)
             crossedThreshold = false
         }
 
-        val progress = (kotlin.math.abs(offsetY.value) / thresholdPx).coerceIn(0f, 1f)
+        val progress = (abs(offsetX.value) / thresholdPx).coerceIn(0f, 1f)
         val direction = when {
-            offsetY.value < 0f -> -1
-            offsetY.value > 0f -> 1
+            offsetX.value < 0f -> -1
+            offsetX.value > 0f -> 1
             else -> 0
         }
         val canNavigate = when {
@@ -91,19 +90,22 @@ fun DawnChapterSwipeSurface(
             direction > 0 -> hasPreviousChapter && allowPreviousGesture
             else -> false
         }
-        val accent = if (direction < 0) DawnSitePink else DawnSiteGold
 
         Box(modifier = Modifier.fillMaxSize()) {
             if (direction != 0 && canNavigate) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
-                    contentAlignment = if (direction < 0) Alignment.BottomCenter else Alignment.TopCenter
+                    contentAlignment = if (direction < 0) Alignment.CenterEnd else Alignment.CenterStart
                 ) {
                     Surface(
-                        shape = RoundedCornerShape(24.dp),
+                        shape = RoundedCornerShape(26.dp),
                         color = MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.97f),
-                        border = BorderStroke(1.dp, accent.copy(alpha = 0.62f)),
-                        tonalElevation = 5.dp
+                        border = BorderStroke(
+                            1.dp,
+                            if (direction < 0) DawnSitePink.copy(alpha = 0.68f)
+                            else DawnSiteGold.copy(alpha = 0.68f)
+                        ),
+                        tonalElevation = 4.dp
                     ) {
                         Row(
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 11.dp),
@@ -114,16 +116,13 @@ fun DawnChapterSwipeSurface(
                                 text = when {
                                     direction < 0 && progress >= 1f -> "RELEASE TO CONTINUE"
                                     direction > 0 && progress >= 1f -> "RELEASE TO RETURN"
-                                    direction < 0 -> "SWIPE UP FROM EDGE"
-                                    else -> "SWIPE DOWN FROM EDGE"
+                                    direction < 0 -> "NEXT CHAPTER"
+                                    else -> "PREVIOUS CHAPTER"
                                 },
-                                style = MaterialTheme.typography.labelMedium.copy(letterSpacing = 1.05.sp),
-                                color = accent
-                            )
-                            Text(
-                                text = if (direction < 0) "NEXT CHAPTER  ↑" else "PREVIOUS CHAPTER  ↓",
-                                style = MaterialTheme.typography.titleLarge,
-                                color = MaterialTheme.colorScheme.onSurface
+                                style = MaterialTheme.typography.labelMedium.copy(
+                                    letterSpacing = 1.05.sp
+                                ),
+                                color = if (direction < 0) DawnSitePink else DawnSiteGold
                             )
                         }
                     }
@@ -134,103 +133,125 @@ fun DawnChapterSwipeSurface(
                 modifier = Modifier
                     .fillMaxSize()
                     .graphicsLayer {
-                        translationY = offsetY.value
-                        val lift = progress * 0.018f
+                        translationX = offsetX.value
+                        val lift = progress * 0.012f
                         scaleX = 1f - lift
                         scaleY = 1f - lift
                         rotationZ = when {
-                            offsetY.value < 0f -> -progress * 1.25f
-                            offsetY.value > 0f -> progress * 1.25f
+                            offsetX.value < 0f -> -progress * 1.1f
+                            offsetX.value > 0f -> progress * 1.1f
                             else -> 0f
                         }
-                        shadowElevation = progress * 16f
+                        shadowElevation = progress * 14f
                     }
-                    .pointerInput(chapterKey, enabled, hasPreviousChapter, hasNextChapter, allowPreviousGesture, allowNextGesture) {
+                    .pointerInput(
+                        chapterKey,
+                        enabled,
+                        hasPreviousChapter,
+                        hasNextChapter,
+                        allowPreviousGesture,
+                        allowNextGesture
+                    ) {
                         if (!enabled) return@pointerInput
+
                         awaitEachGesture {
                             val down = awaitFirstDown(requireUnconsumed = false)
-                            var last = down.position
+                            var lastPosition = down.position
                             var totalDx = 0f
                             var totalDy = 0f
-                            var vertical = false
-                            var trackingEdgeGesture = false
-                            val startedAtTopEdge = down.position.y <= edgeZonePx
-                            val startedAtBottomEdge = down.position.y >= heightPx - edgeZonePx
+                            var trackingHorizontal = false
+                            var sawVerticalIntent = false
 
-                            while (true) {
-                                val event = awaitPointerEvent()
-                                val change = event.changes.firstOrNull { it.id == down.id }
-                                    ?: event.changes.firstOrNull()
-                                    ?: break
-                                val delta = change.position - last
-                                last = change.position
-                                totalDx += delta.x
-                                totalDy += delta.y
+                            coroutineScope {
+                                while (true) {
+                                    val event = awaitPointerEvent()
+                                    val change = event.changes.firstOrNull { it.id == down.id }
+                                        ?: event.changes.firstOrNull()
+                                        ?: break
 
-                                if (!vertical &&
-                                    (kotlin.math.abs(totalDx) > touchSlopPx ||
-                                     kotlin.math.abs(totalDy) > touchSlopPx)
-                                ) {
-                                    if (kotlin.math.abs(totalDy) > kotlin.math.abs(totalDx)) {
-                                        vertical = true
-                                        trackingEdgeGesture = when {
-                                            totalDy < 0f -> startedAtBottomEdge && hasNextChapter && allowNextGesture
-                                            totalDy > 0f -> startedAtTopEdge && hasPreviousChapter && allowPreviousGesture
-                                            else -> false
-                                        }
-                                    } else {
-                                        break
-                                    }
-                                }
+                                    val delta = change.position - lastPosition
+                                    lastPosition = change.position
+                                    totalDx += delta.x
+                                    totalDy += delta.y
 
-                                if (vertical && trackingEdgeGesture) {
-                                    change.consume()
-                                    val candidate = (offsetY.value + delta.y).coerceIn(-heightPx, heightPx)
-                                    val allowed = when {
-                                        candidate < 0f -> hasNextChapter && allowNextGesture
-                                        candidate > 0f -> hasPreviousChapter && allowPreviousGesture
-                                        else -> true
-                                    }
-                                    if (allowed) {
-                                        scope.launch { offsetY.snapTo(candidate) }
-                                        val crossed = kotlin.math.abs(candidate) >= thresholdPx
-                                        if (crossed && !crossedThreshold) {
-                                            crossedThreshold = true
-                                            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
-                                        } else if (!crossed) {
-                                            crossedThreshold = false
+                                    if (!trackingHorizontal && !sawVerticalIntent) {
+                                        val movedEnough = abs(totalDx) > touchSlopPx ||
+                                            abs(totalDy) > touchSlopPx
+
+                                        if (movedEnough) {
+                                            if (abs(totalDx) > abs(totalDy)) {
+                                                val wantsNext = totalDx < 0f
+                                                val allowed = if (wantsNext) {
+                                                    hasNextChapter && allowNextGesture
+                                                } else {
+                                                    hasPreviousChapter && allowPreviousGesture
+                                                }
+
+                                                if (allowed) {
+                                                    trackingHorizontal = true
+                                                } else {
+                                                    break
+                                                }
+                                            } else {
+                                                sawVerticalIntent = true
+                                            }
                                         }
                                     }
+
+                                    if (trackingHorizontal) {
+                                        change.consume()
+                                        val candidate = (offsetX.value + delta.x)
+                                            .coerceIn(-widthPx, widthPx)
+
+                                        val allowed = when {
+                                            candidate < 0f -> hasNextChapter && allowNextGesture
+                                            candidate > 0f -> hasPreviousChapter && allowPreviousGesture
+                                            else -> true
+                                        }
+
+                                        if (allowed) {
+                                            offsetX.snapTo(candidate)
+                                            val crossed = abs(candidate) >= thresholdPx
+                                            if (crossed && !crossedThreshold) {
+                                                crossedThreshold = true
+                                                haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                                            } else if (!crossed) {
+                                                crossedThreshold = false
+                                            }
+                                        }
+                                    }
+
+                                    if (!change.pressed) break
                                 }
 
-                                if (!change.pressed) break
-                            }
+                                if (trackingHorizontal) {
+                                    val finalOffset = offsetX.value
+                                    val goNext = finalOffset <= -thresholdPx &&
+                                        hasNextChapter && allowNextGesture
+                                    val goPrevious = finalOffset >= thresholdPx &&
+                                        hasPreviousChapter && allowPreviousGesture
 
-                            if (vertical && trackingEdgeGesture) {
-                                val finalOffset = offsetY.value
-                                val goNext = finalOffset <= -thresholdPx && hasNextChapter && allowNextGesture
-                                val goPrevious = finalOffset >= thresholdPx && hasPreviousChapter && allowPreviousGesture
-                                scope.launch {
                                     if (goNext || goPrevious) {
-                                        offsetY.animateTo(
-                                            if (goNext) -heightPx else heightPx,
-                                            if (reduceMotion) tween(140) else spring(stiffness = 700f)
+                                        offsetX.animateTo(
+                                            if (goNext) -widthPx else widthPx,
+                                            if (reduceMotion) tween(150) else spring(stiffness = 700f)
                                         )
                                         if (goNext) onNext() else onPrevious()
-                                        offsetY.snapTo(0f)
+                                        offsetX.snapTo(0f)
                                     } else {
-                                        offsetY.animateTo(
+                                        offsetX.animateTo(
                                             0f,
-                                            if (reduceMotion) tween(110) else spring(stiffness = 850f)
+                                            if (reduceMotion) tween(120) else spring(stiffness = 850f)
                                         )
                                     }
+
                                     crossedThreshold = false
+                                } else if (
+                                    abs(totalDx) <= touchSlopPx &&
+                                    abs(totalDy) <= touchSlopPx
+                                ) {
+                                    onTap(down.position, widthPx, heightPx)
                                 }
-                            } else if (
-                                kotlin.math.abs(totalDx) <= touchSlopPx &&
-                                kotlin.math.abs(totalDy) <= touchSlopPx
-                            ) {
-                                onTap(down.position, widthPx, heightPx)
                             }
                         }
                     }
