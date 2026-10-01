@@ -1,6 +1,7 @@
 package com.emptycastle.novery.ui.screens.home.tabs.recommendation.components
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row

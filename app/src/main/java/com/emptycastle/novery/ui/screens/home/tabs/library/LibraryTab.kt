@@ -77,11 +77,13 @@ import com.emptycastle.novery.domain.model.AppSettings
 import com.emptycastle.novery.domain.model.DisplayMode
 import com.emptycastle.novery.domain.model.LibraryFilter
 import com.emptycastle.novery.ui.components.DawnPill
+import com.emptycastle.novery.ui.screens.home.shared.LibraryStateHolder
 import com.emptycastle.novery.ui.components.DawnSectionHeader
 import com.emptycastle.novery.ui.components.NovelActionSheet
 import com.emptycastle.novery.ui.components.NovelCard
 import com.emptycastle.novery.ui.components.NovelListItem
 import com.emptycastle.novery.ui.theme.DawnCyan
+import com.emptycastle.novery.ui.theme.DawnMagenta
 import com.emptycastle.novery.ui.theme.DawnNavy
 import com.emptycastle.novery.ui.theme.DawnPanel
 import com.emptycastle.novery.ui.theme.DawnViolet

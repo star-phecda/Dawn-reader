@@ -19,6 +19,7 @@ import com.emptycastle.novery.recommendation.TagNormalizer
 import com.emptycastle.novery.ui.components.NoveryBottomNavBarWithInsets
 import com.emptycastle.novery.ui.navigation.HomeTabs
 import com.emptycastle.novery.ui.theme.DawnBlue
+import com.emptycastle.novery.ui.theme.DawnCyan
 import com.emptycastle.novery.ui.theme.DawnMagenta
 import com.emptycastle.novery.ui.theme.DawnViolet
 import com.emptycastle.novery.ui.navigation.rememberTabNavigationState
