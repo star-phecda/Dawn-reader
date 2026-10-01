@@ -27,6 +27,8 @@ fun DawnAtmosphere(
     modifier: Modifier = Modifier,
     content: @Composable BoxScope.() -> Unit
 ) {
+    val gridColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.035f)
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -34,7 +36,6 @@ fun DawnAtmosphere(
     ) {
         Canvas(modifier = Modifier.fillMaxSize()) {
             val step = 32.dp.toPx()
-            val gridColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.035f)
 
             var x = 0f
             while (x <= size.width) {
@@ -87,8 +88,10 @@ fun DawnAtmosphere(
                 .fillMaxSize()
                 .background(
                     Brush.radialGradient(
-                        colors = listOf(DawnCyan.copy(alpha = 0.11f), Color.Transparent),
-                        center = Offset.Zero
+                        colors = listOf(
+                            DawnCyan.copy(alpha = 0.11f),
+                            Color.Transparent
+                        )
                     )
                 )
         )
@@ -98,8 +101,10 @@ fun DawnAtmosphere(
                 .fillMaxSize()
                 .background(
                     Brush.radialGradient(
-                        colors = listOf(DawnMagenta.copy(alpha = 0.075f), Color.Transparent),
-                        center = Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY)
+                        colors = listOf(
+                            DawnMagenta.copy(alpha = 0.075f),
+                            Color.Transparent
+                        )
                     )
                 )
         )
@@ -109,7 +114,10 @@ fun DawnAtmosphere(
                 .fillMaxSize()
                 .background(
                     Brush.radialGradient(
-                        colors = listOf(SunGold500.copy(alpha = 0.035f), Color.Transparent)
+                        colors = listOf(
+                            SunGold500.copy(alpha = 0.035f),
+                            Color.Transparent
+                        )
                     )
                 )
         )
