@@ -4,7 +4,6 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.clipToBounds
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.layout.Arrangement
@@ -35,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emptycastle.novery.ui.theme.DawnSiteGold
 import com.emptycastle.novery.ui.theme.DawnSitePink
-import kotlinx.coroutines.coroutineScope
 import kotlin.math.abs
 
 /**
@@ -62,9 +60,7 @@ fun DawnChapterSwipeSurface(
     content: @Composable () -> Unit
 ) {
     BoxWithConstraints(
-        modifier = modifier
-            .fillMaxSize()
-            .clipToBounds()
+        modifier = modifier.fillMaxSize()
     ) {
         val widthPx = constraints.maxWidth.toFloat().coerceAtLeast(1f)
         val heightPx = constraints.maxHeight.toFloat().coerceAtLeast(1f)
@@ -162,7 +158,6 @@ fun DawnChapterSwipeSurface(
                             var trackingHorizontal = false
                             var sawVerticalIntent = false
 
-                            coroutineScope {
                                 while (true) {
                                     val event = awaitPointerEvent()
                                     val change = event.changes.firstOrNull { it.id == down.id }
@@ -252,7 +247,6 @@ fun DawnChapterSwipeSurface(
                                 ) {
                                     onTap(down.position, widthPx, heightPx)
                                 }
-                            }
                         }
                     }
             ) {
