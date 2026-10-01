@@ -518,7 +518,7 @@ class WtrLabProvider : MainProvider() {
         val title = data.optString("title", "").takeIf { it.isNotBlank() } ?: return null
         val image = data.optString("image", null)?.takeIf { it.isNotBlank() }
 
-        val novelUrl = "/$lang/serie-$rawId/$slug"
+        val novelUrl = "/$lang/novel/$rawId/$slug"
 
         val chapterCount = seriesObj.optInt("chapter_count", 0)
         val latestChapter = if (chapterCount > 0) "$chapterCount Chapters" else null
@@ -765,7 +765,7 @@ class WtrLabProvider : MainProvider() {
                         "Chapter $order"
                     }
 
-                    val chapterUrl = "/$lang/serie-$rawId/$slug/chapter-$order"
+                    val chapterUrl = "/$lang/novel/$rawId/$slug/chapter-$order"
 
                     chapters.add(
                         Chapter(
@@ -802,8 +802,9 @@ class WtrLabProvider : MainProvider() {
 
         val fullUrl = if (url.startsWith("http")) url else "$mainUrl$url"
 
-        val regex = Regex("/serie-(\\d+)/[^/]+/chapter-(\\d+)")
-        val match = regex.find(fullUrl)
+        val newRegex = Regex("/novel/(\\d+)/[^/]+/chapter-(\\d+)")
+        val oldRegex = Regex("/serie-(\\d+)/[^/]+/chapter-(\\d+)")
+        val match = newRegex.find(fullUrl) ?: oldRegex.find(fullUrl)
             ?: throw Exception("Invalid chapter URL format: $fullUrl")
 
         val rawId = match.groupValues[1]
