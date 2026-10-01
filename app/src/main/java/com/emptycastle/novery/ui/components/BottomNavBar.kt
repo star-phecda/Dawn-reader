@@ -45,6 +45,7 @@ import com.emptycastle.novery.ui.theme.DawnSiteCream
 import com.emptycastle.novery.ui.theme.DawnSiteGold
 import com.emptycastle.novery.ui.theme.DawnSiteInk
 import com.emptycastle.novery.ui.theme.DawnSitePink
+import com.emptycastle.novery.ui.theme.DawnSiteNight
 
 /** Dawn's floating editorial navigation rail. */
 data class BottomNavItem(
@@ -73,11 +74,11 @@ fun NoveryBottomNavBar(
     Surface(
         modifier = modifier.widthIn(max = 560.dp),
         shape = RoundedCornerShape(28.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.97f),
+        color = DawnSiteNight.copy(alpha = 0.97f),
         contentColor = MaterialTheme.colorScheme.onSurface,
         border = BorderStroke(
             1.dp,
-            DawnSiteGold.copy(alpha = 0.28f)
+            DawnSiteGold.copy(alpha = 0.40f)
         ),
         shadowElevation = 14.dp,
         tonalElevation = 3.dp
@@ -108,7 +109,7 @@ private fun DawnNavItem(
 ) {
     val source = remember { MutableInteractionSource() }
     val tint by animateColorAsState(
-        targetValue = if (selected) DawnSiteCream else MaterialTheme.colorScheme.onSurfaceVariant,
+        targetValue = if (selected) DawnSiteCream else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.82f),
         animationSpec = spring(stiffness = 650f),
         label = "dawn_nav_tint"
     )
@@ -127,7 +128,7 @@ private fun DawnNavItem(
                 .then(
                     if (selected) {
                         Modifier.background(
-                            DawnSiteInk,
+                            DawnSitePink.copy(alpha = 0.94f),
                             RoundedCornerShape(18.dp)
                         )
                     } else Modifier
