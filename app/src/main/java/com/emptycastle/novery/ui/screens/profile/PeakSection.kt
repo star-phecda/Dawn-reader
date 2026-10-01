@@ -1,7 +1,6 @@
 package com.emptycastle.novery.ui.screens.profile
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
