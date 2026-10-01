@@ -123,7 +123,7 @@ fun DawnChapterSwipeSurface(
                             Text(
                                 text = if (direction < 0) "NEXT CHAPTER  ↑" else "PREVIOUS CHAPTER  ↓",
                                 style = MaterialTheme.typography.titleLarge,
-                                color = if (MaterialTheme.colorScheme.isLight) DawnSiteInk else DawnSiteCream
+                                color = MaterialTheme.colorScheme.onSurface
                             )
                         }
                     }
@@ -217,6 +217,7 @@ fun DawnChapterSwipeSurface(
                                             if (reduceMotion) tween(140) else spring(stiffness = 700f)
                                         )
                                         if (goNext) onNext() else onPrevious()
+                                        offsetY.snapTo(0f)
                                     } else {
                                         offsetY.animateTo(
                                             0f,
