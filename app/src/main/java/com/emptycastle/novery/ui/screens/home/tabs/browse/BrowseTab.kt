@@ -259,11 +259,9 @@ fun BrowseTab(
             eyebrow = "SOURCE DISCOVERY",
             title = "Explore the shelves",
             subtitle = "Search stories across every source in Dawn.",
-            modifier = Modifier.padding(
-                horizontal = dimensions.gridPadding,
-                top = 16.dp,
-                bottom = 4.dp
-            )
+            modifier = Modifier
+                .padding(horizontal = dimensions.gridPadding)
+                .padding(top = 16.dp, bottom = 4.dp)
         )
 
         // Search Bar
