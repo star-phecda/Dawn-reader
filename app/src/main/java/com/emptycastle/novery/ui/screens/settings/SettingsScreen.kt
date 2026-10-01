@@ -177,7 +177,8 @@ fun SettingsScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background
+                    containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.72f),
+                    scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.92f)
                 )
             )
         }
@@ -185,6 +186,15 @@ fun SettingsScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
+                .background(
+                    Brush.verticalGradient(
+                        listOf(
+                            MaterialTheme.colorScheme.primary.copy(alpha = 0.035f),
+                            Color.Transparent,
+                            MaterialTheme.colorScheme.tertiary.copy(alpha = 0.028f)
+                        )
+                    )
+                )
                 .padding(padding),
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)

@@ -11,6 +11,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -88,20 +89,22 @@ fun HomeScreen(
                 .background(
                     Brush.radialGradient(
                         colors = listOf(
-                            DawnViolet.copy(alpha = 0.075f),
-                            DawnBlue.copy(alpha = 0.03f),
-                            androidx.compose.ui.graphics.Color.Transparent
+                            DawnCyan.copy(alpha = 0.075f),
+                            DawnViolet.copy(alpha = 0.038f),
+                            Color.Transparent
                         ),
-                        radius = 900f
+                        center = androidx.compose.ui.geometry.Offset(0.12f, 0.02f),
+                        radius = 1000f
                     )
                 )
                 .background(
-                    Brush.linearGradient(
+                    Brush.radialGradient(
                         colors = listOf(
-                            DawnCyan.copy(alpha = 0.018f),
-                            androidx.compose.ui.graphics.Color.Transparent,
-                            DawnMagenta.copy(alpha = 0.018f)
-                        )
+                            DawnMagenta.copy(alpha = 0.05f),
+                            Color.Transparent
+                        ),
+                        center = androidx.compose.ui.geometry.Offset(0.92f, 0.76f),
+                        radius = 820f
                     )
                 )
         ) {

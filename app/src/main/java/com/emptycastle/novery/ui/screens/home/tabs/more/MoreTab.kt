@@ -43,6 +43,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.emptycastle.novery.ui.components.DawnHeroSurface
+import com.emptycastle.novery.ui.components.DawnSectionHeader
 import com.emptycastle.novery.ui.theme.NoveryTheme
 import java.time.LocalTime
 
@@ -74,7 +76,7 @@ fun MoreTab(
             top = 0.dp,
             bottom = 100.dp
         ),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         // Header
         item(key = "header") {
@@ -99,15 +101,10 @@ fun MoreTab(
 
         // Menu Section
         item(key = "menu_header") {
-            Text(
-                text = "Menu",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier.padding(
-                    horizontal = dimensions.gridPadding,
-                    vertical = 8.dp
-                )
+            DawnSectionHeader(
+                title = "Dawn",
+                subtitle = "Your reading command center",
+                modifier = Modifier.padding(horizontal = dimensions.gridPadding)
             )
         }
 
@@ -199,76 +196,63 @@ private fun MoreHeader(
 ) {
     val levelColor = getLevelColor(readerLevel)
 
-    Box(
+    DawnHeroSurface(
         modifier = Modifier
-            .fillMaxWidth()
-            .background(
-                Brush.verticalGradient(
-                    colors = listOf(
-                        levelColor.copy(alpha = 0.12f),
-                        levelColor.copy(alpha = 0.04f),
-                        Color.Transparent
-                    )
-                )
-            )
+            .padding(horizontal = 16.dp)
+            .padding(top = 12.dp, bottom = 4.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp)
-                .padding(top = 16.dp, bottom = 24.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            // Greeting Row
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column {
-                    Text(
-                        text = greeting,
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
-                    Text(
-                        text = "$readerLevelName • Level $readerLevel",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = levelColor
-                    )
-                }
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(
+                    text = greeting,
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Text(
+                    text = "$readerLevelName • Level $readerLevel",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = levelColor
+                )
+            }
 
-                // Streak Badge
-                if (currentStreak > 0 || isStreakActive) {
-                    Surface(
-                        shape = RoundedCornerShape(20.dp),
-                        color = if (isStreakActive) {
-                            Color(0xFFFF6B35).copy(alpha = 0.15f)
-                        } else {
-                            MaterialTheme.colorScheme.surfaceContainerHigh
-                        }
+            if (currentStreak > 0 || isStreakActive) {
+                Surface(
+                    shape = RoundedCornerShape(20.dp),
+                    color = if (isStreakActive) {
+                        Color(0xFFFF6B35).copy(alpha = 0.16f)
+                    } else {
+                        MaterialTheme.colorScheme.surfaceContainerHigh
+                    },
+                    border = BorderStroke(
+                        1.dp,
+                        if (isStreakActive) Color(0xFFFF6B35).copy(alpha = 0.22f)
+                        else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f)
+                    )
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 9.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(5.dp)
                     ) {
-                        Row(
-                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(4.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Rounded.LocalFireDepartment,
-                                contentDescription = null,
-                                modifier = Modifier.size(18.dp),
-                                tint = if (isStreakActive) Color(0xFFFF6B35)
-                                else MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                            Text(
-                                text = "$currentStreak",
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold,
-                                color = if (isStreakActive) Color(0xFFFF6B35)
-                                else MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
+                        Icon(
+                            imageVector = Icons.Rounded.LocalFireDepartment,
+                            contentDescription = null,
+                            modifier = Modifier.size(19.dp),
+                            tint = if (isStreakActive) Color(0xFFFF6B35)
+                            else MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Text(
+                            text = "$currentStreak",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = if (isStreakActive) Color(0xFFFF6B35)
+                            else MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
                 }
             }

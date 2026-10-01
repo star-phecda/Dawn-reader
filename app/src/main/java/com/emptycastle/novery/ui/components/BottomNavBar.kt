@@ -5,6 +5,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -72,15 +73,25 @@ fun NoveryBottomNavBar(
     val normalizedSelectedRoute = selectedRoute.removePrefix("tab_")
     Surface(
         modifier = modifier.widthIn(max = 430.dp),
-        shape = RoundedCornerShape(30.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.96f),
+        shape = RoundedCornerShape(32.dp),
+        color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.90f),
         contentColor = MaterialTheme.colorScheme.onSurface,
-        shadowElevation = 12.dp,
-        tonalElevation = 4.dp
+        border = BorderStroke(
+            1.dp,
+            Brush.linearGradient(
+                listOf(
+                    DawnCyan.copy(alpha = 0.32f),
+                    MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.28f),
+                    DawnMagenta.copy(alpha = 0.28f)
+                )
+            )
+        ),
+        shadowElevation = 14.dp,
+        tonalElevation = 5.dp
     ) {
         Row(
             modifier = Modifier
-                .padding(horizontal = 7.dp, vertical = 7.dp)
+                .padding(horizontal = 8.dp, vertical = 8.dp)
                 .animateContentSize(animationSpec = spring(stiffness = 500f)),
             horizontalArrangement = Arrangement.spacedBy(4.dp),
             verticalAlignment = Alignment.CenterVertically

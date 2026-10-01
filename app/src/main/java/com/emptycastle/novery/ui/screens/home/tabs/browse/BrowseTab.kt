@@ -1898,9 +1898,19 @@ private fun ProviderCard(
                     }
                 )
             },
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(26.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLow.copy(alpha = 0.92f)
+        ),
+        border = BorderStroke(
+            1.dp,
+            Brush.linearGradient(
+                listOf(
+                    primaryColor.copy(alpha = 0.24f),
+                    MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.32f),
+                    secondaryColor.copy(alpha = 0.18f)
+                )
+            )
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 1.dp,
@@ -1911,7 +1921,7 @@ private fun ProviderCard(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(90.dp)
+                    .height(112.dp)
                     .background(
                         Brush.verticalGradient(
                             colors = listOf(
@@ -1991,7 +2001,7 @@ private fun ProviderCard(
                 Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     Text(
                         text = provider.name,
-                        style = MaterialTheme.typography.titleMedium,
+                        style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface,
                         maxLines = 1,
@@ -2003,12 +2013,30 @@ private fun ProviderCard(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        ProviderStatChip(
-                            icon = Icons.Rounded.Category,
-                            text = "${provider.tags.size}",
-                            label = "genres",
-                            color = primaryColor
-                        )
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(6.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Surface(
+                                shape = RoundedCornerShape(12.dp),
+                                color = primaryColor.copy(alpha = 0.10f)
+                            ) {
+                                Text(
+                                    text = "SOURCE",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    fontWeight = FontWeight.Bold,
+                                    letterSpacing = 1.sp,
+                                    color = primaryColor,
+                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp)
+                                )
+                            }
+                            ProviderStatChip(
+                                icon = Icons.Rounded.Category,
+                                text = "${provider.tags.size}",
+                                label = "genres",
+                                color = primaryColor
+                            )
+                        }
 
                         Surface(
                             shape = CircleShape,

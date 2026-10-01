@@ -3,6 +3,7 @@ package com.emptycastle.novery.ui.components
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AutoAwesome
@@ -195,24 +197,61 @@ fun DawnHeroSurface(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(30.dp),
         color = Color.Transparent,
-        shadowElevation = 8.dp,
-        tonalElevation = 2.dp
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.42f)),
+        shadowElevation = 10.dp,
+        tonalElevation = 3.dp
     ) {
-        Box(
-            modifier = Modifier
-                .background(
-                    Brush.linearGradient(
-                        colors = listOf(
-                            DawnCyan.copy(alpha = 0.18f),
-                            DawnBlue.copy(alpha = 0.09f),
-                            DawnViolet.copy(alpha = 0.12f),
-                            DawnMagenta.copy(alpha = 0.15f)
+        Box {
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .background(
+                        Brush.linearGradient(
+                            colors = listOf(
+                                DawnCyan.copy(alpha = 0.20f),
+                                DawnBlue.copy(alpha = 0.08f),
+                                DawnViolet.copy(alpha = 0.11f),
+                                DawnMagenta.copy(alpha = 0.17f)
+                            )
                         )
                     )
-                )
-                .padding(20.dp)
-        ) {
-            content()
+            )
+            Box(
+                modifier = Modifier
+                    .size(150.dp)
+                    .offset(x = 190.dp, y = (-54).dp)
+                    .background(
+                        Brush.radialGradient(
+                            colors = listOf(
+                                DawnCyan.copy(alpha = 0.18f),
+                                Color.Transparent
+                            )
+                        ),
+                        CircleShape
+                    )
+            )
+            Box(
+                modifier = Modifier
+                    .size(120.dp)
+                    .offset(x = (-26).dp, y = 76.dp)
+                    .background(
+                        Brush.radialGradient(
+                            colors = listOf(
+                                DawnMagenta.copy(alpha = 0.13f),
+                                Color.Transparent
+                            )
+                        ),
+                        CircleShape
+                    )
+            )
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.20f))
+                    .padding(20.dp)
+            ) {
+                content()
+            }
         }
     }
 }
