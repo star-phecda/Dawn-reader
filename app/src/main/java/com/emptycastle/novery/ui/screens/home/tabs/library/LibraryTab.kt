@@ -69,6 +69,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.emptycastle.novery.R
@@ -361,8 +362,7 @@ private fun DawnHeader(
                     color = DawnCyan
                 )
                 Text(
-                    text = "YOUR
-LIBRARY",
+                    text = "YOUR\nLIBRARY",
                     style = MaterialTheme.typography.displayMedium.copy(lineHeight = 44.sp),
                     color = MaterialTheme.colorScheme.onBackground
                 )
