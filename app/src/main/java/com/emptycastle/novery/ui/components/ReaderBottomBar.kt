@@ -100,14 +100,14 @@ import com.emptycastle.novery.domain.model.TextAlign as ReaderTextAlign
 // =============================================================================
 
 private object BarTheme {
-    val background = Color(0xFF0A0A0B)
-    val surface = Color(0xFF141416)
-    val surfaceVariant = Color(0xFF1C1C1F)
-    val surfaceElevated = Color(0xFF232328)
+    val background = Color(0xFF0B0A10)
+    val surface = Color(0xFF17131B)
+    val surfaceVariant = Color(0xFF211A25)
+    val surfaceElevated = Color(0xFF2B2030)
 
-    val primary = Color(0xFFFF6B35)
-    val primaryMuted = Color(0xFFFF6B35).copy(alpha = 0.15f)
-    val primarySubtle = Color(0xFFFF6B35).copy(alpha = 0.08f)
+    val primary = Color(0xFFFF1493)
+    val primaryMuted = Color(0xFFFF1493).copy(alpha = 0.15f)
+    val primarySubtle = Color(0xFFFF1493).copy(alpha = 0.08f)
 
     val textPrimary = Color(0xFFFAFAFA)
     val textSecondary = Color(0xFFA1A1AA)
@@ -115,16 +115,16 @@ private object BarTheme {
     val textDisabled = Color(0xFF52525B)
 
     val divider = Color(0xFF27272A)
-    val border = Color(0xFF3F3F46)
+    val border = Color(0xFFAB8248).copy(alpha = 0.34f)
 
     val success = Color(0xFF22C55E)
     val successMuted = Color(0xFF22C55E).copy(alpha = 0.15f)
 
-    val warning = Color(0xFFF59E0B)
+    val warning = Color(0xFFFFBE55)
 
-    val cornerRadius = 28.dp
-    val cornerRadiusMedium = 20.dp
-    val cornerRadiusSmall = 14.dp
+    val cornerRadius = 30.dp
+    val cornerRadiusMedium = 22.dp
+    val cornerRadiusSmall = 16.dp
 }
 
 // Settings tabs for inline settings
