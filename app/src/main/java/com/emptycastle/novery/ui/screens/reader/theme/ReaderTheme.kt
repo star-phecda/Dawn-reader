@@ -411,55 +411,55 @@ data class ReaderColors(
         // =====================================================================
 
         fun lightTheme(): ReaderColors = ReaderColors(
-            background = Color(0xFFFFFBFE),
-            surface = Color(0xFFF5F5F5),
-            text = Color(0xFF1C1B1F),
-            textSecondary = Color(0xFF49454F),
+            background = DawnSiteCream,
+            surface = Color(0xFFFFFAF4),
+            text = DawnSiteInk,
+            textSecondary = Color(0xFF625A61),
 
-            accent = AccentColors.Orange,
-            accentDark = AccentColors.OrangeDark,
-            accentLight = AccentColors.OrangeLight,
+            accent = DawnSitePink,
+            accentDark = Color(0xFFC20D6C),
+            accentLight = Color(0xFFFF79B8),
 
-            divider = Color(0xFFE0E0E0),
-            border = Color(0xFFCAC4D0),
-            icon = Color(0xFF49454F),
-            iconSecondary = Color(0xFF79747E),
+            divider = Color(0xFFD9D0C8),
+            border = Color(0xFFC8BCB1),
+            icon = Color(0xFF4B444B),
+            iconSecondary = Color(0xFF7A6F77),
 
-            buttonBackground = AccentColors.Orange,
-            buttonText = Color.White,
-            ripple = Color(0xFF49454F),
+            buttonBackground = DawnSiteInk,
+            buttonText = DawnSiteCream,
+            ripple = DawnSitePink,
 
-            sentenceHighlight = AccentColors.Orange.copy(alpha = 0.25f),
-            segmentHighlight = AccentColors.Orange.copy(alpha = 0.08f),
-            selectionBackground = AccentColors.Blue.copy(alpha = 0.3f),
-            selectionHandle = AccentColors.Blue,
+            sentenceHighlight = DawnSitePink.copy(alpha = 0.24f),
+            segmentHighlight = DawnSitePink.copy(alpha = 0.07f),
+            selectionBackground = DawnSiteGold.copy(alpha = 0.3f),
+            selectionHandle = DawnSiteGold,
 
             success = AccentColors.Green,
-            warning = Color(0xFFFFA000),
+            warning = DawnSiteGold,
             error = Color(0xFFD32F2F),
 
-            chapterDividerBackground = Color(0xFFF0F0F0),
-            chapterHeaderText = Color(0xFF49454F),
+            chapterDividerBackground = Color(0xFFEFE6DC),
+            chapterHeaderText = DawnSiteInk,
 
-            codeBackground = Color(0xFFF6F8FA),
-            codeText = Color(0xFF24292F),
-            systemMessageBackground = Color(0xFFF0F6FC),
-            systemMessageBorder = Color(0xFFD0D7DE),
-            systemMessageText = Color(0xFF24292F),
-            systemMessageAccent = Color(0xFF0969DA),
+            codeBackground = Color(0xFFEEE8E1),
+            codeText = DawnSiteInk,
+            systemMessageBackground = Color(0xFFECE7DE),
+            systemMessageBorder = Color(0xFFD4C8B9),
+            systemMessageText = DawnSiteInk,
+            systemMessageAccent = DawnSiteGold,
 
-            progressTrack = Color(0xFFE0E0E0),
-            progressIndicator = AccentColors.Orange,
+            progressTrack = Color(0xFFD9D0C8),
+            progressIndicator = DawnSitePink,
 
             scrim = Color.Black.copy(alpha = 0.32f),
-            controlsBackground = Color(0xFFFFFBFE).copy(alpha = ReaderDefaults.ControlsBackgroundAlpha),
+            controlsBackground = Color(0xFFF9F4ED).copy(alpha = ReaderDefaults.ControlsBackgroundAlpha),
 
             metadata = ThemeMetadata(
                 id = "light",
                 displayName = "Light",
                 isDark = false,
                 category = ThemeCategory.STANDARD,
-                description = "Clean white background with dark text"
+                description = "Warm editorial paper with bold pink accents"
             )
         )
 
@@ -663,55 +663,55 @@ data class ReaderColors(
         // =====================================================================
 
         fun darkTheme(): ReaderColors = ReaderColors(
-            background = Color(0xFF26272C),
-            surface = Color(0xFF39363F),
-            text = Color(0xFFE6E1E5),
-            textSecondary = Color(0xFFCAC4D0),
+            background = DawnSiteNight,
+            surface = DawnSiteSurface,
+            text = DawnSiteCream,
+            textSecondary = Color(0xFFCEC4CE),
 
-            accent = AccentColors.Orange,
-            accentDark = AccentColors.OrangeDark,
-            accentLight = AccentColors.OrangeLight,
+            accent = DawnSitePink,
+            accentDark = Color(0xFFC20D6C),
+            accentLight = Color(0xFFFF79B8),
 
-            divider = Color(0xFF49454F),
-            border = Color(0xFF49454F),
-            icon = Color(0xFFCAC4D0),
-            iconSecondary = Color(0xFF938F99),
+            divider = Color(0xFF463B45),
+            border = Color(0xFF4F4350),
+            icon = Color(0xFFD7CDD5),
+            iconSecondary = Color(0xFF9C909A),
 
-            buttonBackground = AccentColors.Orange,
-            buttonText = Color.White,
-            ripple = Color(0xFFE6E1E5),
+            buttonBackground = DawnSiteCream,
+            buttonText = DawnSiteInk,
+            ripple = DawnSitePink,
 
-            sentenceHighlight = AccentColors.Orange.copy(alpha = 0.35f),
-            segmentHighlight = AccentColors.Orange.copy(alpha = 0.12f),
-            selectionBackground = AccentColors.Blue.copy(alpha = 0.4f),
-            selectionHandle = AccentColors.Blue,
+            sentenceHighlight = DawnSitePink.copy(alpha = 0.32f),
+            segmentHighlight = DawnSitePink.copy(alpha = 0.1f),
+            selectionBackground = DawnSiteGold.copy(alpha = 0.32f),
+            selectionHandle = DawnSiteGold,
 
             success = AccentColors.GreenLight,
-            warning = Color(0xFFFFB74D),
+            warning = DawnSiteGold,
             error = Color(0xFFEF5350),
 
-            chapterDividerBackground = Color(0xFF252328),
-            chapterHeaderText = Color(0xFFCAC4D0),
+            chapterDividerBackground = Color(0xFF151117),
+            chapterHeaderText = DawnSiteCream,
 
-            progressTrack = Color(0xFF49454F),
-            progressIndicator = AccentColors.Orange,
+            progressTrack = Color(0xFF463B45),
+            progressIndicator = DawnSitePink,
 
-            codeBackground = Color(0xFF1E1E1E),
-            codeText = Color(0xFFD4D4D4),
-            systemMessageBackground = Color(0xFF0D1117),
-            systemMessageBorder = Color(0xFF30363D),
-            systemMessageText = Color(0xFFC9D1D9),
-            systemMessageAccent = Color(0xFF58A6FF),
+            codeBackground = Color(0xFF17131B),
+            codeText = DawnSiteCream,
+            systemMessageBackground = Color(0xFF121017),
+            systemMessageBorder = Color(0xFF3C323E),
+            systemMessageText = DawnSiteCream,
+            systemMessageAccent = DawnSiteGold,
 
             scrim = Color.Black.copy(alpha = 0.5f),
-            controlsBackground = Color(0xFF1C1B1F).copy(alpha = ReaderDefaults.ControlsBackgroundAlpha),
+            controlsBackground = Color(0xFF120F15).copy(alpha = ReaderDefaults.ControlsBackgroundAlpha),
 
             metadata = ThemeMetadata(
                 id = "dark",
                 displayName = "Dark",
                 isDark = true,
                 category = ThemeCategory.STANDARD,
-                description = "Dark gray background, easy on the eyes"
+                description = "Ink-black editorial night with pink and gold accents"
             )
         )
 

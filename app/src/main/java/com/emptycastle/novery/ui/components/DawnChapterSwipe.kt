@@ -33,8 +33,10 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.emptycastle.novery.ui.theme.DawnCyan
-import com.emptycastle.novery.ui.theme.DawnMagenta
+import com.emptycastle.novery.ui.theme.DawnSiteCream
+import com.emptycastle.novery.ui.theme.DawnSiteGold
+import com.emptycastle.novery.ui.theme.DawnSiteInk
+import com.emptycastle.novery.ui.theme.DawnSitePink
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 
@@ -59,6 +61,7 @@ fun DawnChapterSwipeSurface(
     onNext: () -> Unit,
     onTap: (Offset, Float, Float) -> Unit,
     modifier: Modifier = Modifier,
+    edgeZoneRatio: Float = 0.22f,
     content: @Composable () -> Unit
 ) {
     BoxWithConstraints(modifier = modifier.fillMaxSize()) {
@@ -66,6 +69,7 @@ fun DawnChapterSwipeSurface(
         val heightPx = constraints.maxHeight.toFloat().coerceAtLeast(1f)
         val thresholdPx = maxOf(110f, heightPx * 0.18f)
         val touchSlopPx = 8.dp.value * LocalDensity.current.density
+        val edgeZonePx = heightPx * edgeZoneRatio.coerceIn(0.12f, 0.35f)
         val offsetY = remember { Animatable(0f) }
         val scope = rememberCoroutineScope()
         val haptics = LocalHapticFeedback.current
@@ -87,7 +91,7 @@ fun DawnChapterSwipeSurface(
             direction > 0 -> hasPreviousChapter && allowPreviousGesture
             else -> false
         }
-        val accent = if (direction < 0) DawnCyan else DawnMagenta
+        val accent = if (direction < 0) DawnSitePink else DawnSiteGold
 
         Box(modifier = Modifier.fillMaxSize()) {
             if (direction != 0 && canNavigate) {
@@ -96,10 +100,10 @@ fun DawnChapterSwipeSurface(
                     contentAlignment = if (direction < 0) Alignment.BottomCenter else Alignment.TopCenter
                 ) {
                     Surface(
-                        shape = RoundedCornerShape(26.dp),
-                        color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.94f),
-                        border = BorderStroke(1.dp, accent.copy(alpha = 0.65f)),
-                        tonalElevation = 3.dp
+                        shape = RoundedCornerShape(24.dp),
+                        color = MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.97f),
+                        border = BorderStroke(1.dp, accent.copy(alpha = 0.62f)),
+                        tonalElevation = 5.dp
                     ) {
                         Row(
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 11.dp),
@@ -108,10 +112,10 @@ fun DawnChapterSwipeSurface(
                         ) {
                             Text(
                                 text = when {
-                                    direction < 0 && progress >= 1f -> "RELEASE TO UNLOCK"
+                                    direction < 0 && progress >= 1f -> "RELEASE TO CONTINUE"
                                     direction > 0 && progress >= 1f -> "RELEASE TO RETURN"
-                                    direction < 0 -> "DRAG UP"
-                                    else -> "DRAG DOWN"
+                                    direction < 0 -> "SWIPE UP FROM EDGE"
+                                    else -> "SWIPE DOWN FROM EDGE"
                                 },
                                 style = MaterialTheme.typography.labelMedium.copy(letterSpacing = 1.05.sp),
                                 color = accent
@@ -119,7 +123,7 @@ fun DawnChapterSwipeSurface(
                             Text(
                                 text = if (direction < 0) "NEXT CHAPTER  ↑" else "PREVIOUS CHAPTER  ↓",
                                 style = MaterialTheme.typography.titleLarge,
-                                color = accent
+                                color = if (MaterialTheme.colorScheme.isLight) DawnSiteInk else DawnSiteCream
                             )
                         }
                     }
@@ -150,6 +154,8 @@ fun DawnChapterSwipeSurface(
                             var totalDy = 0f
                             var vertical = false
                             var trackingEdgeGesture = false
+                            val startedAtTopEdge = down.position.y <= edgeZonePx
+                            val startedAtBottomEdge = down.position.y >= heightPx - edgeZonePx
 
                             while (true) {
                                 val event = awaitPointerEvent()
@@ -167,9 +173,11 @@ fun DawnChapterSwipeSurface(
                                 ) {
                                     if (kotlin.math.abs(totalDy) > kotlin.math.abs(totalDx)) {
                                         vertical = true
-                                        trackingEdgeGesture =
-                                            (totalDy < 0f && hasNextChapter && allowNextGesture) ||
-                                            (totalDy > 0f && hasPreviousChapter && allowPreviousGesture)
+                                        trackingEdgeGesture = when {
+                                            totalDy < 0f -> startedAtBottomEdge && hasNextChapter && allowNextGesture
+                                            totalDy > 0f -> startedAtTopEdge && hasPreviousChapter && allowPreviousGesture
+                                            else -> false
+                                        }
                                     } else {
                                         break
                                     }

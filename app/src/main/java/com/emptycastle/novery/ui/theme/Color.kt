@@ -100,3 +100,11 @@ val DawnCream = Color(0xFFF7F0E3)
 val DawnCoral = Color(0xFFFF7A66)
 val DawnGold = Color(0xFFFFC85A)
 val DawnInk = Color(0xFF17141A)
+
+// Site-inspired identity palette: Finn's bold pink/ink + Phecda's warm paper/gold.
+val DawnSiteCream = Color(0xFFF7F2EA)
+val DawnSiteInk = Color(0xFF111111)
+val DawnSitePink = Color(0xFFFF1493)
+val DawnSiteGold = Color(0xFFAB8248)
+val DawnSiteNight = Color(0xFF0B0A10)
+val DawnSiteSurface = Color(0xFF17131B)

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -38,6 +39,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.emptycastle.novery.domain.model.MaxWidth
 import com.emptycastle.novery.domain.model.ReadingDirection
 import com.emptycastle.novery.ui.screens.reader.logic.AuthorNoteDisplayMode
@@ -412,41 +414,69 @@ fun ReaderContainer(
                             }
 
                             is ReaderDisplayItem.ChapterDivider -> {
-                                Column(
+                                Surface(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(horizontal = horizontalPadding, vertical = 32.dp),
-                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                                        .padding(horizontal = horizontalPadding, vertical = 28.dp),
+                                    shape = RoundedCornerShape(28.dp),
+                                    color = effectiveColors.surface,
+                                    border = BorderStroke(
+                                        1.dp,
+                                        effectiveColors.accent.copy(alpha = 0.24f)
+                                    ),
+                                    tonalElevation = 4.dp,
+                                    shadowElevation = 8.dp
                                 ) {
-                                    Row(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                                    Column(
+                                        modifier = Modifier.padding(horizontal = 20.dp, vertical = 18.dp),
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                        verticalArrangement = Arrangement.spacedBy(10.dp)
                                     ) {
-                                        HorizontalDivider(
-                                            modifier = Modifier.weight(1f),
-                                            color = effectiveColors.textSecondary.copy(alpha = 0.22f)
-                                        )
                                         Text(
                                             text = "CHAPTER " + (item.chapterIndex + 1),
-                                            style = MaterialTheme.typography.labelSmall,
+                                            style = MaterialTheme.typography.labelSmall.copy(
+                                                fontFamily = MonoFontFamily,
+                                                letterSpacing = 1.4.sp,
+                                                fontWeight = FontWeight.Bold
+                                            ),
+                                            color = effectiveColors.accent
+                                        )
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                                        ) {
+                                            HorizontalDivider(
+                                                modifier = Modifier.weight(1f),
+                                                color = effectiveColors.textSecondary.copy(alpha = 0.22f)
+                                            )
+                                            Text(
+                                                text = if (item.chapterIndex < uiState.allChapters.lastIndex) "NEXT" else "FIN",
+                                                style = MaterialTheme.typography.labelSmall.copy(
+                                                    fontFamily = MonoFontFamily,
+                                                    letterSpacing = 1.2.sp,
+                                                    fontWeight = FontWeight.Bold
+                                                ),
+                                                color = effectiveColors.text
+                                            )
+                                            HorizontalDivider(
+                                                modifier = Modifier.weight(1f),
+                                                color = effectiveColors.textSecondary.copy(alpha = 0.22f)
+                                            )
+                                        }
+                                        Text(
+                                            text = if (item.chapterIndex < uiState.allChapters.lastIndex) {
+                                                "SWIPE UP FROM THE BOTTOM EDGE"
+                                            } else {
+                                                "END OF BOOK"
+                                            },
+                                            style = MaterialTheme.typography.labelMedium.copy(
+                                                fontFamily = MonoFontFamily,
+                                                letterSpacing = 0.7.sp
+                                            ),
                                             color = effectiveColors.textSecondary
                                         )
-                                        HorizontalDivider(
-                                            modifier = Modifier.weight(1f),
-                                            color = effectiveColors.textSecondary.copy(alpha = 0.22f)
-                                        )
                                     }
-                                    Text(
-                                        text = if (item.chapterIndex < uiState.allChapters.lastIndex) {
-                                            "Drag up to unlock the next chapter"
-                                        } else {
-                                            "End of book"
-                                        },
-                                        style = MaterialTheme.typography.labelMedium,
-                                        color = effectiveColors.textSecondary.copy(alpha = 0.8f)
-                                    )
                                 }
                             }
 

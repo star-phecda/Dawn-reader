@@ -36,18 +36,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.emptycastle.novery.ui.theme.DawnBlue
-import com.emptycastle.novery.ui.theme.DawnCyan
-import com.emptycastle.novery.ui.theme.DawnMagenta
-import com.emptycastle.novery.ui.theme.DawnNavy
-import com.emptycastle.novery.ui.theme.DawnViolet
-import com.emptycastle.novery.ui.theme.SunGold500
+import com.emptycastle.novery.ui.theme.DawnSiteCream
+import com.emptycastle.novery.ui.theme.DawnSiteGold
+import com.emptycastle.novery.ui.theme.DawnSiteInk
+import com.emptycastle.novery.ui.theme.DawnSitePink
 
 /** Dawn's floating editorial navigation rail. */
 data class BottomNavItem(
@@ -74,22 +71,16 @@ fun NoveryBottomNavBar(
     val normalizedSelectedRoute = selectedRoute.removePrefix("tab_")
 
     Surface(
-        modifier = modifier.widthIn(max = 500.dp),
-        shape = RoundedCornerShape(22.dp),
-        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.94f),
+        modifier = modifier.widthIn(max = 560.dp),
+        shape = RoundedCornerShape(28.dp),
+        color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.97f),
         contentColor = MaterialTheme.colorScheme.onSurface,
         border = BorderStroke(
             1.dp,
-            Brush.horizontalGradient(
-                listOf(
-                    DawnCyan.copy(alpha = 0.48f),
-                    SunGold500.copy(alpha = 0.36f),
-                    DawnMagenta.copy(alpha = 0.42f)
-                )
-            )
+            DawnSiteGold.copy(alpha = 0.28f)
         ),
-        shadowElevation = 18.dp,
-        tonalElevation = 2.dp
+        shadowElevation = 14.dp,
+        tonalElevation = 3.dp
     ) {
         Row(
             modifier = Modifier
@@ -117,7 +108,7 @@ private fun DawnNavItem(
 ) {
     val source = remember { MutableInteractionSource() }
     val tint by animateColorAsState(
-        targetValue = if (selected) DawnNavy else MaterialTheme.colorScheme.onSurfaceVariant,
+        targetValue = if (selected) DawnSiteCream else MaterialTheme.colorScheme.onSurfaceVariant,
         animationSpec = spring(stiffness = 650f),
         label = "dawn_nav_tint"
     )
@@ -136,18 +127,12 @@ private fun DawnNavItem(
                 .then(
                     if (selected) {
                         Modifier.background(
-                            Brush.horizontalGradient(
-                                listOf(
-                                    DawnCyan.copy(alpha = 0.96f),
-                                    SunGold500.copy(alpha = 0.92f),
-                                    DawnMagenta.copy(alpha = 0.94f)
-                                )
-                            ),
+                            DawnSiteInk,
                             RoundedCornerShape(18.dp)
                         )
                     } else Modifier
                 )
-                .padding(horizontal = if (selected) 14.dp else 11.dp, vertical = 9.dp),
+                .padding(horizontal = if (selected) 15.dp else 11.dp, vertical = 10.dp),
             horizontalArrangement = Arrangement.spacedBy(if (selected) 6.dp else 0.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {

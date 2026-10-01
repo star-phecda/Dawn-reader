@@ -42,6 +42,8 @@ import androidx.compose.ui.unit.dp
 import com.emptycastle.novery.domain.model.ProgressStyle
 import com.emptycastle.novery.ui.screens.reader.theme.ReaderColors
 import com.emptycastle.novery.ui.screens.reader.theme.ReaderDefaults
+import com.emptycastle.novery.ui.theme.MonoFontFamily
+import com.emptycastle.novery.ui.theme.SerifFontFamily
 
 // =============================================================================
 // TOP BAR
@@ -70,8 +72,14 @@ fun ReaderTopBar(
 
     Surface(
         modifier = modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(
+            bottomStart = 28.dp,
+            bottomEnd = 28.dp
+        ),
         color = colors.controlsBackground,
-        shadowElevation = ReaderDefaults.TopBarElevation
+        border = BorderStroke(1.dp, colors.accent.copy(alpha = 0.16f)),
+        shadowElevation = 8.dp,
+        tonalElevation = 3.dp
     ) {
         Column {
             Row(
@@ -99,9 +107,21 @@ fun ReaderTopBar(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
+                        text = "DAWN READER",
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            fontFamily = MonoFontFamily,
+                            letterSpacing = 1.5.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        color = colors.accent
+                    )
+                    Spacer(modifier = Modifier.height(2.dp))
+                    Text(
                         text = chapterTitle,
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.Medium,
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontFamily = SerifFontFamily
+                        ),
+                        fontWeight = FontWeight.Bold,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         textAlign = TextAlign.Center,

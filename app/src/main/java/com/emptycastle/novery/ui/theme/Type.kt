@@ -10,14 +10,14 @@ import androidx.compose.ui.unit.sp
 import com.emptycastle.novery.R
 
 val DawnSans = FontFamily(
-    Font(R.font.nunito_regular, FontWeight.Normal),
-    Font(R.font.nunito_bold, FontWeight.Bold)
+    Font(R.font.inter_regular, FontWeight.Normal),
+    Font(R.font.inter_bold, FontWeight.Bold)
 )
 
 val DawnSerif = FontFamily(
-    Font(R.font.cormorant_garamond_regular, FontWeight.Normal),
-    Font(R.font.cormorant_garamond_bold, FontWeight.Bold),
-    Font(R.font.cormorant_garamond_italic, FontWeight.Normal, FontStyle.Italic)
+    Font(R.font.newsreader_regular, FontWeight.Normal),
+    Font(R.font.newsreader_bold, FontWeight.Bold),
+    Font(R.font.newsreader_italic, FontWeight.Normal, FontStyle.Italic)
 )
 
 val DefaultFontFamily = DawnSans
