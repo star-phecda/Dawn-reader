@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -35,6 +36,11 @@ import androidx.compose.ui.unit.sp
 import com.emptycastle.novery.ui.theme.DawnSiteGold
 import com.emptycastle.novery.ui.theme.DawnSitePink
 import kotlin.math.abs
+
+private data class SwipeSettleRequest(
+    val target: Float,
+    val direction: Int
+)
 
 /**
  * Dawn's horizontal chapter gesture.
@@ -66,19 +72,46 @@ fun DawnChapterSwipeSurface(
         val heightPx = constraints.maxHeight.toFloat().coerceAtLeast(1f)
         val touchSlopPx = 8.dp.value * LocalDensity.current.density
         val thresholdPx = maxOf(96f, widthPx * 0.24f)
-        val offsetX = remember { Animatable(0f) }
+        val settleAnimation = remember { Animatable(0f) }
         val haptics = LocalHapticFeedback.current
-        var crossedThreshold by remember(chapterKey) { mutableStateOf(false) }
 
-        LaunchedEffect(chapterKey) {
-            offsetX.snapTo(0f)
-            crossedThreshold = false
+        var dragOffsetX by remember(chapterKey) { mutableFloatStateOf(0f) }
+        var crossedThreshold by remember(chapterKey) { mutableStateOf(false) }
+        var settleRequest by remember(chapterKey) {
+            mutableStateOf<SwipeSettleRequest?>(null)
         }
 
-        val progress = (abs(offsetX.value) / thresholdPx).coerceIn(0f, 1f)
+        LaunchedEffect(chapterKey) {
+            dragOffsetX = 0f
+            crossedThreshold = false
+            settleRequest = null
+            settleAnimation.snapTo(0f)
+        }
+
+        LaunchedEffect(settleRequest) {
+            val request = settleRequest ?: return@LaunchedEffect
+
+            settleAnimation.snapTo(dragOffsetX)
+            settleAnimation.animateTo(
+                request.target,
+                if (reduceMotion) tween(150) else spring(stiffness = 700f)
+            )
+
+            when (request.direction) {
+                -1 -> onNext()
+                1 -> onPrevious()
+            }
+
+            dragOffsetX = 0f
+            crossedThreshold = false
+            settleRequest = null
+        }
+
+        val renderedOffsetX = settleRequest?.let { settleAnimation.value } ?: dragOffsetX
+        val progress = (abs(renderedOffsetX) / thresholdPx).coerceIn(0f, 1f)
         val direction = when {
-            offsetX.value < 0f -> -1
-            offsetX.value > 0f -> 1
+            renderedOffsetX < 0f -> -1
+            renderedOffsetX > 0f -> 1
             else -> 0
         }
         val canNavigate = when {
@@ -129,13 +162,13 @@ fun DawnChapterSwipeSurface(
                 modifier = Modifier
                     .fillMaxSize()
                     .graphicsLayer {
-                        translationX = offsetX.value
+                        translationX = renderedOffsetX
                         val lift = progress * 0.012f
                         scaleX = 1f - lift
                         scaleY = 1f - lift
                         rotationZ = when {
-                            offsetX.value < 0f -> -progress * 1.1f
-                            offsetX.value > 0f -> progress * 1.1f
+                            renderedOffsetX < 0f -> -progress * 1.1f
+                            renderedOffsetX > 0f -> progress * 1.1f
                             else -> 0f
                         }
                         shadowElevation = progress * 14f
@@ -158,95 +191,92 @@ fun DawnChapterSwipeSurface(
                             var trackingHorizontal = false
                             var sawVerticalIntent = false
 
-                                while (true) {
-                                    val event = awaitPointerEvent()
-                                    val change = event.changes.firstOrNull { it.id == down.id }
-                                        ?: event.changes.firstOrNull()
-                                        ?: break
+                            while (true) {
+                                val event = awaitPointerEvent()
+                                val change = event.changes.firstOrNull { it.id == down.id }
+                                    ?: event.changes.firstOrNull()
+                                    ?: break
 
-                                    val delta = change.position - lastPosition
-                                    lastPosition = change.position
-                                    totalDx += delta.x
-                                    totalDy += delta.y
+                                val delta = change.position - lastPosition
+                                lastPosition = change.position
+                                totalDx += delta.x
+                                totalDy += delta.y
 
-                                    if (!trackingHorizontal && !sawVerticalIntent) {
-                                        val movedEnough = abs(totalDx) > touchSlopPx ||
-                                            abs(totalDy) > touchSlopPx
+                                if (!trackingHorizontal && !sawVerticalIntent) {
+                                    val movedEnough = abs(totalDx) > touchSlopPx ||
+                                        abs(totalDy) > touchSlopPx
 
-                                        if (movedEnough) {
-                                            if (abs(totalDx) > abs(totalDy)) {
-                                                val wantsNext = totalDx < 0f
-                                                val allowed = if (wantsNext) {
-                                                    hasNextChapter && allowNextGesture
-                                                } else {
-                                                    hasPreviousChapter && allowPreviousGesture
-                                                }
-
-                                                if (allowed) {
-                                                    trackingHorizontal = true
-                                                } else {
-                                                    break
-                                                }
+                                    if (movedEnough) {
+                                        if (abs(totalDx) > abs(totalDy)) {
+                                            val wantsNext = totalDx < 0f
+                                            val allowed = if (wantsNext) {
+                                                hasNextChapter && allowNextGesture
                                             } else {
-                                                sawVerticalIntent = true
+                                                hasPreviousChapter && allowPreviousGesture
                                             }
+
+                                            if (allowed) {
+                                                trackingHorizontal = true
+                                            } else {
+                                                break
+                                            }
+                                        } else {
+                                            sawVerticalIntent = true
                                         }
                                     }
-
-                                    if (trackingHorizontal) {
-                                        change.consume()
-                                        val candidate = (offsetX.value + delta.x)
-                                            .coerceIn(-widthPx, widthPx)
-
-                                        val allowed = when {
-                                            candidate < 0f -> hasNextChapter && allowNextGesture
-                                            candidate > 0f -> hasPreviousChapter && allowPreviousGesture
-                                            else -> true
-                                        }
-
-                                        if (allowed) {
-                                            offsetX.snapTo(candidate)
-                                            val crossed = abs(candidate) >= thresholdPx
-                                            if (crossed && !crossedThreshold) {
-                                                crossedThreshold = true
-                                                haptics.performHapticFeedback(HapticFeedbackType.LongPress)
-                                            } else if (!crossed) {
-                                                crossedThreshold = false
-                                            }
-                                        }
-                                    }
-
-                                    if (!change.pressed) break
                                 }
 
                                 if (trackingHorizontal) {
-                                    val finalOffset = offsetX.value
-                                    val goNext = finalOffset <= -thresholdPx &&
-                                        hasNextChapter && allowNextGesture
-                                    val goPrevious = finalOffset >= thresholdPx &&
-                                        hasPreviousChapter && allowPreviousGesture
+                                    change.consume()
+                                    val candidate = (dragOffsetX + delta.x)
+                                        .coerceIn(-widthPx, widthPx)
 
-                                    if (goNext || goPrevious) {
-                                        offsetX.animateTo(
-                                            if (goNext) -widthPx else widthPx,
-                                            if (reduceMotion) tween(150) else spring(stiffness = 700f)
-                                        )
-                                        if (goNext) onNext() else onPrevious()
-                                        offsetX.snapTo(0f)
-                                    } else {
-                                        offsetX.animateTo(
-                                            0f,
-                                            if (reduceMotion) tween(120) else spring(stiffness = 850f)
-                                        )
+                                    val allowed = when {
+                                        candidate < 0f -> hasNextChapter && allowNextGesture
+                                        candidate > 0f -> hasPreviousChapter && allowPreviousGesture
+                                        else -> true
                                     }
 
-                                    crossedThreshold = false
-                                } else if (
-                                    abs(totalDx) <= touchSlopPx &&
-                                    abs(totalDy) <= touchSlopPx
-                                ) {
-                                    onTap(down.position, widthPx, heightPx)
+                                    if (allowed) {
+                                        dragOffsetX = candidate
+                                        val crossed = abs(candidate) >= thresholdPx
+                                        if (crossed && !crossedThreshold) {
+                                            crossedThreshold = true
+                                            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                                        } else if (!crossed) {
+                                            crossedThreshold = false
+                                        }
+                                    }
                                 }
+
+                                if (!change.pressed) break
+                            }
+
+                            if (trackingHorizontal) {
+                                val finalOffset = dragOffsetX
+                                val goNext = finalOffset <= -thresholdPx &&
+                                    hasNextChapter && allowNextGesture
+                                val goPrevious = finalOffset >= thresholdPx &&
+                                    hasPreviousChapter && allowPreviousGesture
+
+                                settleRequest = SwipeSettleRequest(
+                                    target = when {
+                                        goNext -> -widthPx
+                                        goPrevious -> widthPx
+                                        else -> 0f
+                                    },
+                                    direction = when {
+                                        goNext -> -1
+                                        goPrevious -> 1
+                                        else -> 0
+                                    }
+                                )
+                            } else if (
+                                abs(totalDx) <= touchSlopPx &&
+                                abs(totalDy) <= touchSlopPx
+                            ) {
+                                onTap(down.position, widthPx, heightPx)
+                            }
                         }
                     }
             ) {
