@@ -12,72 +12,74 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.emptycastle.novery.ui.theme.DawnBlue
 import com.emptycastle.novery.ui.theme.DawnCyan
 import com.emptycastle.novery.ui.theme.DawnMagenta
 import com.emptycastle.novery.ui.theme.DawnViolet
 import com.emptycastle.novery.ui.theme.SunGold500
 
 /**
- * Shared Dawn atmosphere inspired by Finn's living canvas and Phecda's museum grid.
+ * Dawn's editorial atmosphere: part creative canvas, part museum wall.
  *
- * The texture stays deliberately subtle so covers, titles, and reader content remain dominant.
+ * Strong negative space, oversized structure and small authored details replace
+ * the generic repeating app grid used previously.
  */
 @Composable
 fun DawnAtmosphere(
     modifier: Modifier = Modifier,
     content: @Composable BoxScope.() -> Unit
 ) {
-    val gridColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.035f)
+    val background = MaterialTheme.colorScheme.background
+    val ink = MaterialTheme.colorScheme.onBackground
 
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(background)
     ) {
         Canvas(modifier = Modifier.fillMaxSize()) {
-            val step = 32.dp.toPx()
+            val guide = ink.copy(alpha = 0.055f)
+            val x1 = size.width * 0.11f
+            val x2 = size.width * 0.86f
+            val y1 = size.height * 0.23f
+            val y2 = size.height * 0.79f
 
-            var x = 0f
-            while (x <= size.width) {
-                drawLine(
-                    color = gridColor,
-                    start = Offset(x, 0f),
-                    end = Offset(x, size.height),
-                    strokeWidth = 1f
-                )
-                x += step
-            }
+            drawLine(guide, Offset(x1, 0f), Offset(x1, size.height), 1f)
+            drawLine(guide, Offset(x2, 0f), Offset(x2, size.height), 1f)
+            drawLine(guide, Offset(0f, y1), Offset(size.width, y1), 1f)
+            drawLine(guide, Offset(0f, y2), Offset(size.width, y2), 1f)
 
-            var y = 0f
-            while (y <= size.height) {
-                drawLine(
-                    color = gridColor,
-                    start = Offset(0f, y),
-                    end = Offset(size.width, y),
-                    strokeWidth = 1f
-                )
-                y += step
-            }
-
-            val stars = listOf(
-                Offset(size.width * 0.10f, size.height * 0.16f),
-                Offset(size.width * 0.18f, size.height * 0.72f),
-                Offset(size.width * 0.34f, size.height * 0.28f),
-                Offset(size.width * 0.61f, size.height * 0.12f),
-                Offset(size.width * 0.78f, size.height * 0.34f),
-                Offset(size.width * 0.90f, size.height * 0.70f),
-                Offset(size.width * 0.48f, size.height * 0.84f)
+            drawCircle(
+                color = DawnCyan.copy(alpha = 0.075f),
+                radius = size.minDimension * 0.34f,
+                center = Offset(size.width * 0.92f, size.height * 0.12f)
+            )
+            drawCircle(
+                color = DawnMagenta.copy(alpha = 0.055f),
+                radius = size.minDimension * 0.27f,
+                center = Offset(size.width * 0.05f, size.height * 0.78f)
+            )
+            drawCircle(
+                color = DawnViolet.copy(alpha = 0.045f),
+                radius = size.minDimension * 0.18f,
+                center = Offset(size.width * 0.50f, size.height * 0.52f)
             )
 
-            stars.forEachIndexed { index, point ->
+            val marks = listOf(
+                Offset(size.width * 0.16f, size.height * 0.12f),
+                Offset(size.width * 0.74f, size.height * 0.34f),
+                Offset(size.width * 0.22f, size.height * 0.67f),
+                Offset(size.width * 0.81f, size.height * 0.83f)
+            )
+            marks.forEachIndexed { index, point ->
                 drawCircle(
                     color = when (index % 4) {
-                        0 -> DawnCyan.copy(alpha = 0.20f)
-                        1 -> DawnMagenta.copy(alpha = 0.17f)
-                        2 -> SunGold500.copy(alpha = 0.15f)
-                        else -> DawnViolet.copy(alpha = 0.17f)
+                        0 -> DawnCyan.copy(alpha = 0.22f)
+                        1 -> DawnMagenta.copy(alpha = 0.20f)
+                        2 -> SunGold500.copy(alpha = 0.17f)
+                        else -> DawnBlue.copy(alpha = 0.18f)
                     },
-                    radius = 1.5.dp.toPx(),
+                    radius = if (index == 1) 2.2.dp.toPx() else 1.5.dp.toPx(),
                     center = point
                 )
             }
@@ -89,33 +91,20 @@ fun DawnAtmosphere(
                 .background(
                     Brush.radialGradient(
                         colors = listOf(
-                            DawnCyan.copy(alpha = 0.11f),
+                            DawnCyan.copy(alpha = 0.055f),
                             Color.Transparent
                         )
                     )
                 )
         )
-
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(
-                    Brush.radialGradient(
+                    Brush.linearGradient(
                         colors = listOf(
-                            DawnMagenta.copy(alpha = 0.075f),
-                            Color.Transparent
-                        )
-                    )
-                )
-        )
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    Brush.radialGradient(
-                        colors = listOf(
-                            SunGold500.copy(alpha = 0.035f),
+                            Color.Transparent,
+                            DawnMagenta.copy(alpha = 0.035f),
                             Color.Transparent
                         )
                     )

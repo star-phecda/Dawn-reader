@@ -346,75 +346,104 @@ private fun DawnHeader(
     total: Int,
     onNotificationClick: () -> Unit
 ) {
-    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            verticalAlignment = Alignment.Top
         ) {
-            Image(
-                painter = painterResource(R.drawable.dawn_launcher_round),
-                contentDescription = "Dawn",
-                modifier = Modifier
-                    .size(46.dp)
-                    .clip(RoundedCornerShape(16.dp))
-            )
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "Dawn",
-                    style = MaterialTheme.typography.headlineMedium,
+                    text = "00 / PRIVATE SHELF",
+                    style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 2.sp),
+                    color = DawnCyan
+                )
+                Text(
+                    text = "YOUR
+LIBRARY",
+                    style = MaterialTheme.typography.displayMedium.copy(lineHeight = 44.sp),
                     color = MaterialTheme.colorScheme.onBackground
                 )
                 Text(
-                    text = if (total == 0) "Your next story starts here" else "${total} stories · keep reading",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    text = if (total == 0) {
+                        "No stories yet. The wall is still blank."
+                    } else {
+                        "$total stories / keep the next one close."
+                    },
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(top = 8.dp)
                 )
             }
-            Box {
+
+            Column(
+                horizontalAlignment = Alignment.End,
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.dawn_launcher_round),
+                    contentDescription = "Dawn",
+                    modifier = Modifier
+                        .size(42.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                )
+                if (newCount > 0) {
+                    Text(
+                        text = "$newCount NEW",
+                        style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 1.sp),
+                        color = DawnMagenta
+                    )
+                }
                 IconButton(onClick = onNotificationClick) {
                     Icon(Icons.Rounded.NotificationsNone, "Notifications")
-                }
-                if (newCount > 0) {
-                    Surface(
-                        modifier = Modifier.align(Alignment.TopEnd).size(9.dp),
-                        shape = RoundedCornerShape(50),
-                        color = DawnMagenta,
-                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.background)
-                    ) {}
                 }
             }
         }
 
-        Surface(
+        Row(
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(23.dp),
-            color = MaterialTheme.colorScheme.surfaceContainerLow,
-            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.6f))
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                modifier = Modifier.padding(horizontal = 15.dp, vertical = 12.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                Icon(Icons.Rounded.Search, null, tint = DawnCyan)
-                androidx.compose.foundation.text.BasicTextField(
-                    value = query,
-                    onValueChange = onQueryChange,
-                    modifier = Modifier.weight(1f),
-                    singleLine = true,
-                    textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onSurface),
-                    decorationBox = { inner ->
-                        Box {
-                            if (query.isBlank()) {
-                                Text("Search your library...", color = MaterialTheme.colorScheme.onSurfaceVariant)
-                            }
-                            inner()
+            Box(
+                modifier = Modifier
+                    .width(26.dp)
+                    .height(1.dp)
+                    .background(DawnCyan)
+            )
+            Spacer(Modifier.width(10.dp))
+            Icon(Icons.Rounded.Search, null, tint = DawnCyan)
+            Spacer(Modifier.width(10.dp))
+            androidx.compose.foundation.text.BasicTextField(
+                value = query,
+                onValueChange = onQueryChange,
+                modifier = Modifier.weight(1f),
+                singleLine = true,
+                textStyle = MaterialTheme.typography.bodyLarge.copy(
+                    color = MaterialTheme.colorScheme.onSurface
+                ),
+                decorationBox = { inner ->
+                    Box {
+                        if (query.isBlank()) {
+                            Text(
+                                "SEARCH THE COLLECTION",
+                                style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 1.1.sp),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
                         }
+                        inner()
                     }
-                )
-            }
+                }
+            )
         }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(1.dp)
+                .background(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.55f))
+        )
     }
 }
 
@@ -422,18 +451,19 @@ private fun DawnHeader(
 private fun DawnContinueCard(item: LibraryItem, onClick: () -> Unit) {
     val novel = item.novel
     val chapter = item.lastReadPosition?.chapterName
+
     Card(
         onClick = onClick,
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(30.dp),
+        shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(188.dp)
-                .clip(RoundedCornerShape(30.dp))
+                .height(216.dp)
+                .clip(RoundedCornerShape(14.dp))
         ) {
             AsyncImage(
                 model = novel.posterUrl,
@@ -441,35 +471,37 @@ private fun DawnContinueCard(item: LibraryItem, onClick: () -> Unit) {
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
             )
+
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(
                         Brush.horizontalGradient(
                             listOf(
-                                DawnNavy.copy(alpha = 0.97f),
+                                DawnNavy.copy(alpha = 0.98f),
                                 DawnNavy.copy(alpha = 0.82f),
+                                DawnNavy.copy(alpha = 0.28f),
                                 Color.Transparent
                             )
                         )
                     )
             )
+
             Column(
                 modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .padding(20.dp)
-                    .padding(end = 130.dp),
-                verticalArrangement = Arrangement.spacedBy(7.dp)
+                    .align(Alignment.BottomStart)
+                    .padding(18.dp)
+                    .fillMaxWidth(0.78f),
+                verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 Text(
-                    text = "CONTINUE READING",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = DawnCyan,
-                    fontWeight = FontWeight.Bold
+                    text = "01 / CONTINUE READING",
+                    style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 1.6.sp),
+                    color = DawnCyan
                 )
                 Text(
                     text = novel.name,
-                    style = MaterialTheme.typography.headlineSmall,
+                    style = MaterialTheme.typography.displaySmall.copy(lineHeight = 38.sp),
                     color = Color.White,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
@@ -483,30 +515,21 @@ private fun DawnContinueCard(item: LibraryItem, onClick: () -> Unit) {
                         overflow = TextOverflow.Ellipsis
                     )
                 }
-                Spacer(Modifier.height(2.dp))
-                Text(
-                    text = if (chapter != null) "Tap to continue" else "Open story",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = Color.White.copy(alpha = 0.78f)
-                )
             }
-            Surface(
+
+            Box(
                 modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(18.dp)
-                    .size(50.dp),
-                shape = RoundedCornerShape(18.dp),
-                color = Color.Transparent,
-                tonalElevation = 0.dp
+                    .align(Alignment.TopEnd)
+                    .padding(16.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(Color.Black.copy(alpha = 0.32f))
+                    .padding(horizontal = 10.dp, vertical = 7.dp)
             ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Brush.linearGradient(listOf(DawnCyan, DawnMagenta))),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(Icons.Rounded.MenuBook, null, tint = DawnNavy, modifier = Modifier.size(24.dp))
-                }
+                Text(
+                    text = "OPEN ↗",
+                    style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 1.sp),
+                    color = Color.White
+                )
             }
         }
     }

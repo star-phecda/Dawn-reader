@@ -520,106 +520,71 @@ fun ChapterDividerItem(
     onNext: () -> Unit,
     onBackToDetails: () -> Unit
 ) {
-    val buttonHeight = if (largerTouchTargets) 64.dp else 56.dp
-    val iconSize = if (largerTouchTargets) 24.dp else 20.dp
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 48.dp)
+            .padding(vertical = 44.dp)
             .padding(horizontal = horizontalPadding),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         HorizontalDivider(
-            modifier = Modifier.padding(horizontal = 32.dp),
-            color = colors.divider
+            modifier = Modifier.padding(horizontal = 8.dp),
+            color = colors.divider.copy(alpha = 0.65f)
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Icon(
-            imageVector = Icons.AutoMirrored.Filled.MenuBook,
-            contentDescription = null,
-            modifier = Modifier.size(40.dp),
-            tint = colors.text.copy(alpha = 0.3f)
-        )
-
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         Text(
-            text = "End of Chapter ${item.chapterNumber}",
-            style = MaterialTheme.typography.titleSmall,
-            color = colors.text.copy(alpha = 0.6f)
+            text = "END OF CHAPTER ${item.chapterNumber}",
+            style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 1.8.sp),
+            color = colors.accent
         )
+
+        Spacer(modifier = Modifier.height(8.dp))
 
         Text(
             text = item.chapterName,
-            style = MaterialTheme.typography.bodySmall,
-            color = colors.text.copy(alpha = 0.4f),
+            style = MaterialTheme.typography.headlineSmall,
+            color = colors.text,
             textAlign = TextAlign.Center,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis
         )
 
-        if (!infiniteScrollEnabled) {
-            Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(18.dp))
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                ChapterNavButton(
-                    text = "Previous",
-                    icon = Icons.AutoMirrored.Filled.ArrowBack,
-                    enabled = item.chapterNumber > 1,
-                    isPrimary = false,
-                    colors = colors,
-                    onClick = onPrevious,
-                    modifier = Modifier.weight(1f),
-                    height = buttonHeight,
-                    iconSize = iconSize
-                )
-
-                ChapterNavButton(
-                    text = "Next",
-                    icon = Icons.AutoMirrored.Filled.ArrowForward,
-                    enabled = item.hasNextChapter,
-                    isPrimary = true,
-                    colors = colors,
-                    onClick = onNext,
-                    modifier = Modifier.weight(1f),
-                    height = buttonHeight,
-                    iconSize = iconSize
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            GhostButton(
-                text = "Back to Novel",
-                onClick = onBackToDetails
+        Surface(
+            shape = RoundedCornerShape(10.dp),
+            color = colors.surface.copy(alpha = 0.28f),
+            border = androidx.compose.foundation.BorderStroke(
+                1.dp,
+                colors.divider.copy(alpha = 0.55f)
             )
-        } else if (!item.hasNextChapter) {
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Surface(
-                shape = RoundedCornerShape(12.dp),
-                color = colors.accent.copy(alpha = 0.1f)
+        ) {
+            Column(
+                modifier = Modifier.padding(horizontal = 18.dp, vertical = 14.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "🎉 You've reached the end!",
-                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp),
-                    style = MaterialTheme.typography.titleSmall,
-                    color = colors.accent,
-                    fontWeight = FontWeight.Bold
+                    text = "SWIPE LEFT  →  NEXT",
+                    style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 1.1.sp),
+                    color = colors.text
+                )
+                Text(
+                    text = "SWIPE RIGHT  ←  PREVIOUS",
+                    style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 1.1.sp),
+                    color = colors.textSecondary
                 )
             }
+        }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            GhostButton(
-                text = "Back to Novel",
-                onClick = onBackToDetails
+        if (!infiniteScrollEnabled) {
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = "or return to the novel",
+                style = MaterialTheme.typography.bodySmall,
+                color = colors.text.copy(alpha = 0.45f),
+                modifier = Modifier.clickable(onClick = onBackToDetails)
             )
         }
     }

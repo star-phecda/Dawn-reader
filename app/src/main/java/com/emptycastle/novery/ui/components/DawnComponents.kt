@@ -96,50 +96,44 @@ fun DawnSectionHeader(
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.Bottom
+        verticalAlignment = Alignment.Bottom,
+        horizontalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
-            modifier = Modifier.weight(1f)
-        ) {
-            Box(
-                modifier = Modifier
-                    .width(4.dp)
-                    .height(34.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(
-                        Brush.verticalGradient(listOf(DawnCyan, DawnViolet, DawnMagenta))
-                    )
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = "02 / ${title.uppercase()}",
+                style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 1.8.sp),
+                color = DawnCyan
             )
-            Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.displaySmall,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+            subtitle?.let {
                 Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onBackground
+                    text = it,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(top = 4.dp)
                 )
-                subtitle?.let {
-                    Text(
-                        text = it,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(top = 2.dp)
-                    )
-                }
             }
         }
         if (actionLabel != null && onAction != null) {
             Surface(
                 onClick = onAction,
-                shape = RoundedCornerShape(18.dp),
-                color = MaterialTheme.colorScheme.surfaceContainerHigh
+                shape = RoundedCornerShape(10.dp),
+                color = Color.Transparent,
+                border = BorderStroke(
+                    1.dp,
+                    MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.8f)
+                )
             ) {
                 Text(
-                    text = actionLabel,
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.padding(horizontal = 13.dp, vertical = 9.dp)
+                    text = actionLabel.uppercase(),
+                    style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 1.sp),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 9.dp)
                 )
             }
         }
@@ -154,36 +148,33 @@ fun DawnPageHeader(
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Box(
-                modifier = Modifier
-                    .width(5.dp)
-                    .height(48.dp)
-                    .clip(RoundedCornerShape(5.dp))
-                    .background(
-                        Brush.verticalGradient(listOf(DawnCyan, DawnBlue, DawnMagenta))
+        Text(
+            text = eyebrow.uppercase(),
+            style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 2.1.sp),
+            color = DawnCyan
+        )
+        Spacer(Modifier.height(6.dp))
+        Text(
+            text = title,
+            style = MaterialTheme.typography.displayMedium.copy(lineHeight = 48.sp),
+            color = MaterialTheme.colorScheme.onBackground
+        )
+        Box(
+            modifier = Modifier
+                .padding(vertical = 14.dp)
+                .fillMaxWidth(0.72f)
+                .height(1.dp)
+                .background(
+                    Brush.horizontalGradient(
+                        listOf(DawnCyan, DawnViolet, DawnMagenta, Color.Transparent)
                     )
-            )
-            Spacer(Modifier.width(12.dp))
-            Column {
-                Text(
-                    text = eyebrow.uppercase(),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = DawnCyan,
-                    letterSpacing = 1.7.sp
                 )
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-            }
-        }
+        )
         Text(
             text = subtitle,
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(start = 17.dp, top = 7.dp, end = 4.dp)
+            modifier = Modifier.fillMaxWidth(0.92f)
         )
     }
 }
@@ -195,11 +186,14 @@ fun DawnHeroSurface(
 ) {
     Surface(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(30.dp),
+        shape = RoundedCornerShape(14.dp),
         color = Color.Transparent,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.42f)),
-        shadowElevation = 10.dp,
-        tonalElevation = 3.dp
+        border = BorderStroke(
+            1.dp,
+            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.62f)
+        ),
+        tonalElevation = 0.dp,
+        shadowElevation = 0.dp
     ) {
         Box {
             Box(
@@ -208,22 +202,21 @@ fun DawnHeroSurface(
                     .background(
                         Brush.linearGradient(
                             colors = listOf(
-                                DawnCyan.copy(alpha = 0.20f),
-                                DawnBlue.copy(alpha = 0.08f),
-                                DawnViolet.copy(alpha = 0.11f),
-                                DawnMagenta.copy(alpha = 0.17f)
+                                DawnCyan.copy(alpha = 0.10f),
+                                MaterialTheme.colorScheme.surface.copy(alpha = 0.78f),
+                                DawnMagenta.copy(alpha = 0.06f)
                             )
                         )
                     )
             )
             Box(
                 modifier = Modifier
-                    .size(150.dp)
-                    .offset(x = 190.dp, y = (-54).dp)
+                    .size(170.dp)
+                    .offset(x = 190.dp, y = (-72).dp)
                     .background(
                         Brush.radialGradient(
                             colors = listOf(
-                                DawnCyan.copy(alpha = 0.18f),
+                                DawnCyan.copy(alpha = 0.14f),
                                 Color.Transparent
                             )
                         ),
@@ -232,23 +225,8 @@ fun DawnHeroSurface(
             )
             Box(
                 modifier = Modifier
-                    .size(120.dp)
-                    .offset(x = (-26).dp, y = 76.dp)
-                    .background(
-                        Brush.radialGradient(
-                            colors = listOf(
-                                DawnMagenta.copy(alpha = 0.13f),
-                                Color.Transparent
-                            )
-                        ),
-                        CircleShape
-                    )
-            )
-            Box(
-                modifier = Modifier
-                    .matchParentSize()
-                    .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.20f))
-                    .padding(20.dp)
+                    .fillMaxWidth()
+                    .padding(18.dp)
             ) {
                 content()
             }
@@ -263,32 +241,23 @@ fun DawnPill(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val brush = if (selected) {
-        Brush.horizontalGradient(listOf(DawnCyan.copy(alpha = 0.92f), DawnViolet.copy(alpha = 0.9f)))
-    } else null
-
     Surface(
         onClick = onClick,
         modifier = modifier,
-        shape = RoundedCornerShape(50),
-        color = if (selected) Color.Transparent else MaterialTheme.colorScheme.surfaceContainerHigh,
-        border = androidx.compose.foundation.BorderStroke(
+        shape = RoundedCornerShape(8.dp),
+        color = if (selected) DawnCyan.copy(alpha = 0.14f) else Color.Transparent,
+        border = BorderStroke(
             1.dp,
-            if (selected) DawnCyan.copy(alpha = 0.7f) else MaterialTheme.colorScheme.outlineVariant
+            if (selected) DawnCyan.copy(alpha = 0.75f)
+            else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.75f)
         )
     ) {
-        Box(
-            modifier = Modifier
-                .then(if (brush != null) Modifier.background(brush) else Modifier)
-                .padding(horizontal = 15.dp, vertical = 9.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = label,
-                style = MaterialTheme.typography.labelMedium,
-                color = if (selected) DawnNavy else MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
+        Text(
+            text = label.uppercase(),
+            style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 0.8.sp),
+            color = if (selected) DawnCyan else MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
+        )
     }
 }
 

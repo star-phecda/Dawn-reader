@@ -786,14 +786,28 @@ private fun ReaderScreenContent(
                     .fillMaxSize()
                     .alpha(if (contentVisible) 1f else 0f)
             ) {
-                if (true) {
+                DawnChapterSwipeSurface(
+                    chapterKey = uiState.currentChapterUrl,
+                    enabled = contentVisible &&
+                            uiState.isContentReady &&
+                            !uiState.showControls &&
+                            !uiState.showTTSSettings &&
+                            !uiState.showChapterList &&
+                            !uiState.isTTSActive,
+                    hasPreviousChapter = uiState.currentChapterIndex > 0,
+                    hasNextChapter = uiState.currentChapterIndex < uiState.allChapters.lastIndex,
+                    reduceMotion = uiState.settings.reduceMotion,
+                    onPrevious = onPrevious,
+                    onNext = onNext,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
                             .pointerInput(tapZones, contentVisible) {
                                 if (contentVisible) {
                                     detectTapGestures(
-                                        onDoubleTap = { offset ->
+                                        onDoubleTap = {
                                             onTapAction(tapZones.doubleTapAction)
                                         },
                                         onTap = { offset ->
@@ -819,41 +833,24 @@ private fun ReaderScreenContent(
                                 }
                             }
                     ) {
-                        DawnChapterSwipeSurface(
-                            chapterKey = uiState.currentChapterUrl,
-                            enabled = contentVisible &&
-                                    uiState.isContentReady &&
-                                    !uiState.showControls &&
-                                    !uiState.showTTSSettings &&
-                                    !uiState.showChapterList &&
-                                    !uiState.isTTSActive,
-                            hasPreviousChapter = uiState.currentChapterIndex > 0,
-                            hasNextChapter = uiState.currentChapterIndex < uiState.allChapters.lastIndex,
-                            reduceMotion = uiState.settings.reduceMotion,
+                        ReaderContainer(
+                            uiState = uiState,
+                            colors = colors,
+                            listState = listState,
+                            isScrollBounded = isScrollBounded,
+                            highlightedDisplayIndex = highlightedDisplayIndex,
+                            ensureVisibleIndex = ensureVisibleIndex,
+                            onEnsureVisibleHandled = onEnsureVisibleHandled,
+                            onSentenceBoundsUpdated = { displayIndex, top, bottom ->
+                                onSentenceBoundsUpdated(displayIndex, top, bottom)
+                            },
+                            currentSentenceBounds = currentSentenceBounds,
                             onPrevious = onPrevious,
                             onNext = onNext,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            ReaderContainer(
-                                uiState = uiState,
-                                colors = colors,
-                                listState = listState,
-                                isScrollBounded = isScrollBounded,
-                                highlightedDisplayIndex = highlightedDisplayIndex,
-                                ensureVisibleIndex = ensureVisibleIndex,
-                                onEnsureVisibleHandled = onEnsureVisibleHandled,
-                                onSentenceBoundsUpdated = { displayIndex, top, bottom ->
-                                    onSentenceBoundsUpdated(displayIndex, top, bottom)
-                                },
-                                currentSentenceBounds = currentSentenceBounds,
-                                onPrevious = onPrevious,
-                                onNext = onNext,
-                                onBack = onBack,
-                                onRetryChapter = onRetryChapter
-                            )
-                        }
+                            onBack = onBack,
+                            onRetryChapter = onRetryChapter
+                        )
                     }
-
                 }
 
                 // Controls overlay (only interactive when visible)
