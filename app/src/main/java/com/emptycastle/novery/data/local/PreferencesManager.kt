@@ -1339,6 +1339,23 @@ class PreferencesManager(context: Context) {
         prefs.edit().putBoolean(KEY_ONBOARDING_COMPLETE, true).apply()
     }
 
+    /**
+     * Returns whether the one-time recommendation discovery pass has already run.
+     * This is separate from the discovered-novel count so partial provider failures
+     * cannot trap the app in a long discovery loop on every launch.
+     */
+    fun hasInitializedRecommendationDiscovery(): Boolean {
+        return prefs.getBoolean(KEY_RECOMMENDATION_DISCOVERY_INITIALIZED, false)
+    }
+
+    fun setRecommendationDiscoveryInitialized() {
+        prefs.edit().putBoolean(KEY_RECOMMENDATION_DISCOVERY_INITIALIZED, true).apply()
+    }
+
+    fun resetRecommendationDiscovery() {
+        prefs.edit().remove(KEY_RECOMMENDATION_DISCOVERY_INITIALIZED).apply()
+    }
+
     fun getAppVersion(): Int = prefs.getInt(KEY_APP_VERSION, 0)
 
     fun setAppVersion(version: Int) {
@@ -1599,6 +1616,7 @@ class PreferencesManager(context: Context) {
 
         private const val KEY_SEARCH_HISTORY = "search_history"
         private const val KEY_FAVORITE_PROVIDERS = "favorite_providers"
+        private const val KEY_RECOMMENDATION_DISCOVERY_INITIALIZED = "recommendation_discovery_initialized"
 
         // =====================================================================
         // READER SETTINGS KEYS

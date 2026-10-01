@@ -10,7 +10,6 @@ import com.emptycastle.novery.provider.FreeWebNovelProvider
 import com.emptycastle.novery.provider.LibReadProvider
 import com.emptycastle.novery.provider.LnoriProvider
 import com.emptycastle.novery.provider.MainProvider
-import com.emptycastle.novery.provider.NovelBinProvider
 import com.emptycastle.novery.provider.NovelFireProvider
 import com.emptycastle.novery.provider.NovelsOnlineProvider
 import com.emptycastle.novery.provider.RoyalRoadProvider
@@ -69,7 +68,6 @@ class NoveryApp : Application() {
         // Add providers here - order determines display order
         MainProvider.register(NovelFireProvider())
         MainProvider.register(WtrLabProvider())
-        MainProvider.register(NovelBinProvider())
         MainProvider.register(LibReadProvider())
         MainProvider.register(RoyalRoadProvider())
         MainProvider.register(NovelsOnlineProvider())

@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 
 /**
  * Defines how content should be loaded
@@ -100,11 +101,15 @@ class NovelRepository(
         extraFilters: Map<String, String> = emptyMap()
     ): Result<MainPageResult> {
         return try {
-            val result = provider.loadMainPage(
-                page = page,
-                orderBy = orderBy,
-                tag = tag,
-                extraFilters = extraFilters
+            val result = withTimeoutOrNull(15_000L) {
+                provider.loadMainPage(
+                    page = page,
+                    orderBy = orderBy,
+                    tag = tag,
+                    extraFilters = extraFilters
+                )
+            } ?: return Result.failure(
+                NetworkException("Timed out loading ${provider.name} after 15s")
             )
             Result.success(result)
         } catch (e: Exception) {
@@ -121,7 +126,11 @@ class NovelRepository(
         query: String
     ): Result<List<Novel>> = withContext(Dispatchers.IO) {
         try {
-            val results = provider.search(query)
+            val results = withTimeoutOrNull(15_000L) {
+                provider.search(query)
+            } ?: return@withContext Result.failure(
+                NetworkException("Timed out searching ${provider.name} after 15s")
+            )
             Result.success(results)
         } catch (e: Exception) {
             Result.failure(e)

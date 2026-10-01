@@ -180,48 +180,92 @@ fun RecommendationTab(
                         modifier = Modifier.fillMaxSize(),
                         contentPadding = PaddingValues(
                             top = 0.dp,
-                            bottom = 100.dp
+                            bottom = 96.dp
                         ),
-                        verticalArrangement = Arrangement.spacedBy(28.dp)
+                        verticalArrangement = Arrangement.spacedBy(20.dp)
                     ) {
                         // Dawn editorial intro
                         item(key = "dawn_intro") {
                             DawnHeroSurface(
-                                modifier = Modifier.padding(horizontal = 16.dp).padding(top = 14.dp)
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp)
+                                    .padding(top = 12.dp)
                             ) {
-                                Row(
+                                Column(
                                     modifier = Modifier.fillMaxWidth(),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(14.dp)
+                                    verticalArrangement = Arrangement.spacedBy(14.dp)
                                 ) {
-                                    Surface(
-                                        shape = RoundedCornerShape(22.dp),
-                                        color = MaterialTheme.colorScheme.background.copy(alpha = 0.36f),
-                                        modifier = Modifier.size(58.dp)
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(14.dp)
                                     ) {
-                                        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                                            Icon(
-                                                imageVector = Icons.Rounded.AutoAwesome,
-                                                contentDescription = null,
-                                                tint = MaterialTheme.colorScheme.primary,
-                                                modifier = Modifier.size(30.dp)
+                                        Surface(
+                                            shape = RoundedCornerShape(22.dp),
+                                            color = MaterialTheme.colorScheme.background.copy(alpha = 0.34f),
+                                            modifier = Modifier.size(58.dp)
+                                        ) {
+                                            Box(
+                                                contentAlignment = Alignment.Center,
+                                                modifier = Modifier.fillMaxSize()
+                                            ) {
+                                                Icon(
+                                                    imageVector = Icons.Rounded.AutoAwesome,
+                                                    contentDescription = null,
+                                                    tint = MaterialTheme.colorScheme.primary,
+                                                    modifier = Modifier.size(29.dp)
+                                                )
+                                            }
+                                        }
+
+                                        Column(
+                                            modifier = Modifier.weight(1f),
+                                            verticalArrangement = Arrangement.spacedBy(2.dp)
+                                        ) {
+                                            Text(
+                                                text = "DAWN • FOR YOU",
+                                                style = MaterialTheme.typography.labelMedium,
+                                                fontWeight = FontWeight.Bold,
+                                                color = MaterialTheme.colorScheme.primary
+                                            )
+                                            Text(
+                                                text = "Your next chapter.",
+                                                style = MaterialTheme.typography.headlineMedium,
+                                                fontWeight = FontWeight.Bold
+                                            )
+                                            Text(
+                                                text = "Stories shaped around what you actually read.",
+                                                style = MaterialTheme.typography.bodyMedium,
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant
                                             )
                                         }
                                     }
-                                    Column(
-                                        modifier = Modifier.weight(1f),
-                                        verticalArrangement = Arrangement.spacedBy(2.dp)
+
+                                    Row(
+                                        horizontalArrangement = Arrangement.spacedBy(8.dp)
                                     ) {
-                                        Text(
-                                            text = "For You",
-                                            style = MaterialTheme.typography.headlineSmall,
-                                            fontWeight = FontWeight.Bold
-                                        )
-                                        Text(
-                                            text = "Your story radar, tuned by what you actually read.",
-                                            style = MaterialTheme.typography.bodyMedium,
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                                        )
+                                        Surface(
+                                            shape = RoundedCornerShape(14.dp),
+                                            color = MaterialTheme.colorScheme.surface.copy(alpha = 0.55f)
+                                        ) {
+                                            Text(
+                                                text = "${uiState.poolSize} indexed",
+                                                style = MaterialTheme.typography.labelMedium,
+                                                color = MaterialTheme.colorScheme.onSurface,
+                                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
+                                            )
+                                        }
+                                        Surface(
+                                            shape = RoundedCornerShape(14.dp),
+                                            color = MaterialTheme.colorScheme.surface.copy(alpha = 0.55f)
+                                        ) {
+                                            Text(
+                                                text = "${uiState.totalRecommendations} picks",
+                                                style = MaterialTheme.typography.labelMedium,
+                                                color = MaterialTheme.colorScheme.onSurface,
+                                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
+                                            )
+                                        }
                                     }
                                 }
                             }
@@ -448,7 +492,7 @@ private fun SeedingScreen(
             }
 
             Text(
-                text = "Building Your Recommendations",
+                text = "Preparing Dawn",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
@@ -500,7 +544,7 @@ private fun SeedingScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "This only happens once. We're indexing novels from all your sources to find the best recommendations for you.",
+                text = "This is a one-time local index. Dawn keeps the results after setup instead of rebuilding the recommendation pool every time you open the app.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,

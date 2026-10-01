@@ -3,6 +3,7 @@ package com.emptycastle.novery.recommendation
 import android.util.Log
 import com.emptycastle.novery.data.local.dao.OfflineDao
 import com.emptycastle.novery.data.local.dao.RecommendationDao
+import com.emptycastle.novery.data.remote.NetworkException
 import com.emptycastle.novery.data.local.entity.DiscoveredNovelEntity
 import com.emptycastle.novery.data.local.entity.NovelDetailsEntity
 import com.emptycastle.novery.data.repository.NovelRepository
@@ -11,8 +12,10 @@ import com.emptycastle.novery.domain.model.NovelDetails
 import com.emptycastle.novery.provider.MainProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 
 private const val TAG = "DiscoveryManager"
+private const val PROVIDER_REQUEST_TIMEOUT_MS = 15_000L
 
 /**
  * Manages discovery of novels for the recommendation pool.
@@ -28,8 +31,8 @@ class DiscoveryManager(
     data class DiscoveryConfig(
         val minPoolSize: Int = 50,
         val targetPerProvider: Int = 100,
-        val seedingPages: Int = 2,
-        val enrichTopCount: Int = 10
+        val seedingPages: Int = 1,
+        val enrichTopCount: Int = 0
     )
 
     private val config = DiscoveryConfig()
@@ -138,7 +141,11 @@ class DiscoveryManager(
             }
 
             try {
-                val result = provider.loadMainPage(page, orderBy = null, tag = null)
+                val result = withTimeoutOrNull(PROVIDER_REQUEST_TIMEOUT_MS) {
+                    provider.loadMainPage(page, orderBy = null, tag = null)
+                } ?: throw NetworkException(
+                    "Timed out loading ${provider.name} after ${PROVIDER_REQUEST_TIMEOUT_MS / 1000}s"
+                )
                 networkBudgetManager.recordRequest(provider.name)
                 requestsUsed++
 
@@ -405,7 +412,11 @@ class DiscoveryManager(
             onProgress("Checking ${provider.name}...")
 
             try {
-                val result = provider.loadMainPage(1, orderBy = null, tag = null)
+                val result = withTimeoutOrNull(PROVIDER_REQUEST_TIMEOUT_MS) {
+                    provider.loadMainPage(1, orderBy = null, tag = null)
+                } ?: throw NetworkException(
+                    "Timed out refreshing ${provider.name} after ${PROVIDER_REQUEST_TIMEOUT_MS / 1000}s"
+                )
                 networkBudgetManager.recordRequest(provider.name)
 
                 result.novels.forEach { novel ->

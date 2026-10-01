@@ -251,10 +251,16 @@ class RecommendationViewModel : ViewModel() {
                 val poolSize = discoveryManager.getPoolSize()
                 _uiState.update { it.copy(poolSize = poolSize) }
 
-                if (discoveryManager.needsSeeding()) {
+                // Only run the expensive discovery pass on a genuinely fresh install.
+                // Existing installs with a partial pool are migrated to the persisted
+                // initialized state instead of rebuilding the index on every launch.
+                val initialized = preferencesManager.hasInitializedRecommendationDiscovery()
+                if (!initialized && poolSize == 0) {
                     seedDiscoveryPool()
                 } else {
-                    enhanceTagsIfNeeded()
+                    if (!initialized) {
+                        preferencesManager.setRecommendationDiscoveryInitialized()
+                    }
                     loadUserProfile()
                     loadRecommendations()
                     loadLibrarySources()
@@ -297,6 +303,7 @@ class RecommendationViewModel : ViewModel() {
             }
 
             Log.d(TAG, "Seeding complete: ${result.totalDiscovered} novels discovered")
+            preferencesManager.setRecommendationDiscoveryInitialized()
 
             val newPoolSize = discoveryManager.getPoolSize()
             val poolByProvider = discoveryManager.getPoolSizeByProvider()
@@ -310,17 +317,15 @@ class RecommendationViewModel : ViewModel() {
                 )
             }
 
-            val enhancementResult = tagEnhancementManager.enhanceNovelsWithSynopsis()
-            Log.d(TAG, "Tag enhancement: ${enhancementResult.novelsEnhanced} novels, " +
-                    "${enhancementResult.tagsAdded} tags added")
-
-            logTagCoverageStats()
-
+            // Tag enhancement is local and can be run manually later. Do not make
+            // first-run setup wait for a full-pool pass after network discovery.
             loadUserProfile()
             loadRecommendations()
             loadLibrarySources()
 
         } catch (e: Exception) {
+            // Prevent a failed/partial first pass from becoming a multi-launch loop.
+            preferencesManager.setRecommendationDiscoveryInitialized()
             Log.e(TAG, "Error seeding discovery pool", e)
             _uiState.update {
                 it.copy(
