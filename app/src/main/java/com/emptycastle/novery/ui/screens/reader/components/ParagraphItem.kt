@@ -566,7 +566,7 @@ fun ChapterDividerItem(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "SWIPE LEFT  →  NEXT",
+                    text = "DRAG UP  ↑  NEXT",
                     style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 1.1.sp),
                     color = colors.text
                 )

@@ -71,6 +71,7 @@ import com.emptycastle.novery.ui.screens.details.components.FastScrollerContaine
 import com.emptycastle.novery.ui.screens.details.components.FloatingScrollButton
 import com.emptycastle.novery.ui.screens.details.components.LoadMoreReviewsButton
 import com.emptycastle.novery.ui.screens.details.components.NovelHeader
+import com.emptycastle.novery.ui.screens.details.components.NovelInfoDeck
 import com.emptycastle.novery.ui.screens.details.components.PaginationControls
 import com.emptycastle.novery.ui.screens.details.components.RelatedNovelRow
 import com.emptycastle.novery.ui.screens.details.components.ReviewCard
@@ -626,6 +627,10 @@ private fun DetailsContent(
                 views = details.views,
                 providerName = providerName
             )
+        }
+
+        item(key = "novel_info_deck") {
+            NovelInfoDeck(details = details, providerName = providerName, readProgress = uiState.readProgress)
         }
 
         // Synopsis

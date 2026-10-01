@@ -440,7 +440,7 @@ fun ReaderContainer(
                                     }
                                     Text(
                                         text = if (item.chapterIndex < uiState.allChapters.lastIndex) {
-                                            "Swipe left for the next chapter"
+                                            "Drag up to unlock the next chapter"
                                         } else {
                                             "End of book"
                                         },

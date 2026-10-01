@@ -94,3 +94,9 @@ val ReaderLightSecondary = Color(0xFF5D6578)
 val ReaderSepiaBackground = Color(0xFFF4ECD8)
 val ReaderSepiaText = Color(0xFF5B4636)
 val ReaderSepiaSecondary = Color(0xFF8B7355)
+
+
+val DawnCream = Color(0xFFF7F0E3)
+val DawnCoral = Color(0xFFFF7A66)
+val DawnGold = Color(0xFFFFC85A)
+val DawnInk = Color(0xFF17141A)

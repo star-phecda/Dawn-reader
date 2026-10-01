@@ -234,6 +234,14 @@ private fun ProfileContent(
             ProfileHeroSection(uiState = uiState)
         }
 
+        // Personal peak mechanism
+        item(key = "peaks") {
+            PeakSection(
+                uiState = uiState,
+                modifier = Modifier.padding(horizontal = dimensions.gridPadding)
+            )
+        }
+
         // Quick Stats Row
         item(key = "quick_stats") {
             QuickStatsRow(

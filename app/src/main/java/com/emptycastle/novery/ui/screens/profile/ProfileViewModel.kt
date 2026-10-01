@@ -137,6 +137,13 @@ class ProfileViewModel : ViewModel() {
                 // Load weekly activity (last 7 days)
                 val weeklyActivity = loadWeeklyActivity()
 
+                val allDailyStats = statsRepository.getDailyStats(0, Long.MAX_VALUE)
+                val byDate = allDailyStats.groupBy { it.date }
+                val peakDay = byDate.maxByOrNull { (_, entries) -> entries.sumOf { it.readingTimeSeconds } }
+                val peakChapterDay = byDate.maxByOrNull { (_, entries) -> entries.sumOf { it.chaptersRead } }
+                val peakReadingMinutes = peakDay?.value?.sumOf { it.readingTimeSeconds }?.div(60) ?: 0L
+                val peakChapters = peakChapterDay?.value?.sumOf { it.chaptersRead } ?: 0
+
                 // Load most read novels
                 val mostReadNovels = loadMostReadNovels()
 
@@ -172,6 +179,10 @@ class ProfileViewModel : ViewModel() {
                         totalReadingTime = totalReadingTime,
 
                         weeklyActivity = weeklyActivity,
+                        peakReadingMinutes = peakReadingMinutes,
+                        peakReadingDate = peakDay?.key?.let { LocalDate.ofEpochDay(it).toString() } ?: "",
+                        peakChapters = peakChapters,
+                        peakChaptersDate = peakChapterDay?.key?.let { LocalDate.ofEpochDay(it).toString() } ?: "",
                         mostReadNovels = mostReadNovels,
 
                         dailyGoalMinutes = dailyGoal,

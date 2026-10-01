@@ -52,6 +52,8 @@ fun DawnChapterSwipeSurface(
     enabled: Boolean,
     hasPreviousChapter: Boolean,
     hasNextChapter: Boolean,
+    allowPreviousGesture: Boolean = true,
+    allowNextGesture: Boolean = true,
     reduceMotion: Boolean,
     onPrevious: () -> Unit,
     onNext: () -> Unit,
@@ -62,27 +64,27 @@ fun DawnChapterSwipeSurface(
     BoxWithConstraints(modifier = modifier.fillMaxSize()) {
         val widthPx = constraints.maxWidth.toFloat().coerceAtLeast(1f)
         val heightPx = constraints.maxHeight.toFloat().coerceAtLeast(1f)
-        val thresholdPx = maxOf(96f, widthPx * 0.20f)
+        val thresholdPx = maxOf(110f, heightPx * 0.18f)
         val touchSlopPx = 8.dp.value * LocalDensity.current.density
-        val offsetX = remember { Animatable(0f) }
+        val offsetY = remember { Animatable(0f) }
         val scope = rememberCoroutineScope()
         val haptics = LocalHapticFeedback.current
         var crossedThreshold by remember(chapterKey) { mutableStateOf(false) }
 
         LaunchedEffect(chapterKey) {
-            offsetX.snapTo(0f)
+            offsetY.snapTo(0f)
             crossedThreshold = false
         }
 
-        val progress = (kotlin.math.abs(offsetX.value) / thresholdPx).coerceIn(0f, 1f)
+        val progress = (kotlin.math.abs(offsetY.value) / thresholdPx).coerceIn(0f, 1f)
         val direction = when {
-            offsetX.value < 0f -> -1
-            offsetX.value > 0f -> 1
+            offsetY.value < 0f -> -1
+            offsetY.value > 0f -> 1
             else -> 0
         }
         val canNavigate = when {
-            direction < 0 -> hasNextChapter
-            direction > 0 -> hasPreviousChapter
+            direction < 0 -> hasNextChapter && allowNextGesture
+            direction > 0 -> hasPreviousChapter && allowPreviousGesture
             else -> false
         }
         val accent = if (direction < 0) DawnCyan else DawnMagenta
@@ -91,7 +93,7 @@ fun DawnChapterSwipeSurface(
             if (direction != 0 && canNavigate) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
-                    contentAlignment = if (direction < 0) Alignment.CenterEnd else Alignment.CenterStart
+                    contentAlignment = if (direction < 0) Alignment.BottomCenter else Alignment.TopCenter
                 ) {
                     Surface(
                         shape = RoundedCornerShape(26.dp),
@@ -105,12 +107,17 @@ fun DawnChapterSwipeSurface(
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             Text(
-                                text = if (direction < 0) "SWIPE LEFT" else "SWIPE RIGHT",
+                                text = when {
+                                    direction < 0 && progress >= 1f -> "RELEASE TO UNLOCK"
+                                    direction > 0 && progress >= 1f -> "RELEASE TO RETURN"
+                                    direction < 0 -> "DRAG UP"
+                                    else -> "DRAG DOWN"
+                                },
                                 style = MaterialTheme.typography.labelMedium.copy(letterSpacing = 1.05.sp),
                                 color = accent
                             )
                             Text(
-                                text = if (direction < 0) "→" else "←",
+                                text = if (direction < 0) "NEXT CHAPTER  ↑" else "PREVIOUS CHAPTER  ↓",
                                 style = MaterialTheme.typography.titleLarge,
                                 color = accent
                             )
@@ -123,7 +130,7 @@ fun DawnChapterSwipeSurface(
                 modifier = Modifier
                     .fillMaxSize()
                     .graphicsLayer {
-                        translationX = offsetX.value
+                        translationY = offsetY.value
                         val lift = progress * 0.018f
                         scaleX = 1f - lift
                         scaleY = 1f - lift
@@ -134,14 +141,15 @@ fun DawnChapterSwipeSurface(
                         }
                         shadowElevation = progress * 16f
                     }
-                    .pointerInput(chapterKey, enabled, hasPreviousChapter, hasNextChapter) {
+                    .pointerInput(chapterKey, enabled, hasPreviousChapter, hasNextChapter, allowPreviousGesture, allowNextGesture) {
                         if (!enabled) return@pointerInput
                         awaitEachGesture {
                             val down = awaitFirstDown(requireUnconsumed = false)
                             var last = down.position
                             var totalDx = 0f
                             var totalDy = 0f
-                            var horizontal = false
+                            var vertical = false
+                            var trackingEdgeGesture = false
 
                             while (true) {
                                 val event = awaitPointerEvent()
@@ -153,27 +161,30 @@ fun DawnChapterSwipeSurface(
                                 totalDx += delta.x
                                 totalDy += delta.y
 
-                                if (!horizontal &&
+                                if (!vertical &&
                                     (kotlin.math.abs(totalDx) > touchSlopPx ||
                                      kotlin.math.abs(totalDy) > touchSlopPx)
                                 ) {
-                                    if (kotlin.math.abs(totalDx) > kotlin.math.abs(totalDy)) {
-                                        horizontal = true
+                                    if (kotlin.math.abs(totalDy) > kotlin.math.abs(totalDx)) {
+                                        vertical = true
+                                        trackingEdgeGesture =
+                                            (totalDy < 0f && hasNextChapter && allowNextGesture) ||
+                                            (totalDy > 0f && hasPreviousChapter && allowPreviousGesture)
                                     } else {
                                         break
                                     }
                                 }
 
-                                if (horizontal) {
+                                if (vertical && trackingEdgeGesture) {
                                     change.consume()
-                                    val candidate = (offsetX.value + delta.x).coerceIn(-widthPx, widthPx)
+                                    val candidate = (offsetY.value + delta.y).coerceIn(-heightPx, heightPx)
                                     val allowed = when {
-                                        candidate < 0f -> hasNextChapter
-                                        candidate > 0f -> hasPreviousChapter
+                                        candidate < 0f -> hasNextChapter && allowNextGesture
+                                        candidate > 0f -> hasPreviousChapter && allowPreviousGesture
                                         else -> true
                                     }
                                     if (allowed) {
-                                        scope.launch { offsetX.snapTo(candidate) }
+                                        scope.launch { offsetY.snapTo(candidate) }
                                         val crossed = kotlin.math.abs(candidate) >= thresholdPx
                                         if (crossed && !crossedThreshold) {
                                             crossedThreshold = true
@@ -187,19 +198,19 @@ fun DawnChapterSwipeSurface(
                                 if (!change.pressed) break
                             }
 
-                            if (horizontal) {
-                                val finalOffset = offsetX.value
-                                val goNext = finalOffset <= -thresholdPx && hasNextChapter
-                                val goPrevious = finalOffset >= thresholdPx && hasPreviousChapter
+                            if (vertical && trackingEdgeGesture) {
+                                val finalOffset = offsetY.value
+                                val goNext = finalOffset <= -thresholdPx && hasNextChapter && allowNextGesture
+                                val goPrevious = finalOffset >= thresholdPx && hasPreviousChapter && allowPreviousGesture
                                 scope.launch {
                                     if (goNext || goPrevious) {
-                                        offsetX.animateTo(
-                                            if (goNext) -widthPx else widthPx,
+                                        offsetY.animateTo(
+                                            if (goNext) -heightPx else heightPx,
                                             if (reduceMotion) tween(140) else spring(stiffness = 700f)
                                         )
                                         if (goNext) onNext() else onPrevious()
                                     } else {
-                                        offsetX.animateTo(
+                                        offsetY.animateTo(
                                             0f,
                                             if (reduceMotion) tween(110) else spring(stiffness = 850f)
                                         )

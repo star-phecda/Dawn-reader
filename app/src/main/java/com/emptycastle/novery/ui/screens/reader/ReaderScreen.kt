@@ -794,6 +794,8 @@ private fun ReaderScreenContent(
                             !uiState.isTTSActive,
                     hasPreviousChapter = uiState.currentChapterIndex > 0,
                     hasNextChapter = uiState.currentChapterIndex < uiState.allChapters.lastIndex,
+                    allowPreviousGesture = !listState.canScrollBackward,
+                    allowNextGesture = !listState.canScrollForward,
                     reduceMotion = uiState.settings.reduceMotion,
                     onPrevious = onPrevious,
                     onNext = onNext,

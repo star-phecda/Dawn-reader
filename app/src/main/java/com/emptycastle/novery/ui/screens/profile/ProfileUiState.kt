@@ -27,6 +27,12 @@ data class ProfileUiState(
     // Weekly activity (7 days, minutes per day)
     val weeklyActivity: List<Long> = List(7) { 0L },
 
+    // Personal peak records
+    val peakReadingMinutes: Long = 0,
+    val peakReadingDate: String = "",
+    val peakChapters: Int = 0,
+    val peakChaptersDate: String = "",
+
     // Most read novels
     val mostReadNovels: List<NovelReadingStats> = emptyList(),
 
