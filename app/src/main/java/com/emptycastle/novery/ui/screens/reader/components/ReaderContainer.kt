@@ -1,6 +1,9 @@
 package com.emptycastle.novery.ui.screens.reader.components
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
@@ -13,7 +16,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -406,16 +411,42 @@ fun ReaderContainer(
                             }
 
                             is ReaderDisplayItem.ChapterDivider -> {
-                                ChapterDividerItem(
-                                    item = item,
-                                    colors = effectiveColors,
-                                    infiniteScrollEnabled = uiState.infiniteScrollEnabled,
-                                    horizontalPadding = horizontalPadding,
-                                    largerTouchTargets = settings.largerTouchTargets,
-                                    onPrevious = onPrevious,
-                                    onNext = onNext,
-                                    onBackToDetails = onBack
-                                )
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = horizontalPadding, vertical = 32.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                                ) {
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                                    ) {
+                                        HorizontalDivider(
+                                            modifier = Modifier.weight(1f),
+                                            color = effectiveColors.textSecondary.copy(alpha = 0.22f)
+                                        )
+                                        Text(
+                                            text = "CHAPTER " + (item.chapterIndex + 1),
+                                            style = MaterialTheme.typography.labelSmall,
+                                            color = effectiveColors.textSecondary
+                                        )
+                                        HorizontalDivider(
+                                            modifier = Modifier.weight(1f),
+                                            color = effectiveColors.textSecondary.copy(alpha = 0.22f)
+                                        )
+                                    }
+                                    Text(
+                                        text = if (item.chapterIndex < uiState.allChapters.lastIndex) {
+                                            "Swipe left for the next chapter"
+                                        } else {
+                                            "End of book"
+                                        },
+                                        style = MaterialTheme.typography.labelMedium,
+                                        color = effectiveColors.textSecondary.copy(alpha = 0.8f)
+                                    )
+                                }
                             }
 
                             is ReaderDisplayItem.LoadingIndicator -> {

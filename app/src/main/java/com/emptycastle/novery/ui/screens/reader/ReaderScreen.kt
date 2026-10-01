@@ -13,7 +13,6 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -44,7 +43,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
@@ -799,58 +797,39 @@ private fun ReaderScreenContent(
                     reduceMotion = uiState.settings.reduceMotion,
                     onPrevious = onPrevious,
                     onNext = onNext,
+                    onTap = { offset, width, height ->
+                        val leftZoneWidth = tapZones.horizontalZoneRatio * width
+                        val rightZoneStart = width * (1f - tapZones.horizontalZoneRatio)
+                        val topZoneHeight = tapZones.verticalZoneRatio * height
+                        val bottomZoneStart = height * (1f - tapZones.verticalZoneRatio)
+                        val action = when {
+                            offset.y < topZoneHeight -> tapZones.topZoneAction
+                            offset.y > bottomZoneStart -> tapZones.bottomZoneAction
+                            offset.x < leftZoneWidth -> tapZones.leftZoneAction
+                            offset.x > rightZoneStart -> tapZones.rightZoneAction
+                            else -> tapZones.centerZoneAction
+                        }
+                        onTapAction(action)
+                    },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .pointerInput(tapZones, contentVisible) {
-                                if (contentVisible) {
-                                    detectTapGestures(
-                                        onDoubleTap = {
-                                            onTapAction(tapZones.doubleTapAction)
-                                        },
-                                        onTap = { offset ->
-                                            val width = size.width.toFloat()
-                                            val height = size.height.toFloat()
-
-                                            val leftZoneWidth = width * tapZones.horizontalZoneRatio
-                                            val rightZoneStart = width * (1 - tapZones.horizontalZoneRatio)
-                                            val topZoneHeight = height * tapZones.verticalZoneRatio
-                                            val bottomZoneStart = height * (1 - tapZones.verticalZoneRatio)
-
-                                            val action = when {
-                                                offset.y < topZoneHeight -> tapZones.topZoneAction
-                                                offset.y > bottomZoneStart -> tapZones.bottomZoneAction
-                                                offset.x < leftZoneWidth -> tapZones.leftZoneAction
-                                                offset.x > rightZoneStart -> tapZones.rightZoneAction
-                                                else -> tapZones.centerZoneAction
-                                            }
-
-                                            onTapAction(action)
-                                        }
-                                    )
-                                }
-                            }
-                    ) {
-                        ReaderContainer(
-                            uiState = uiState,
-                            colors = colors,
-                            listState = listState,
-                            isScrollBounded = isScrollBounded,
-                            highlightedDisplayIndex = highlightedDisplayIndex,
-                            ensureVisibleIndex = ensureVisibleIndex,
-                            onEnsureVisibleHandled = onEnsureVisibleHandled,
-                            onSentenceBoundsUpdated = { displayIndex, top, bottom ->
-                                onSentenceBoundsUpdated(displayIndex, top, bottom)
-                            },
-                            currentSentenceBounds = currentSentenceBounds,
-                            onPrevious = onPrevious,
-                            onNext = onNext,
-                            onBack = onBack,
-                            onRetryChapter = onRetryChapter
-                        )
-                    }
+                    ReaderContainer(
+                        uiState = uiState,
+                        colors = colors,
+                        listState = listState,
+                        isScrollBounded = isScrollBounded,
+                        highlightedDisplayIndex = highlightedDisplayIndex,
+                        ensureVisibleIndex = ensureVisibleIndex,
+                        onEnsureVisibleHandled = onEnsureVisibleHandled,
+                        onSentenceBoundsUpdated = { displayIndex, top, bottom ->
+                            onSentenceBoundsUpdated(displayIndex, top, bottom)
+                        },
+                        currentSentenceBounds = currentSentenceBounds,
+                        onPrevious = onPrevious,
+                        onNext = onNext,
+                        onBack = onBack,
+                        onRetryChapter = onRetryChapter
+                    )
                 }
 
                 // Controls overlay (only interactive when visible)

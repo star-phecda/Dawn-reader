@@ -251,6 +251,10 @@ class RecommendationViewModel : ViewModel() {
                 val poolSize = discoveryManager.getPoolSize()
                 _uiState.update { it.copy(poolSize = poolSize) }
 
+                // Library-based source recommendations are local. Surface them immediately
+                // instead of waiting for the first-run network discovery pass.
+                loadLibrarySources()
+
                 // Only run the expensive discovery pass on a genuinely fresh install.
                 // Existing installs with a partial pool are migrated to the persisted
                 // initialized state instead of rebuilding the index on every launch.
