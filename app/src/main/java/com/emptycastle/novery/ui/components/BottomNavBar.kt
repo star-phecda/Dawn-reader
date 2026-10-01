@@ -47,8 +47,9 @@ import com.emptycastle.novery.ui.theme.DawnCyan
 import com.emptycastle.novery.ui.theme.DawnMagenta
 import com.emptycastle.novery.ui.theme.DawnNavy
 import com.emptycastle.novery.ui.theme.DawnViolet
+import com.emptycastle.novery.ui.theme.SunGold500
 
-/** Dawn's signature floating expressive navigation capsule. */
+/** Dawn's floating editorial navigation rail. */
 data class BottomNavItem(
     val route: String,
     val label: String,
@@ -71,29 +72,30 @@ fun NoveryBottomNavBar(
     modifier: Modifier = Modifier
 ) {
     val normalizedSelectedRoute = selectedRoute.removePrefix("tab_")
+
     Surface(
-        modifier = modifier.widthIn(max = 430.dp),
-        shape = RoundedCornerShape(32.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.90f),
+        modifier = modifier.widthIn(max = 500.dp),
+        shape = RoundedCornerShape(22.dp),
+        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.94f),
         contentColor = MaterialTheme.colorScheme.onSurface,
         border = BorderStroke(
             1.dp,
-            Brush.linearGradient(
+            Brush.horizontalGradient(
                 listOf(
-                    DawnCyan.copy(alpha = 0.32f),
-                    MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.28f),
-                    DawnMagenta.copy(alpha = 0.28f)
+                    DawnCyan.copy(alpha = 0.48f),
+                    SunGold500.copy(alpha = 0.36f),
+                    DawnMagenta.copy(alpha = 0.42f)
                 )
             )
         ),
-        shadowElevation = 14.dp,
-        tonalElevation = 5.dp
+        shadowElevation = 18.dp,
+        tonalElevation = 2.dp
     ) {
         Row(
             modifier = Modifier
-                .padding(horizontal = 8.dp, vertical = 8.dp)
+                .padding(horizontal = 7.dp, vertical = 7.dp)
                 .animateContentSize(animationSpec = spring(stiffness = 500f)),
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            horizontalArrangement = Arrangement.spacedBy(3.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             bottomNavItems.forEach { item ->
@@ -126,7 +128,7 @@ private fun DawnNavItem(
             indication = null,
             onClick = onClick
         ),
-        shape = RoundedCornerShape(23.dp),
+        shape = RoundedCornerShape(18.dp),
         color = Color.Transparent
     ) {
         Row(
@@ -135,28 +137,35 @@ private fun DawnNavItem(
                     if (selected) {
                         Modifier.background(
                             Brush.horizontalGradient(
-                                listOf(DawnCyan, DawnBlue, DawnMagenta)
+                                listOf(
+                                    DawnCyan.copy(alpha = 0.96f),
+                                    SunGold500.copy(alpha = 0.92f),
+                                    DawnMagenta.copy(alpha = 0.94f)
+                                )
                             ),
-                            RoundedCornerShape(23.dp)
+                            RoundedCornerShape(18.dp)
                         )
                     } else Modifier
                 )
-                .padding(horizontal = if (selected) 15.dp else 12.dp, vertical = 10.dp),
-            horizontalArrangement = Arrangement.spacedBy(if (selected) 7.dp else 0.dp),
+                .padding(horizontal = if (selected) 14.dp else 11.dp, vertical = 9.dp),
+            horizontalArrangement = Arrangement.spacedBy(if (selected) 6.dp else 0.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
                 imageVector = if (selected) item.selectedIcon else item.unselectedIcon,
                 contentDescription = item.label,
-                modifier = Modifier.size(22.dp),
+                modifier = Modifier.size(21.dp),
                 tint = tint
             )
             AnimatedContent(targetState = selected, label = "dawn_nav_label") { showLabel ->
                 if (showLabel) {
                     Text(
-                        text = item.label,
+                        text = item.label.uppercase(),
                         color = tint,
-                        style = MaterialTheme.typography.labelLarge.copy(fontSize = 12.sp),
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            fontSize = 10.sp,
+                            letterSpacing = 0.7.sp
+                        ),
                         fontWeight = FontWeight.Bold,
                         maxLines = 1
                     )
@@ -175,7 +184,7 @@ fun NoveryBottomNavBarWithInsets(
     Box(
         modifier = modifier
             .navigationBarsPadding()
-            .padding(horizontal = 12.dp, vertical = 9.dp),
+            .padding(horizontal = 12.dp, vertical = 10.dp),
         contentAlignment = Alignment.Center
     ) {
         NoveryBottomNavBar(

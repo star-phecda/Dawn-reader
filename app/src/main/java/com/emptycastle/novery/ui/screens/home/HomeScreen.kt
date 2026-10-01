@@ -1,7 +1,6 @@
 package com.emptycastle.novery.ui.screens.home
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -10,19 +9,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.emptycastle.novery.domain.model.AppSettings
 import com.emptycastle.novery.recommendation.TagNormalizer
+import com.emptycastle.novery.ui.components.DawnAtmosphere
 import com.emptycastle.novery.ui.components.NoveryBottomNavBarWithInsets
 import com.emptycastle.novery.ui.navigation.HomeTabs
-import com.emptycastle.novery.ui.theme.DawnBlue
-import com.emptycastle.novery.ui.theme.DawnCyan
-import com.emptycastle.novery.ui.theme.DawnMagenta
-import com.emptycastle.novery.ui.theme.DawnViolet
 import com.emptycastle.novery.ui.navigation.rememberTabNavigationState
 import com.emptycastle.novery.ui.screens.home.shared.LibraryStateHolder
 import com.emptycastle.novery.ui.screens.home.tabs.browse.BrowseTab
@@ -46,7 +40,6 @@ fun HomeScreen(
     onNavigateToOnboarding: () -> Unit = {},
     onNavigateToTagExplorer: (TagNormalizer.TagCategory) -> Unit = {}
 ) {
-    // Initialize shared state
     LaunchedEffect(Unit) {
         LibraryStateHolder.initialize()
     }
@@ -56,15 +49,12 @@ fun HomeScreen(
     val currentRoute = navBackStackEntry?.destination?.route
     val currentTab = currentRoute?.let { HomeTabs.fromRoute(it) } ?: HomeTabs.LIBRARY
 
-    // Handle navigation to For You tab with tag filter
     LaunchedEffect(currentRoute) {
         if (com.emptycastle.novery.ui.screens.home.shared.RecommendationNavigationHelper.consumeNavigationRequest()) {
-            // Switch to For You tab
             tabNavState.navigateToTab(HomeTabs.FOR_YOU)
         }
     }
 
-    // Handle system back button
     BackHandler(enabled = currentTab != HomeTabs.LIBRARY) {
         tabNavState.navigateToTab(HomeTabs.LIBRARY)
     }
@@ -86,77 +76,58 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(
-                    Brush.radialGradient(
-                        colors = listOf(
-                            DawnCyan.copy(alpha = 0.075f),
-                            DawnViolet.copy(alpha = 0.038f),
-                            Color.Transparent
-                        ),
-                        center = androidx.compose.ui.geometry.Offset(0.12f, 0.02f),
-                        radius = 1000f
-                    )
-                )
-                .background(
-                    Brush.radialGradient(
-                        colors = listOf(
-                            DawnMagenta.copy(alpha = 0.05f),
-                            Color.Transparent
-                        ),
-                        center = androidx.compose.ui.geometry.Offset(0.92f, 0.76f),
-                        radius = 820f
-                    )
-                )
         ) {
-            NavHost(
-                navController = tabNavState.navController,
-                startDestination = HomeTabs.LIBRARY.route
-            ) {
-                composable(HomeTabs.LIBRARY.route) {
-                    LibraryTab(
-                        appSettings = appSettings,
-                        onNavigateToDetails = onNavigateToDetails,
-                        onNavigateToReader = onNavigateToReader,
-                        onNavigateToNotifications = onNavigateToNotifications
-                    )
-                }
+            DawnAtmosphere(modifier = Modifier.fillMaxSize()) {
+                NavHost(
+                    navController = tabNavState.navController,
+                    startDestination = HomeTabs.LIBRARY.route
+                ) {
+                    composable(HomeTabs.LIBRARY.route) {
+                        LibraryTab(
+                            appSettings = appSettings,
+                            onNavigateToDetails = onNavigateToDetails,
+                            onNavigateToReader = onNavigateToReader,
+                            onNavigateToNotifications = onNavigateToNotifications
+                        )
+                    }
 
-                composable(HomeTabs.BROWSE.route) {
-                    BrowseTab(
-                        appSettings = appSettings,
-                        onNavigateToProvider = onNavigateToProviderBrowse,
-                        onNavigateToDetails = onNavigateToDetails,
-                        onNavigateToReader = onNavigateToReader
-                    )
-                }
+                    composable(HomeTabs.BROWSE.route) {
+                        BrowseTab(
+                            appSettings = appSettings,
+                            onNavigateToProvider = onNavigateToProviderBrowse,
+                            onNavigateToDetails = onNavigateToDetails,
+                            onNavigateToReader = onNavigateToReader
+                        )
+                    }
 
-                composable(HomeTabs.FOR_YOU.route) {
-                    RecommendationTab(
-                        onNavigateToDetails = onNavigateToDetails,
-                        onNavigateToBrowse = {
-                            tabNavState.navigateToTab(HomeTabs.BROWSE)
-                        },
-                        onNavigateToOnboarding = onNavigateToOnboarding,
-                        onNavigateToTagExplorer = onNavigateToTagExplorer
-                    )
-                }
+                    composable(HomeTabs.FOR_YOU.route) {
+                        RecommendationTab(
+                            onNavigateToDetails = onNavigateToDetails,
+                            onNavigateToBrowse = {
+                                tabNavState.navigateToTab(HomeTabs.BROWSE)
+                            },
+                            onNavigateToOnboarding = onNavigateToOnboarding,
+                            onNavigateToTagExplorer = onNavigateToTagExplorer
+                        )
+                    }
 
-                composable(HomeTabs.HISTORY.route) {
-                    HistoryTab(
-                        appSettings = appSettings,
-                        onNavigateToDetails = onNavigateToDetails,
-                        onNavigateToReader = onNavigateToReader
-                    )
-                }
+                    composable(HomeTabs.HISTORY.route) {
+                        HistoryTab(
+                            appSettings = appSettings,
+                            onNavigateToDetails = onNavigateToDetails,
+                            onNavigateToReader = onNavigateToReader
+                        )
+                    }
 
-                composable(HomeTabs.MORE.route) {
-                    MoreTab(
-                        onNavigateToProfile = onNavigateToProfile,
-                        onNavigateToDownloads = onNavigateToDownloads,
-                        onNavigateToAbout = { onNavigateToAbout() },
-                        onNavigateToSettings = onNavigateToSettings,
-                        onNavigateToStorage = onNavigateToStorage
-                    )
+                    composable(HomeTabs.MORE.route) {
+                        MoreTab(
+                            onNavigateToProfile = onNavigateToProfile,
+                            onNavigateToDownloads = onNavigateToDownloads,
+                            onNavigateToAbout = { onNavigateToAbout() },
+                            onNavigateToSettings = onNavigateToSettings,
+                            onNavigateToStorage = onNavigateToStorage
+                        )
+                    }
                 }
             }
         }
