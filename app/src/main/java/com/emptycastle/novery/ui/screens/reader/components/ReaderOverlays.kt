@@ -73,15 +73,17 @@ fun ReaderTopBar(
     val displayTimeLeft = estimatedTimeLeft?.takeIf { it.isNotBlank() }
 
     Surface(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp),
         shape = RoundedCornerShape(
-            bottomStart = 28.dp,
-            bottomEnd = 28.dp
+            bottomStart = 34.dp,
+            bottomEnd = 34.dp
         ),
-        color = colors.controlsBackground,
-        border = BorderStroke(1.dp, colors.accent.copy(alpha = 0.16f)),
-        shadowElevation = 8.dp,
-        tonalElevation = 3.dp
+        color = colors.controlsBackground.copy(alpha = 0.96f),
+        border = BorderStroke(1.dp, colors.accent.copy(alpha = 0.22f)),
+        shadowElevation = 12.dp,
+        tonalElevation = 4.dp
     ) {
         Column {
             Row(
@@ -109,10 +111,10 @@ fun ReaderTopBar(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "DAWN READER",
+                        text = "DAWN / READER",
                         style = MaterialTheme.typography.labelSmall.copy(
                             fontFamily = MonoFontFamily,
-                            letterSpacing = 1.5.sp,
+                            letterSpacing = 1.8.sp,
                             fontWeight = FontWeight.Bold
                         ),
                         color = colors.accent
@@ -120,8 +122,9 @@ fun ReaderTopBar(
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = chapterTitle,
-                        style = MaterialTheme.typography.titleMedium.copy(
-                            fontFamily = SerifFontFamily
+                        style = MaterialTheme.typography.titleLarge.copy(
+                            fontFamily = SerifFontFamily,
+                            letterSpacing = (-0.2).sp
                         ),
                         fontWeight = FontWeight.Bold,
                         maxLines = 1,
@@ -163,14 +166,23 @@ fun ReaderTopBar(
 
             // Progress bar at bottom (only if style is BAR)
             if (progressStyle == ProgressStyle.BAR) {
-                LinearProgressIndicator(
-                    progress = { chapterProgress.coerceIn(0f, 1f) },
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(2.dp),
-                    color = colors.accent,
-                    trackColor = colors.progressTrack.copy(alpha = 0.3f)
-                )
+                        .height(4.dp)
+                        .padding(horizontal = 18.dp, vertical = 1.dp)
+                        .clip(RoundedCornerShape(99.dp))
+                        .background(colors.progressTrack.copy(alpha = 0.26f))
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth(chapterProgress.coerceIn(0f, 1f))
+                            .height(2.dp)
+                            .align(Alignment.CenterStart)
+                            .clip(RoundedCornerShape(99.dp))
+                            .background(colors.accent)
+                    )
+                }
             }
         }
     }
