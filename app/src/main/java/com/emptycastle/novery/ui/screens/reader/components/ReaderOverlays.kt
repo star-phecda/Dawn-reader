@@ -3,6 +3,7 @@ package com.emptycastle.novery.ui.screens.reader.components
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,6 +40,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.emptycastle.novery.domain.model.ProgressStyle
 import com.emptycastle.novery.ui.screens.reader.theme.ReaderColors
 import com.emptycastle.novery.ui.screens.reader.theme.ReaderDefaults

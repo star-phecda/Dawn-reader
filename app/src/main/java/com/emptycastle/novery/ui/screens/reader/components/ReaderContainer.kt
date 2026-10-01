@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -40,6 +41,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.shape.RoundedCornerShape
 import com.emptycastle.novery.domain.model.MaxWidth
 import com.emptycastle.novery.domain.model.ReadingDirection
 import com.emptycastle.novery.ui.screens.reader.logic.AuthorNoteDisplayMode
@@ -50,6 +52,7 @@ import com.emptycastle.novery.ui.screens.reader.model.SentenceBoundsInSegment
 import com.emptycastle.novery.ui.screens.reader.model.TTSScrollEdge
 import com.emptycastle.novery.ui.screens.reader.theme.FontProvider
 import com.emptycastle.novery.ui.screens.reader.theme.ReaderColors
+import com.emptycastle.novery.ui.theme.MonoFontFamily
 import com.emptycastle.novery.domain.model.TextAlign as ReaderTextAlign
 
 @Composable

@@ -3,6 +3,12 @@ package com.emptycastle.novery.ui.screens.reader.theme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.emptycastle.novery.domain.model.ReaderTheme
+import com.emptycastle.novery.ui.theme.DawnSiteCream
+import com.emptycastle.novery.ui.theme.DawnSiteGold
+import com.emptycastle.novery.ui.theme.DawnSiteInk
+import com.emptycastle.novery.ui.theme.DawnSiteNight
+import com.emptycastle.novery.ui.theme.DawnSitePink
+import com.emptycastle.novery.ui.theme.DawnSiteSurface
 
 /**
  * Default values and constants for the reader UI
