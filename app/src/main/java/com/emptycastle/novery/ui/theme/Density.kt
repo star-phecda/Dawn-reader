@@ -52,7 +52,7 @@ data class NoveryDimensions(
                     spacingSm = 6.dp,
                     spacingMd = 8.dp,
                     spacingLg = 12.dp,
-                    spacingXl = 18.dp
+                    spacingXl = 18.dp,
                     iconSm = 16.dp,
                     iconMd = 20.dp,
                     iconLg = 24.dp,
@@ -69,7 +69,7 @@ data class NoveryDimensions(
                     spacingSm = 8.dp,
                     spacingMd = 10.dp,
                     spacingLg = 16.dp,
-                    spacingXl = 24.dp
+                    spacingXl = 24.dp,
                     iconSm = 18.dp,
                     iconMd = 24.dp,
                     iconLg = 28.dp,
@@ -86,7 +86,7 @@ data class NoveryDimensions(
                     spacingSm = 8.dp,
                     spacingMd = 12.dp,
                     spacingLg = 20.dp,
-                    spacingXl = 32.dp
+                    spacingXl = 32.dp,
                     iconSm = 20.dp,
                     iconMd = 28.dp,
                     iconLg = 32.dp,
