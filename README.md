@@ -121,7 +121,7 @@ Requires **Android Studio Koala+**, **JDK 11+**, **Kotlin 2.0.21**.
 - Floating expressive navigation capsule
 - Warm sunrise + ink palette with serif display typography
 - Dawn mascot icon
-- Chapter-edge swipe to move between chapters using the existing reader navigation
+- End-of-chapter upward drag from the lower page area to move to the next chapter using the existing reader navigation
 - Gradual screen-by-screen redesign so the underlying novel engine remains intact
 
 ## 🙏 Acknowledgments

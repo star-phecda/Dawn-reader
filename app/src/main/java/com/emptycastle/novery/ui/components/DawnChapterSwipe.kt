@@ -12,7 +12,9 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.KeyboardArrowUp
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -37,18 +39,17 @@ import com.emptycastle.novery.ui.theme.DawnSiteGold
 import com.emptycastle.novery.ui.theme.DawnSitePink
 import kotlin.math.abs
 
-private data class SwipeSettleRequest(
+private data class ChapterSettleRequest(
     val target: Float,
-    val direction: Int
+    val advance: Boolean
 )
 
 /**
- * Dawn's horizontal chapter gesture.
+ * End-of-chapter upward drag.
  *
- * A deliberate horizontal drag from anywhere in the reader moves the current
- * chapter with the finger. Vertical movement is left alone for normal reading
- * scroll. Crossing the threshold gives haptic feedback; releasing commits the
- * chapter change or springs the page back into place.
+ * Normal vertical reading remains vertical scrolling until the user is near the chapter end.
+ * The gesture starts anywhere in the lower 28% of the page; it is never tied to
+ * the visible hint surface or a button edge.
  */
 @Composable
 fun DawnChapterSwipeSurface(
@@ -63,26 +64,27 @@ fun DawnChapterSwipeSurface(
     onNext: () -> Unit,
     onTap: (Offset, Float, Float) -> Unit,
     modifier: Modifier = Modifier,
+    advanceEnabled: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    BoxWithConstraints(
-        modifier = modifier.fillMaxSize()
-    ) {
+    BoxWithConstraints(modifier = modifier.fillMaxSize()) {
         val widthPx = constraints.maxWidth.toFloat().coerceAtLeast(1f)
         val heightPx = constraints.maxHeight.toFloat().coerceAtLeast(1f)
         val touchSlopPx = 8.dp.value * LocalDensity.current.density
-        val thresholdPx = maxOf(96f, widthPx * 0.24f)
+        val thresholdPx = maxOf(96f, heightPx * 0.15f)
+        val bottomGestureStartPx = heightPx * 0.72f
+
         val settleAnimation = remember { Animatable(0f) }
         val haptics = LocalHapticFeedback.current
 
-        var dragOffsetX by remember(chapterKey) { mutableFloatStateOf(0f) }
+        var dragOffsetY by remember(chapterKey) { mutableFloatStateOf(0f) }
         var crossedThreshold by remember(chapterKey) { mutableStateOf(false) }
         var settleRequest by remember(chapterKey) {
-            mutableStateOf<SwipeSettleRequest?>(null)
+            mutableStateOf<ChapterSettleRequest?>(null)
         }
 
         LaunchedEffect(chapterKey) {
-            dragOffsetX = 0f
+            dragOffsetY = 0f
             crossedThreshold = false
             settleRequest = null
             settleAnimation.snapTo(0f)
@@ -90,70 +92,60 @@ fun DawnChapterSwipeSurface(
 
         LaunchedEffect(settleRequest) {
             val request = settleRequest ?: return@LaunchedEffect
-
-            settleAnimation.snapTo(dragOffsetX)
+            settleAnimation.snapTo(dragOffsetY)
             settleAnimation.animateTo(
                 request.target,
                 if (reduceMotion) tween(150) else spring(stiffness = 700f)
             )
-
-            when (request.direction) {
-                -1 -> onNext()
-                1 -> onPrevious()
-            }
-
-            dragOffsetX = 0f
+            if (request.advance) onNext()
+            dragOffsetY = 0f
             crossedThreshold = false
             settleRequest = null
         }
 
-        val renderedOffsetX = settleRequest?.let { settleAnimation.value } ?: dragOffsetX
-        val progress = (abs(renderedOffsetX) / thresholdPx).coerceIn(0f, 1f)
-        val direction = when {
-            renderedOffsetX < 0f -> -1
-            renderedOffsetX > 0f -> 1
-            else -> 0
-        }
-        val canNavigate = when {
-            direction < 0 -> hasNextChapter && allowNextGesture
-            direction > 0 -> hasPreviousChapter && allowPreviousGesture
-            else -> false
-        }
+        val renderedOffsetY = settleRequest?.let { settleAnimation.value } ?: dragOffsetY
+        val progress = (abs(renderedOffsetY) / thresholdPx).coerceIn(0f, 1f)
+        val draggingUp = renderedOffsetY < 0f
+        val canAdvance = advanceEnabled && hasNextChapter && allowNextGesture
 
         Box(modifier = Modifier.fillMaxSize()) {
-            if (direction != 0 && canNavigate) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = if (direction < 0) Alignment.CenterEnd else Alignment.CenterStart
-                ) {
-                    Surface(
-                        shape = RoundedCornerShape(26.dp),
-                        color = MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.97f),
-                        border = BorderStroke(
-                            1.dp,
-                            if (direction < 0) DawnSitePink.copy(alpha = 0.68f)
-                            else DawnSiteGold.copy(alpha = 0.68f)
-                        ),
-                        tonalElevation = 4.dp
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 11.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            Text(
-                                text = when {
-                                    direction < 0 && progress >= 1f -> "RELEASE TO CONTINUE"
-                                    direction > 0 && progress >= 1f -> "RELEASE TO RETURN"
-                                    direction < 0 -> "NEXT CHAPTER"
-                                    else -> "PREVIOUS CHAPTER"
-                                },
-                                style = MaterialTheme.typography.labelMedium.copy(
-                                    letterSpacing = 1.05.sp
-                                ),
-                                color = if (direction < 0) DawnSitePink else DawnSiteGold
-                            )
+            if (canAdvance) {
+                Surface(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(horizontal = 16.dp, vertical = 14.dp),
+                    shape = MaterialTheme.shapes.large,
+                    color = MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.94f),
+                    border = BorderStroke(
+                        1.dp,
+                        if (draggingUp && progress >= 1f) {
+                            DawnSitePink.copy(alpha = 0.88f)
+                        } else {
+                            DawnSiteGold.copy(alpha = 0.48f)
                         }
+                    ),
+                    tonalElevation = if (draggingUp) 6.dp else 3.dp,
+                    shadowElevation = if (draggingUp) 10.dp else 5.dp
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp),
+                        horizontalArrangement = Arrangement.spacedBy(9.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.KeyboardArrowUp,
+                            contentDescription = null,
+                            tint = if (draggingUp && progress >= 1f) DawnSitePink else DawnSiteGold
+                        )
+                        Text(
+                            text = when {
+                                draggingUp && progress >= 1f -> "RELEASE TO CONTINUE"
+                                draggingUp -> "KEEP DRAGGING"
+                                else -> "DRAG UP FOR NEXT CHAPTER"
+                            },
+                            style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 0.9.sp),
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
                     }
                 }
             }
@@ -162,24 +154,18 @@ fun DawnChapterSwipeSurface(
                 modifier = Modifier
                     .fillMaxSize()
                     .graphicsLayer {
-                        translationX = renderedOffsetX
-                        val lift = progress * 0.012f
+                        translationY = renderedOffsetY
+                        val lift = progress * 0.010f
                         scaleX = 1f - lift
                         scaleY = 1f - lift
-                        rotationZ = when {
-                            renderedOffsetX < 0f -> -progress * 1.1f
-                            renderedOffsetX > 0f -> progress * 1.1f
-                            else -> 0f
-                        }
                         shadowElevation = progress * 14f
                     }
                     .pointerInput(
                         chapterKey,
                         enabled,
-                        hasPreviousChapter,
                         hasNextChapter,
-                        allowPreviousGesture,
-                        allowNextGesture
+                        allowNextGesture,
+                        advanceEnabled
                     ) {
                         if (!enabled) return@pointerInput
 
@@ -188,8 +174,8 @@ fun DawnChapterSwipeSurface(
                             var lastPosition = down.position
                             var totalDx = 0f
                             var totalDy = 0f
-                            var trackingHorizontal = false
-                            var sawVerticalIntent = false
+                            var trackingAdvance = false
+                            val startsInAdvanceZone = down.position.y >= bottomGestureStartPx
 
                             while (true) {
                                 val event = awaitPointerEvent()
@@ -202,74 +188,52 @@ fun DawnChapterSwipeSurface(
                                 totalDx += delta.x
                                 totalDy += delta.y
 
-                                if (!trackingHorizontal && !sawVerticalIntent) {
-                                    val movedEnough = abs(totalDx) > touchSlopPx ||
-                                        abs(totalDy) > touchSlopPx
-
+                                if (!trackingAdvance) {
+                                    val movedEnough =
+                                        abs(totalDx) > touchSlopPx || abs(totalDy) > touchSlopPx
                                     if (movedEnough) {
-                                        if (abs(totalDx) > abs(totalDy)) {
-                                            val wantsNext = totalDx < 0f
-                                            val allowed = if (wantsNext) {
-                                                hasNextChapter && allowNextGesture
-                                            } else {
-                                                hasPreviousChapter && allowPreviousGesture
-                                            }
-
-                                            if (allowed) {
-                                                trackingHorizontal = true
-                                            } else {
-                                                break
-                                            }
+                                        val verticalIntent = abs(totalDy) > abs(totalDx)
+                                        val wantsAdvance = totalDy < 0f
+                                        if (
+                                            startsInAdvanceZone &&
+                                            advanceEnabled &&
+                                            hasNextChapter &&
+                                            allowNextGesture &&
+                                            verticalIntent &&
+                                            wantsAdvance
+                                        ) {
+                                            trackingAdvance = true
                                         } else {
-                                            sawVerticalIntent = true
+                                            break
                                         }
                                     }
                                 }
 
-                                if (trackingHorizontal) {
+                                if (trackingAdvance) {
                                     change.consume()
-                                    val candidate = (dragOffsetX + delta.x)
-                                        .coerceIn(-widthPx, widthPx)
-
-                                    val allowed = when {
-                                        candidate < 0f -> hasNextChapter && allowNextGesture
-                                        candidate > 0f -> hasPreviousChapter && allowPreviousGesture
-                                        else -> true
-                                    }
-
-                                    if (allowed) {
-                                        dragOffsetX = candidate
-                                        val crossed = abs(candidate) >= thresholdPx
-                                        if (crossed && !crossedThreshold) {
-                                            crossedThreshold = true
-                                            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
-                                        } else if (!crossed) {
-                                            crossedThreshold = false
-                                        }
+                                    dragOffsetY = (dragOffsetY + delta.y).coerceIn(-heightPx, 0f)
+                                    val crossed = abs(dragOffsetY) >= thresholdPx
+                                    if (crossed && !crossedThreshold) {
+                                        crossedThreshold = true
+                                        haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                                    } else if (!crossed) {
+                                        crossedThreshold = false
                                     }
                                 }
 
                                 if (!change.pressed) break
                             }
 
-                            if (trackingHorizontal) {
-                                val finalOffset = dragOffsetX
-                                val goNext = finalOffset <= -thresholdPx &&
-                                    hasNextChapter && allowNextGesture
-                                val goPrevious = finalOffset >= thresholdPx &&
-                                    hasPreviousChapter && allowPreviousGesture
+                            if (trackingAdvance) {
+                                val shouldAdvance =
+                                    dragOffsetY <= -thresholdPx &&
+                                        advanceEnabled &&
+                                        hasNextChapter &&
+                                        allowNextGesture
 
-                                settleRequest = SwipeSettleRequest(
-                                    target = when {
-                                        goNext -> -widthPx
-                                        goPrevious -> widthPx
-                                        else -> 0f
-                                    },
-                                    direction = when {
-                                        goNext -> -1
-                                        goPrevious -> 1
-                                        else -> 0
-                                    }
+                                settleRequest = ChapterSettleRequest(
+                                    target = if (shouldAdvance) -heightPx else 0f,
+                                    advance = shouldAdvance
                                 )
                             } else if (
                                 abs(totalDx) <= touchSlopPx &&

@@ -59,7 +59,7 @@ fun DawnGradientButton(
     Surface(
         onClick = onClick,
         modifier = modifier,
-        shape = RoundedCornerShape(22.dp),
+        shape = MaterialTheme.shapes.large,
         color = Color.Transparent,
         shadowElevation = 8.dp,
         tonalElevation = 2.dp
@@ -122,7 +122,7 @@ fun DawnSectionHeader(
         if (actionLabel != null && onAction != null) {
             Surface(
                 onClick = onAction,
-                shape = RoundedCornerShape(10.dp),
+                shape = MaterialTheme.shapes.small,
                 color = Color.Transparent,
                 border = BorderStroke(
                     1.dp,
@@ -186,7 +186,7 @@ fun DawnHeroSurface(
 ) {
     Surface(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(14.dp),
+        shape = MaterialTheme.shapes.large,
         color = Color.Transparent,
         border = BorderStroke(
             1.dp,
@@ -244,7 +244,7 @@ fun DawnPill(
     Surface(
         onClick = onClick,
         modifier = modifier,
-        shape = RoundedCornerShape(8.dp),
+        shape = MaterialTheme.shapes.extraLarge,
         color = if (selected) DawnCyan.copy(alpha = 0.14f) else Color.Transparent,
         border = BorderStroke(
             1.dp,
@@ -336,7 +336,7 @@ fun DawnChapterAdvancePull(
         contentAlignment = Alignment.Center
     ) {
         Surface(
-            shape = RoundedCornerShape(24.dp),
+            shape = MaterialTheme.shapes.large,
             color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.94f),
             border = androidx.compose.foundation.BorderStroke(
                 1.dp,
@@ -350,7 +350,7 @@ fun DawnChapterAdvancePull(
                 horizontalArrangement = Arrangement.spacedBy(9.dp)
             ) {
                 Surface(
-                    shape = RoundedCornerShape(16.dp),
+                    shape = MaterialTheme.shapes.medium,
                     color = if (ready) DawnCyan.copy(alpha = 0.18f) else DawnViolet.copy(alpha = 0.13f),
                     modifier = Modifier.size(38.dp)
                 ) {
@@ -365,12 +365,12 @@ fun DawnChapterAdvancePull(
                 }
                 Column(verticalArrangement = Arrangement.spacedBy(1.dp)) {
                     Text(
-                        text = if (ready) "Release for next" else "Next chapter",
+                        text = if (ready) "Release to continue" else "Next chapter",
                         style = MaterialTheme.typography.labelLarge,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
-                        text = if (ready) "Let go to continue" else "Pull upward",
+                        text = if (ready) "Let go to open the next chapter" else "Drag up from the bottom",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

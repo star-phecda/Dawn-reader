@@ -440,9 +440,9 @@ data class ReaderColors(
             selectionBackground = DawnSiteGold.copy(alpha = 0.3f),
             selectionHandle = DawnSiteGold,
 
-            success = AccentColors.Green,
+            success = Color(0xFF2E9D71),
             warning = DawnSiteGold,
-            error = Color(0xFFD32F2F),
+            error = Color(0xFFD45B68),
 
             chapterDividerBackground = Color(0xFFEFE6DC),
             chapterHeaderText = DawnSiteInk,
@@ -692,9 +692,9 @@ data class ReaderColors(
             selectionBackground = DawnSiteGold.copy(alpha = 0.32f),
             selectionHandle = DawnSiteGold,
 
-            success = AccentColors.GreenLight,
+            success = Color(0xFF56D49E),
             warning = DawnSiteGold,
-            error = Color(0xFFEF5350),
+            error = Color(0xFFFF6E7B),
 
             chapterDividerBackground = Color(0xFF151117),
             chapterHeaderText = DawnSiteCream,
@@ -727,33 +727,34 @@ data class ReaderColors(
             text = Color(0xFFE8E8E8),
             textSecondary = Color(0xFFB0B0B0),
 
-            accent = AccentColors.Orange,
-            accentDark = AccentColors.OrangeDark,
-            accentLight = AccentColors.OrangeLight,
+            accent = DawnSitePink,
+            accentDark = Color(0xFFC10D70),
+            accentLight = Color(0xFFFF6CB7),
+            onAccent = Color.White,
 
             divider = Color(0xFF2A2A2A),
             border = Color(0xFF3A3A3A),
             icon = Color(0xFFB0B0B0),
             iconSecondary = Color(0xFF808080),
 
-            buttonBackground = AccentColors.Orange,
+            buttonBackground = DawnSitePink,
             buttonText = Color.White,
             ripple = Color(0xFFE8E8E8),
 
             sentenceHighlight = AccentColors.Orange.copy(alpha = 0.4f),
             segmentHighlight = AccentColors.Orange.copy(alpha = 0.15f),
             selectionBackground = AccentColors.Blue.copy(alpha = 0.45f),
-            selectionHandle = AccentColors.Blue,
+            selectionHandle = DawnSitePink,
 
             success = AccentColors.GreenLight,
-            warning = Color(0xFFFFB74D),
+            warning = DawnSiteGold,
             error = Color(0xFFFF5252),
 
             chapterDividerBackground = Color(0xFF0A0A0A),
             chapterHeaderText = Color(0xFFB0B0B0),
 
             progressTrack = Color(0xFF2A2A2A),
-            progressIndicator = AccentColors.Orange,
+            progressIndicator = DawnSitePink,
 
             scrim = Color.Black.copy(alpha = 0.7f),
             controlsBackground = Color.Black.copy(alpha = 0.95f),

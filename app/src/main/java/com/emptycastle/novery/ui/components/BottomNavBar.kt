@@ -73,7 +73,7 @@ fun NoveryBottomNavBar(
 
     Surface(
         modifier = modifier.widthIn(max = 560.dp),
-        shape = RoundedCornerShape(28.dp),
+        shape = MaterialTheme.shapes.extraLarge,
         color = DawnSiteNight.copy(alpha = 0.97f),
         contentColor = MaterialTheme.colorScheme.onSurface,
         border = BorderStroke(
@@ -85,7 +85,7 @@ fun NoveryBottomNavBar(
     ) {
         Row(
             modifier = Modifier
-                .padding(horizontal = 7.dp, vertical = 7.dp)
+                .padding(horizontal = 8.dp, vertical = 8.dp)
                 .animateContentSize(animationSpec = spring(stiffness = 500f)),
             horizontalArrangement = Arrangement.spacedBy(3.dp),
             verticalAlignment = Alignment.CenterVertically
@@ -120,7 +120,7 @@ private fun DawnNavItem(
             indication = null,
             onClick = onClick
         ),
-        shape = RoundedCornerShape(18.dp),
+        shape = MaterialTheme.shapes.large,
         color = Color.Transparent
     ) {
         Row(
@@ -128,8 +128,8 @@ private fun DawnNavItem(
                 .then(
                     if (selected) {
                         Modifier.background(
-                            DawnSitePink.copy(alpha = 0.94f),
-                            RoundedCornerShape(18.dp)
+                            DawnSitePink.copy(alpha = 0.97f),
+                            MaterialTheme.shapes.large
                         )
                     } else Modifier
                 )
@@ -140,7 +140,7 @@ private fun DawnNavItem(
             Icon(
                 imageVector = if (selected) item.selectedIcon else item.unselectedIcon,
                 contentDescription = item.label,
-                modifier = Modifier.size(21.dp),
+                modifier = Modifier.size(23.dp),
                 tint = tint
             )
             AnimatedContent(targetState = selected, label = "dawn_nav_label") { showLabel ->
