@@ -186,13 +186,13 @@ fun DawnHeroSurface(
 ) {
     Surface(
         modifier = modifier.fillMaxWidth(),
-        shape = MaterialTheme.shapes.large,
-        color = Color.Transparent,
+        shape = MaterialTheme.shapes.extraLarge,
+        color = MaterialTheme.colorScheme.surfaceContainer,
         border = BorderStroke(
             1.dp,
-            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.62f)
+            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.72f)
         ),
-        tonalElevation = 0.dp,
+        tonalElevation = 2.dp,
         shadowElevation = 0.dp
     ) {
         Box {
@@ -202,9 +202,9 @@ fun DawnHeroSurface(
                     .background(
                         Brush.linearGradient(
                             colors = listOf(
-                                DawnCyan.copy(alpha = 0.10f),
-                                MaterialTheme.colorScheme.surface.copy(alpha = 0.78f),
-                                DawnMagenta.copy(alpha = 0.06f)
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.08f),
+                                Color.Transparent,
+                                MaterialTheme.colorScheme.tertiary.copy(alpha = 0.06f)
                             )
                         )
                     )
@@ -245,18 +245,30 @@ fun DawnPill(
         onClick = onClick,
         modifier = modifier,
         shape = MaterialTheme.shapes.extraLarge,
-        color = if (selected) DawnCyan.copy(alpha = 0.14f) else Color.Transparent,
+        color = if (selected) {
+            MaterialTheme.colorScheme.primaryContainer
+        } else {
+            MaterialTheme.colorScheme.surfaceContainerHigh
+        },
         border = BorderStroke(
             1.dp,
-            if (selected) DawnCyan.copy(alpha = 0.75f)
-            else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.75f)
-        )
+            if (selected) {
+                MaterialTheme.colorScheme.primary.copy(alpha = 0.34f)
+            } else {
+                MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.6f)
+            }
+        ),
+        tonalElevation = if (selected) 2.dp else 0.dp
     ) {
         Text(
-            text = label.uppercase(),
-            style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 0.8.sp),
-            color = if (selected) DawnCyan else MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
+            text = label,
+            style = MaterialTheme.typography.labelLarge,
+            color = if (selected) {
+                MaterialTheme.colorScheme.onPrimaryContainer
+            } else {
+                MaterialTheme.colorScheme.onSurfaceVariant
+            },
+            modifier = Modifier.padding(horizontal = 14.dp, vertical = 9.dp)
         )
     }
 }

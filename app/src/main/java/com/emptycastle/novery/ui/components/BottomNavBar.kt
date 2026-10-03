@@ -74,20 +74,20 @@ fun NoveryBottomNavBar(
     Surface(
         modifier = modifier.widthIn(max = 560.dp),
         shape = MaterialTheme.shapes.extraLarge,
-        color = DawnSiteNight.copy(alpha = 0.97f),
+        color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.97f),
         contentColor = MaterialTheme.colorScheme.onSurface,
         border = BorderStroke(
             1.dp,
-            DawnSiteGold.copy(alpha = 0.40f)
+            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.7f)
         ),
-        shadowElevation = 14.dp,
+        shadowElevation = 10.dp,
         tonalElevation = 3.dp
     ) {
         Row(
             modifier = Modifier
-                .padding(horizontal = 8.dp, vertical = 8.dp)
+                .padding(horizontal = 6.dp, vertical = 6.dp)
                 .animateContentSize(animationSpec = spring(stiffness = 500f)),
-            horizontalArrangement = Arrangement.spacedBy(3.dp),
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             bottomNavItems.forEach { item ->
@@ -109,7 +109,11 @@ private fun DawnNavItem(
 ) {
     val source = remember { MutableInteractionSource() }
     val tint by animateColorAsState(
-        targetValue = if (selected) DawnSiteCream else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.82f),
+        targetValue = if (selected) {
+            MaterialTheme.colorScheme.onPrimaryContainer
+        } else {
+            MaterialTheme.colorScheme.onSurfaceVariant
+        },
         animationSpec = spring(stiffness = 650f),
         label = "dawn_nav_tint"
     )
@@ -121,39 +125,51 @@ private fun DawnNavItem(
             onClick = onClick
         ),
         shape = MaterialTheme.shapes.large,
-        color = Color.Transparent
+        color = if (selected) {
+            MaterialTheme.colorScheme.primaryContainer
+        } else {
+            Color.Transparent
+        },
+        tonalElevation = if (selected) 2.dp else 0.dp
     ) {
         Row(
-            modifier = Modifier
-                .then(
-                    if (selected) {
-                        Modifier.background(
-                            DawnSitePink.copy(alpha = 0.97f),
-                            MaterialTheme.shapes.large
-                        )
-                    } else Modifier
-                )
-                .padding(horizontal = if (selected) 15.dp else 11.dp, vertical = 10.dp),
+            modifier = Modifier.padding(
+                horizontal = if (selected) 14.dp else 10.dp,
+                vertical = 8.dp
+            ),
             horizontalArrangement = Arrangement.spacedBy(if (selected) 6.dp else 0.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = if (selected) item.selectedIcon else item.unselectedIcon,
-                contentDescription = item.label,
-                modifier = Modifier.size(23.dp),
-                tint = tint
-            )
-            AnimatedContent(targetState = selected, label = "dawn_nav_label") { showLabel ->
+            Box(
+                modifier = Modifier
+                    .size(32.dp)
+                    .then(
+                        if (selected) {
+                            Modifier.background(
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+                                MaterialTheme.shapes.medium
+                            )
+                        } else Modifier
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = if (selected) item.selectedIcon else item.unselectedIcon,
+                    contentDescription = item.label,
+                    modifier = Modifier.size(21.dp),
+                    tint = tint
+                )
+            }
+
+            AnimatedContent(
+                targetState = selected,
+                label = "dawn_nav_label"
+            ) { showLabel ->
                 if (showLabel) {
                     Text(
-                        text = item.label.uppercase(),
+                        text = item.label,
                         color = tint,
-                        style = MaterialTheme.typography.labelSmall.copy(
-                            fontSize = 10.sp,
-                            letterSpacing = 0.7.sp
-                        ),
-                        fontWeight = FontWeight.Bold,
-                        maxLines = 1
+                        style = MaterialTheme.typography.labelLarge
                     )
                 }
             }
@@ -170,7 +186,7 @@ fun NoveryBottomNavBarWithInsets(
     Box(
         modifier = modifier
             .navigationBarsPadding()
-            .padding(horizontal = 12.dp, vertical = 10.dp),
+            .padding(horizontal = 12.dp, vertical = 8.dp),
         contentAlignment = Alignment.Center
     ) {
         NoveryBottomNavBar(
