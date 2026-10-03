@@ -254,7 +254,6 @@ private fun HistoryHeader(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
-
             Surface(
                 onClick = onClearHistory,
                 shape = RoundedCornerShape(18.dp),
