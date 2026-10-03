@@ -50,6 +50,7 @@ import com.emptycastle.novery.recommendation.TagNormalizer
 import com.emptycastle.novery.recommendation.model.Recommendation
 import com.emptycastle.novery.recommendation.model.RecommendationType
 import com.emptycastle.novery.ui.components.DawnHeroSurface
+import com.emptycastle.novery.ui.components.DawnExpressiveEyebrow
 import com.emptycastle.novery.ui.screens.home.tabs.recommendation.components.EmptyRecommendations
 import com.emptycastle.novery.ui.screens.home.tabs.recommendation.components.NovelActionMenu
 import com.emptycastle.novery.ui.screens.home.tabs.recommendation.components.ProfileHeader
@@ -222,16 +223,10 @@ fun RecommendationTab(
                                             modifier = Modifier.weight(1f),
                                             verticalArrangement = Arrangement.spacedBy(2.dp)
                                         ) {
-                                            Text(
-                                                text = "DAWN • FOR YOU",
-                                                style = MaterialTheme.typography.labelMedium,
-                                                fontWeight = FontWeight.Bold,
-                                                color = MaterialTheme.colorScheme.primary
-                                            )
+                                            DawnExpressiveEyebrow(text = "FOR YOU")
                                             Text(
                                                 text = "Your next chapter.",
-                                                style = MaterialTheme.typography.headlineMedium,
-                                                fontWeight = FontWeight.Bold
+                                                style = MaterialTheme.typography.headlineMedium
                                             )
                                             Text(
                                                 text = "Stories shaped around what you actually read.",

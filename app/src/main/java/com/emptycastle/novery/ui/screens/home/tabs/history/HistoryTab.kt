@@ -65,6 +65,7 @@ import com.emptycastle.novery.domain.model.AppSettings
 import com.emptycastle.novery.domain.model.UiDensity
 import com.emptycastle.novery.ui.components.HistoryListItem
 import com.emptycastle.novery.ui.components.DawnHeroSurface
+import com.emptycastle.novery.ui.components.DawnExpressiveEyebrow
 import com.emptycastle.novery.ui.components.HistoryListItemCompact
 import com.emptycastle.novery.ui.theme.DawnCyan
 import com.emptycastle.novery.ui.theme.DawnMagenta
@@ -242,20 +243,17 @@ private fun HistoryHeader(
                         )
                     }
                 }
-                Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                    Text(
-                        text = "Reading History",
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onBackground
+                Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                    DawnExpressiveEyebrow(
+                        text = "READING TRAIL",
+                        icon = Icons.Outlined.History
                     )
                     Text(
                         text = "$itemCount ${if (itemCount == 1) "novel" else "novels"} in your trail",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
-            }
 
             Surface(
                 onClick = onClearHistory,
