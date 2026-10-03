@@ -97,49 +97,42 @@ fun DawnSectionHeader(
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.Bottom,
-        horizontalArrangement = Arrangement.spacedBy(14.dp)
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = "02 / ${title.uppercase()}",
-                style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 1.8.sp),
-                color = DawnCyan
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(5.dp)
+        ) {
+            DawnExpressiveEyebrow(
+                text = title.uppercase(),
+                icon = Icons.Rounded.AutoAwesome
             )
             Text(
                 text = title,
-                style = MaterialTheme.typography.displaySmall,
+                style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorScheme.onBackground
             )
             subtitle?.let {
                 Text(
                     text = it,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(top = 4.dp)
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
         if (actionLabel != null && onAction != null) {
-            Surface(
+            androidx.compose.material3.FilledTonalButton(
                 onClick = onAction,
-                shape = MaterialTheme.shapes.small,
-                color = Color.Transparent,
-                border = BorderStroke(
-                    1.dp,
-                    MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.8f)
-                )
+                shape = MaterialTheme.shapes.large
             ) {
                 Text(
-                    text = actionLabel.uppercase(),
-                    style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 1.sp),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 9.dp)
+                    text = actionLabel,
+                    style = MaterialTheme.typography.labelLarge
                 )
             }
         }
     }
 }
-
 @Composable
 fun DawnPageHeader(
     eyebrow: String,
@@ -147,38 +140,29 @@ fun DawnPageHeader(
     subtitle: String,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier.fillMaxWidth()) {
-        Text(
-            text = eyebrow.uppercase(),
-            style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 2.1.sp),
-            color = DawnCyan
-        )
-        Spacer(Modifier.height(6.dp))
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        DawnExpressiveEyebrow(text = eyebrow)
         Text(
             text = title,
             style = MaterialTheme.typography.displayMedium.copy(lineHeight = 48.sp),
             color = MaterialTheme.colorScheme.onBackground
         )
-        Box(
+        DawnExpressiveRule(
             modifier = Modifier
-                .padding(vertical = 14.dp)
-                .fillMaxWidth(0.72f)
-                .height(1.dp)
-                .background(
-                    Brush.horizontalGradient(
-                        listOf(DawnCyan, DawnViolet, DawnMagenta, Color.Transparent)
-                    )
-                )
+                .fillMaxWidth(0.78f)
+                .padding(vertical = 6.dp)
         )
         Text(
             text = subtitle,
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.fillMaxWidth(0.92f)
+            modifier = Modifier.fillMaxWidth(0.94f)
         )
     }
 }
-
 @Composable
 fun DawnHeroSurface(
     modifier: Modifier = Modifier,
@@ -192,8 +176,8 @@ fun DawnHeroSurface(
             1.dp,
             MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.72f)
         ),
-        tonalElevation = 2.dp,
-        shadowElevation = 0.dp
+        tonalElevation = 4.dp,
+        shadowElevation = 2.dp
     ) {
         Box {
             Box(
@@ -202,21 +186,36 @@ fun DawnHeroSurface(
                     .background(
                         Brush.linearGradient(
                             colors = listOf(
-                                MaterialTheme.colorScheme.primary.copy(alpha = 0.08f),
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
                                 Color.Transparent,
-                                MaterialTheme.colorScheme.tertiary.copy(alpha = 0.06f)
+                                MaterialTheme.colorScheme.tertiary.copy(alpha = 0.10f),
+                                MaterialTheme.colorScheme.secondary.copy(alpha = 0.06f)
                             )
                         )
                     )
             )
             Box(
                 modifier = Modifier
-                    .size(170.dp)
-                    .offset(x = 190.dp, y = (-72).dp)
+                    .size(190.dp)
+                    .offset(x = 170.dp, y = (-84).dp)
                     .background(
                         Brush.radialGradient(
                             colors = listOf(
-                                DawnCyan.copy(alpha = 0.14f),
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.18f),
+                                Color.Transparent
+                            )
+                        ),
+                        CircleShape
+                    )
+            )
+            Box(
+                modifier = Modifier
+                    .size(120.dp)
+                    .offset(x = (-28).dp, y = 110.dp)
+                    .background(
+                        Brush.radialGradient(
+                            colors = listOf(
+                                MaterialTheme.colorScheme.tertiary.copy(alpha = 0.11f),
                                 Color.Transparent
                             )
                         ),
@@ -226,14 +225,13 @@ fun DawnHeroSurface(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(18.dp)
+                    .padding(20.dp)
             ) {
                 content()
             }
         }
     }
 }
-
 @Composable
 fun DawnPill(
     label: String,

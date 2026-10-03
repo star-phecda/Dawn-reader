@@ -78,6 +78,7 @@ import com.emptycastle.novery.domain.model.AppSettings
 import com.emptycastle.novery.domain.model.DisplayMode
 import com.emptycastle.novery.domain.model.LibraryFilter
 import com.emptycastle.novery.ui.components.DawnPill
+import com.emptycastle.novery.ui.components.DawnExpressiveEyebrow
 import com.emptycastle.novery.ui.screens.home.shared.LibraryStateHolder
 import com.emptycastle.novery.ui.components.DawnSectionHeader
 import com.emptycastle.novery.ui.components.NovelActionSheet
@@ -479,19 +480,13 @@ private fun DawnContinueCard(item: LibraryItem, onClick: () -> Unit) {
         onClick = onClick,
         modifier = Modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.extraLarge,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer
-        ),
-        border = BorderStroke(
-            1.dp,
-            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.55f)
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(204.dp)
+                .height(224.dp)
                 .clip(MaterialTheme.shapes.extraLarge)
         ) {
             AsyncImage(
@@ -505,11 +500,24 @@ private fun DawnContinueCard(item: LibraryItem, onClick: () -> Unit) {
                 modifier = Modifier
                     .fillMaxSize()
                     .background(
+                        Brush.verticalGradient(
+                            colors = listOf(
+                                Color.Transparent,
+                                DawnNavy.copy(alpha = 0.10f),
+                                DawnNavy.copy(alpha = 0.93f)
+                            )
+                        )
+                    )
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
                         Brush.horizontalGradient(
-                            listOf(
-                                DawnNavy.copy(alpha = 0.96f),
-                                DawnNavy.copy(alpha = 0.68f),
-                                Color.Transparent
+                            colors = listOf(
+                                DawnNavy.copy(alpha = 0.72f),
+                                Color.Transparent,
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.16f)
                             )
                         )
                     )
@@ -519,20 +527,28 @@ private fun DawnContinueCard(item: LibraryItem, onClick: () -> Unit) {
                 modifier = Modifier
                     .align(Alignment.BottomStart)
                     .padding(18.dp)
-                    .fillMaxWidth(0.82f),
-                verticalArrangement = Arrangement.spacedBy(6.dp)
+                    .fillMaxWidth(0.92f),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Surface(
-                    shape = MaterialTheme.shapes.extraLarge,
-                    color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.92f)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Text(
-                        text = "CONTINUE READING",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
-                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
-                    )
+                    DawnExpressiveEyebrow(text = "CONTINUE READING")
+                    Surface(
+                        shape = MaterialTheme.shapes.large,
+                        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.22f),
+                        contentColor = Color.White
+                    ) {
+                        Text(
+                            text = novel.apiName,
+                            style = MaterialTheme.typography.labelSmall,
+                            modifier = Modifier.padding(horizontal = 9.dp, vertical = 5.dp),
+                            maxLines = 1
+                        )
+                    }
                 }
+
                 Text(
                     text = novel.name,
                     style = MaterialTheme.typography.headlineMedium,
@@ -540,14 +556,37 @@ private fun DawnContinueCard(item: LibraryItem, onClick: () -> Unit) {
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
+
                 chapter?.let {
                     Text(
                         text = it,
                         style = MaterialTheme.typography.bodySmall,
-                        color = Color.White.copy(alpha = 0.76f),
+                        color = Color.White.copy(alpha = 0.78f),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
+                }
+
+                Surface(
+                    shape = MaterialTheme.shapes.large,
+                    color = MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(7.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.MenuBook,
+                            contentDescription = null,
+                            modifier = Modifier.size(17.dp)
+                        )
+                        Text(
+                            text = "Resume",
+                            style = MaterialTheme.typography.labelLarge
+                        )
+                    }
                 }
             }
         }

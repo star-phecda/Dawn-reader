@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.emptycastle.novery.ui.components.DawnHeroSurface
+import com.emptycastle.novery.ui.components.DawnExpressiveEyebrow
 import com.emptycastle.novery.ui.components.DawnSectionHeader
 import com.emptycastle.novery.ui.theme.NoveryTheme
 import java.time.LocalTime
@@ -178,7 +179,7 @@ fun MoreTab(
                 icon = Icons.Rounded.Info,
                 title = "About Dawn",
                 subtitle = "Version info, updates, and credits",
-                iconTint = Color(0xFF3B82F6),
+                iconTint = MaterialTheme.colorScheme.primary,
                 onClick = onNavigateToAbout,
                 modifier = Modifier.padding(horizontal = dimensions.gridPadding)
             )
@@ -206,11 +207,11 @@ private fun MoreHeader(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                DawnExpressiveEyebrow(text = "YOUR DAWN")
                 Text(
                     text = greeting,
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.headlineMedium,
                     color = MaterialTheme.colorScheme.onBackground
                 )
                 Text(
