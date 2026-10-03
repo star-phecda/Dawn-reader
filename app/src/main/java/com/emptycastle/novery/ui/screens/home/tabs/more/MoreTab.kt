@@ -179,7 +179,7 @@ fun MoreTab(
                 icon = Icons.Rounded.Info,
                 title = "About Dawn",
                 subtitle = "Version info, updates, and credits",
-                iconTint = Color(0xFF3B82F6),
+                iconTint = MaterialTheme.colorScheme.primary,
                 onClick = onNavigateToAbout,
                 modifier = Modifier.padding(horizontal = dimensions.gridPadding)
             )
