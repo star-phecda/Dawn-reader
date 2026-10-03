@@ -110,42 +110,60 @@ fun DawnChapterSwipeSurface(
 
         Box(modifier = Modifier.fillMaxSize()) {
             if (canAdvance) {
+                val isDragging = abs(renderedOffsetY) > 1f
+
+                // Keep the boundary affordance deliberately small. The gesture itself is
+                // the navigation control; this pill is only a discoverable hint.
                 Surface(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
-                        .padding(horizontal = 16.dp, vertical = 14.dp),
-                    shape = MaterialTheme.shapes.large,
-                    color = MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.94f),
+                        .padding(bottom = 12.dp)
+                        .graphicsLayer {
+                            alpha = if (isDragging) 0.96f else 0.72f
+                            scaleX = if (isDragging) 1f + (progress * 0.14f) else 1f
+                            scaleY = if (isDragging) 1f + (progress * 0.06f) else 1f
+                        },
+                    shape = MaterialTheme.shapes.extraLarge,
+                    color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.92f),
                     border = BorderStroke(
                         1.dp,
                         if (draggingUp && progress >= 1f) {
-                            DawnSitePink.copy(alpha = 0.88f)
+                            DawnSitePink.copy(alpha = 0.9f)
                         } else {
-                            DawnSiteGold.copy(alpha = 0.48f)
+                            DawnSiteGold.copy(alpha = 0.5f)
                         }
                     ),
-                    tonalElevation = if (draggingUp) 6.dp else 3.dp,
-                    shadowElevation = if (draggingUp) 10.dp else 5.dp
+                    tonalElevation = 3.dp,
+                    shadowElevation = if (isDragging) 6.dp else 2.dp
                 ) {
                     Row(
-                        modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp),
-                        horizontalArrangement = Arrangement.spacedBy(9.dp),
+                        modifier = Modifier.padding(
+                            horizontal = if (isDragging) 10.dp else 8.dp,
+                            vertical = 5.dp
+                        ),
+                        horizontalArrangement = Arrangement.spacedBy(6.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
                             imageVector = Icons.Rounded.KeyboardArrowUp,
-                            contentDescription = null,
-                            tint = if (draggingUp && progress >= 1f) DawnSitePink else DawnSiteGold
+                            contentDescription = "Swipe up for next chapter",
+                            tint = if (draggingUp && progress >= 1f) {
+                                DawnSitePink
+                            } else {
+                                DawnSiteGold
+                            }
                         )
-                        Text(
-                            text = when {
-                                draggingUp && progress >= 1f -> "RELEASE TO CONTINUE"
-                                draggingUp -> "KEEP DRAGGING"
-                                else -> "DRAG UP FOR NEXT CHAPTER"
-                            },
-                            style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 0.9.sp),
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
+                        if (isDragging) {
+                            Text(
+                                text = if (progress >= 1f) {
+                                    "Release for next chapter"
+                                } else {
+                                    "Next chapter"
+                                },
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
                     }
                 }
             }

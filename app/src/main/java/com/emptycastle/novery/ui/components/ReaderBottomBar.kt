@@ -156,8 +156,8 @@ fun ReaderBottomBar(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp)
-            .padding(bottom = navBarPadding.calculateBottomPadding() + 8.dp)
+            .padding(horizontal = 16.dp)
+            .padding(bottom = navBarPadding.calculateBottomPadding() + 4.dp)
     ) {
         // Inline Settings Panel
         AnimatedVisibility(
@@ -215,7 +215,7 @@ fun ReaderBottomBar(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 6.dp, vertical = 10.dp),
+                        .padding(horizontal = 4.dp, vertical = 4.dp),
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -279,24 +279,26 @@ private fun BottomBarButton(
         onClick = onClick,
         shape = MaterialTheme.shapes.medium,
         color = bgColor,
-        modifier = Modifier.scale(scale)
+        modifier = Modifier
+            .scale(scale)
+            .heightIn(min = 48.dp)
     ) {
         Column(
-            modifier = Modifier.padding(horizontal = 22.dp, vertical = 12.dp),
+            modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = label,
                 tint = iconColor,
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(21.dp)
             )
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(2.dp))
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelSmall.copy(
                     fontWeight = if (isActive) FontWeight.Medium else FontWeight.Normal,
-                    fontSize = 11.sp
+                    fontSize = 10.sp
                 ),
                 color = if (isActive) BarTheme.primary else BarTheme.textDisabled
             )
@@ -319,7 +321,7 @@ private fun ListenButton(onClick: () -> Unit) {
         color = Color.Transparent,
         shadowElevation = 10.dp,
         modifier = Modifier
-            .height(54.dp)
+            .height(48.dp)
             .scale(scale)
             .pointerInput(Unit) {
                 detectTapGestures(
@@ -346,7 +348,7 @@ private fun ListenButton(onClick: () -> Unit) {
             contentAlignment = Alignment.Center
         ) {
             Row(
-                modifier = Modifier.padding(horizontal = 28.dp),
+                modifier = Modifier.padding(horizontal = 18.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
@@ -354,7 +356,7 @@ private fun ListenButton(onClick: () -> Unit) {
                     imageVector = Icons.Default.Headphones,
                     contentDescription = null,
                     tint = com.emptycastle.novery.ui.theme.DawnSiteNight,
-                    modifier = Modifier.size(22.dp)
+                    modifier = Modifier.size(19.dp)
                 )
                 Text(
                     text = "Listen",
