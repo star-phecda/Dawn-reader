@@ -50,18 +50,18 @@ fun DawnAtmosphere(
             drawLine(guide, Offset(0f, y2), Offset(size.width, y2), 1f)
 
             drawCircle(
-                color = DawnCyan.copy(alpha = 0.075f),
-                radius = size.minDimension * 0.34f,
+                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.09f),
+                radius = size.minDimension * 0.36f,
                 center = Offset(size.width * 0.92f, size.height * 0.12f)
             )
             drawCircle(
-                color = DawnMagenta.copy(alpha = 0.055f),
-                radius = size.minDimension * 0.27f,
+                color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.065f),
+                radius = size.minDimension * 0.28f,
                 center = Offset(size.width * 0.05f, size.height * 0.78f)
             )
             drawCircle(
-                color = DawnViolet.copy(alpha = 0.045f),
-                radius = size.minDimension * 0.18f,
+                color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.055f),
+                radius = size.minDimension * 0.20f,
                 center = Offset(size.width * 0.50f, size.height * 0.52f)
             )
 
@@ -91,7 +91,7 @@ fun DawnAtmosphere(
                 .background(
                     Brush.radialGradient(
                         colors = listOf(
-                            DawnCyan.copy(alpha = 0.055f),
+                            MaterialTheme.colorScheme.primary.copy(alpha = 0.06f),
                             Color.Transparent
                         )
                     )
@@ -104,7 +104,7 @@ fun DawnAtmosphere(
                     Brush.linearGradient(
                         colors = listOf(
                             Color.Transparent,
-                            DawnMagenta.copy(alpha = 0.035f),
+                            MaterialTheme.colorScheme.secondary.copy(alpha = 0.04f),
                             Color.Transparent
                         )
                     )

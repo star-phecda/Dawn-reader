@@ -186,58 +186,55 @@ fun ReaderBottomBar(
             }
         }
 
-        // Main Bottom Bar
-        Surface(
+        // Expressive floating reader toolbar. The inline settings panel stays above
+        // this surface, while the native Material 3 toolbar keeps the reader chrome compact.
+        androidx.compose.material3.HorizontalFloatingToolbar(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .widthIn(max = 286.dp),
-            shape = MaterialTheme.shapes.extraLarge,
-            color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.96f),
-            border = BorderStroke(
-                1.dp,
-                MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.7f)
-            ),
-            tonalElevation = 4.dp,
-            shadowElevation = 10.dp
-        ) {
-            Box(
-                modifier = Modifier
-                    .padding(horizontal = 4.dp, vertical = 4.dp)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .padding(horizontal = 4.dp, vertical = 3.dp),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
+                .padding(horizontal = 12.dp),
+            expanded = true,
+            colors = androidx.compose.material3.FloatingToolbarDefaults.standardFloatingToolbarColors(),
+            floatingActionButton = {
+                androidx.compose.material3.FloatingActionButton(
+                    onClick = {
+                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                        onStartTTS()
+                    },
+                    shape = MaterialTheme.shapes.large,
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    elevation = androidx.compose.material3.FloatingActionButtonDefaults.elevation(
+                        defaultElevation = 3.dp,
+                        pressedElevation = 6.dp
+                    )
                 ) {
-                    BottomBarButton(
-                        icon = Icons.AutoMirrored.Filled.MenuBook,
-                        label = "Chapters",
-                        onClick = {
-                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            onOpenChapterList()
-                        }
-                    )
-
-                    ListenButton(
-                        onClick = {
-                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            onStartTTS()
-                        }
-                    )
-
-                    BottomBarButton(
-                        icon = if (showSettings) Icons.Rounded.Close else Icons.Rounded.Tune,
-                        label = "Settings",
-                        isActive = showSettings,
-                        onClick = {
-                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            showSettings = !showSettings
-                        }
+                    Icon(
+                        imageVector = Icons.Default.Headphones,
+                        contentDescription = "Listen",
+                        modifier = Modifier.size(21.dp)
                     )
                 }
+            },
+            content = {
+                BottomBarButton(
+                    icon = Icons.AutoMirrored.Filled.MenuBook,
+                    label = "Chapters",
+                    onClick = {
+                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                        onOpenChapterList()
+                    }
+                )
+                BottomBarButton(
+                    icon = if (showSettings) Icons.Rounded.Close else Icons.Rounded.Tune,
+                    label = "Settings",
+                    isActive = showSettings,
+                    onClick = {
+                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                        showSettings = !showSettings
+                    }
+                )
             }
-        }
+        )
     }
 }
 

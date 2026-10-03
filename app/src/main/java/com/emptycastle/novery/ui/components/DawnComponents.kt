@@ -97,43 +97,37 @@ fun DawnSectionHeader(
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.Bottom,
-        horizontalArrangement = Arrangement.spacedBy(14.dp)
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = "02 / ${title.uppercase()}",
-                style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 1.8.sp),
-                color = DawnCyan
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(5.dp)
+        ) {
+            DawnExpressiveEyebrow(
+                text = title.uppercase(),
+                icon = Icons.Rounded.AutoAwesome
             )
             Text(
                 text = title,
-                style = MaterialTheme.typography.displaySmall,
+                style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorScheme.onBackground
             )
             subtitle?.let {
                 Text(
                     text = it,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(top = 4.dp)
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
         if (actionLabel != null && onAction != null) {
-            Surface(
+            androidx.compose.material3.FilledTonalButton(
                 onClick = onAction,
-                shape = MaterialTheme.shapes.small,
-                color = Color.Transparent,
-                border = BorderStroke(
-                    1.dp,
-                    MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.8f)
-                )
+                shape = MaterialTheme.shapes.large
             ) {
                 Text(
-                    text = actionLabel.uppercase(),
-                    style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 1.sp),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 9.dp)
+                    text = actionLabel,
+                    style = MaterialTheme.typography.labelLarge
                 )
             }
         }
@@ -147,34 +141,26 @@ fun DawnPageHeader(
     subtitle: String,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier.fillMaxWidth()) {
-        Text(
-            text = eyebrow.uppercase(),
-            style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 2.1.sp),
-            color = DawnCyan
-        )
-        Spacer(Modifier.height(6.dp))
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        DawnExpressiveEyebrow(text = eyebrow)
         Text(
             text = title,
             style = MaterialTheme.typography.displayMedium.copy(lineHeight = 48.sp),
             color = MaterialTheme.colorScheme.onBackground
         )
-        Box(
+        DawnExpressiveRule(
             modifier = Modifier
-                .padding(vertical = 14.dp)
-                .fillMaxWidth(0.72f)
-                .height(1.dp)
-                .background(
-                    Brush.horizontalGradient(
-                        listOf(DawnCyan, DawnViolet, DawnMagenta, Color.Transparent)
-                    )
-                )
+                .fillMaxWidth(0.78f)
+                .padding(vertical = 6.dp)
         )
         Text(
             text = subtitle,
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.fillMaxWidth(0.92f)
+            modifier = Modifier.fillMaxWidth(0.94f)
         )
     }
 }
@@ -227,6 +213,233 @@ fun DawnHeroSurface(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(18.dp)
+            ) {
+                content()
+            }
+        }
+    }
+}
+
+@Composable
+fun DawnPill(
+    label: String,
+    selected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        onClick = onClick,
+        modifier = modifier,
+        shape = MaterialTheme.shapes.extraLarge,
+        color = if (selected) {
+            MaterialTheme.colorScheme.primaryContainer
+        } else {
+            MaterialTheme.colorScheme.surfaceContainerHigh
+        },
+        border = BorderStroke(
+            1.dp,
+            if (selected) {
+                MaterialTheme.colorScheme.primary.copy(alpha = 0.34f)
+            } else {
+                MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.6f)
+            }
+        ),
+        tonalElevation = if (selected) 2.dp else 0.dp
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelLarge,
+            color = if (selected) {
+                MaterialTheme.colorScheme.onPrimaryContainer
+            } else {
+                MaterialTheme.colorScheme.onSurfaceVariant
+            },
+            modifier = Modifier.padding(horizontal = 14.dp, vertical = 9.dp)
+        )
+    }
+}
+
+@Composable
+fun DawnIconTile(
+    modifier: Modifier = Modifier,
+    tint: Color = DawnCyan,
+    icon: @Composable () -> Unit
+) {
+    Box(
+        modifier = modifier
+            .size(48.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(tint.copy(alpha = 0.12f)),
+        contentAlignment = Alignment.Center
+    ) { icon() }
+}
+
+/**
+ * Small, deliberate end-of-chapter gesture affordance.
+ * It only exists at the chapter boundary, so ordinary reading gestures remain untouched.
+ */
+@Composable
+fun DawnChapterAdvancePull(
+    visible: Boolean,
+    hasNextChapter: Boolean,
+    onTrigger: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    if (!visible || !hasNextChapter) return
+
+    val haptics = LocalHapticFeedback.current
+    val threshold = 110f
+    var dragDistance by remember { mutableFloatStateOf(0f) }
+    var crossed by remember { mutableStateOf(false) }
+    val progress by animateFloatAsState(
+        targetValue = (dragDistance / threshold).coerceIn(0f, 1.35f),
+        animationSpec = spring(stiffness = 650f),
+        label = "chapter_pull_progress"
+    )
+    val ready = progress >= 1f
+
+    Box(
+        modifier = modifier
+            .padding(bottom = 14.dp)
+            .size(width = 172.dp, height = 74.dp)
+            .graphicsLayer {
+                translationY = -28f * progress.coerceAtMost(1f)
+                alpha = 0.76f + (progress.coerceIn(0f, 1f) * 0.24f)
+            }
+            .pointerInput(Unit) {
+                detectVerticalDragGestures(
+                    onVerticalDrag = { _, dragAmount ->
+                        if (dragAmount < 0f) {
+                            dragDistance = (dragDistance - dragAmount).coerceIn(0f, 150f)
+                            val nowCrossed = dragDistance >= threshold
+                            if (nowCrossed && !crossed) {
+                                crossed = true
+                                haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                            }
+                        } else {
+                            dragDistance = (dragDistance - dragAmount * 0.35f).coerceAtLeast(0f)
+                        }
+                    },
+                    onDragEnd = {
+                        if (dragDistance >= threshold) onTrigger()
+                        dragDistance = 0f
+                        crossed = false
+                    },
+                    onDragCancel = {
+                        dragDistance = 0f
+                        crossed = false
+                    }
+                )
+            },
+        contentAlignment = Alignment.Center
+    ) {
+        Surface(
+            shape = MaterialTheme.shapes.large,
+            color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.94f),
+            border = androidx.compose.foundation.BorderStroke(
+                1.dp,
+                if (ready) DawnCyan.copy(alpha = 0.8f) else MaterialTheme.colorScheme.outlineVariant
+            ),
+            tonalElevation = 5.dp
+        ) {
+            Row(
+                modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(9.dp)
+            ) {
+                Surface(
+                    shape = MaterialTheme.shapes.medium,
+                    color = if (ready) DawnCyan.copy(alpha = 0.18f) else DawnViolet.copy(alpha = 0.13f),
+                    modifier = Modifier.size(38.dp)
+                ) {
+                    Box(contentAlignment = Alignment.Center, modifier = Modifier.size(38.dp)) {
+                        Icon(
+                            imageVector = Icons.Rounded.KeyboardArrowUp,
+                            contentDescription = null,
+                            tint = if (ready) DawnCyan else DawnViolet,
+                            modifier = Modifier.size(22.dp)
+                        )
+                    }
+                }
+                Column(verticalArrangement = Arrangement.spacedBy(1.dp)) {
+                    Text(
+                        text = if (ready) "Release to continue" else "Next chapter",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        text = if (ready) "Let go to open the next chapter" else "Drag up from the bottom",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        }
+    }
+}
+@Composable
+fun DawnHeroSurface(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    Surface(
+        modifier = modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.extraLarge,
+        color = MaterialTheme.colorScheme.surfaceContainer,
+        border = BorderStroke(
+            1.dp,
+            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.72f)
+        ),
+        tonalElevation = 4.dp,
+        shadowElevation = 2.dp
+    ) {
+        Box {
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .background(
+                        Brush.linearGradient(
+                            colors = listOf(
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+                                Color.Transparent,
+                                MaterialTheme.colorScheme.tertiary.copy(alpha = 0.10f),
+                                MaterialTheme.colorScheme.secondary.copy(alpha = 0.06f)
+                            )
+                        )
+                    )
+            )
+            Box(
+                modifier = Modifier
+                    .size(190.dp)
+                    .offset(x = 170.dp, y = (-84).dp)
+                    .background(
+                        Brush.radialGradient(
+                            colors = listOf(
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.18f),
+                                Color.Transparent
+                            )
+                        ),
+                        CircleShape
+                    )
+            )
+            Box(
+                modifier = Modifier
+                    .size(120.dp)
+                    .offset(x = (-28).dp, y = 110.dp)
+                    .background(
+                        Brush.radialGradient(
+                            colors = listOf(
+                                MaterialTheme.colorScheme.tertiary.copy(alpha = 0.11f),
+                                Color.Transparent
+                            )
+                        ),
+                        CircleShape
+                    )
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp)
             ) {
                 content()
             }
