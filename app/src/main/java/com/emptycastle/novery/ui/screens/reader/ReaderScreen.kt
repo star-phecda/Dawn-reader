@@ -795,7 +795,7 @@ private fun ReaderScreenContent(
                     hasNextChapter = uiState.currentChapterIndex < uiState.allChapters.lastIndex,
                     allowPreviousGesture = uiState.currentChapterIndex > 0,
                     allowNextGesture = uiState.currentChapterIndex < uiState.allChapters.lastIndex,
-                    advanceEnabled = chapterProgress >= 0.96f,
+                    advanceEnabled = chapterProgress >= 0.90f || !listState.canScrollForward,
                     reduceMotion = uiState.settings.reduceMotion,
                     onPrevious = onPrevious,
                     onNext = onNext,

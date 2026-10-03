@@ -303,6 +303,11 @@ class OnboardingViewModel : ViewModel() {
 
                 Log.d(TAG, "Seeding complete: ${result.totalDiscovered} novels discovered")
 
+                // The onboarding pass is the authoritative first-run discovery pass.
+                // Persist this separately so the recommendations screen does not repeat
+                // the same provider crawl when its ViewModel is created afterward.
+                preferencesManager.setRecommendationDiscoveryInitialized()
+
                 // 5. Enhance tags
                 val enhancementResult = tagEnhancementManager.enhanceNovelsWithSynopsis()
                 Log.d(TAG, "Tag enhancement: ${enhancementResult.novelsEnhanced} novels enhanced")

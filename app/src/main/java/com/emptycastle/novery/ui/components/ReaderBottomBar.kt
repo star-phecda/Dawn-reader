@@ -187,35 +187,25 @@ fun ReaderBottomBar(
 
         // Main Bottom Bar
         Surface(
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(BarTheme.cornerRadius),
-            color = Color.Transparent,
-            tonalElevation = 12.dp,
-            shadowElevation = 16.dp
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .widthIn(max = 286.dp),
+            shape = MaterialTheme.shapes.extraLarge,
+            color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.96f),
+            border = BorderStroke(
+                1.dp,
+                MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.7f)
+            ),
+            tonalElevation = 4.dp,
+            shadowElevation = 10.dp
         ) {
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        Brush.verticalGradient(
-                            colors = listOf(BarTheme.surface, BarTheme.background)
-                        )
-                    )
-                    .border(
-                        width = 1.dp,
-                        brush = Brush.verticalGradient(
-                            colors = listOf(
-                                BarTheme.border.copy(alpha = 0.4f),
-                                BarTheme.border.copy(alpha = 0.1f)
-                            )
-                        ),
-                        shape = RoundedCornerShape(BarTheme.cornerRadius)
-                    )
+                    .padding(horizontal = 4.dp, vertical = 4.dp)
             ) {
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 4.dp, vertical = 4.dp),
+                        .padding(horizontal = 4.dp, vertical = 3.dp),
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically
                 ) {

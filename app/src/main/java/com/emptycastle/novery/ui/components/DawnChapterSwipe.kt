@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -71,8 +72,8 @@ fun DawnChapterSwipeSurface(
         val widthPx = constraints.maxWidth.toFloat().coerceAtLeast(1f)
         val heightPx = constraints.maxHeight.toFloat().coerceAtLeast(1f)
         val touchSlopPx = 8.dp.value * LocalDensity.current.density
-        val thresholdPx = maxOf(96f, heightPx * 0.15f)
-        val bottomGestureStartPx = heightPx * 0.72f
+        val thresholdPx = maxOf(84f, heightPx * 0.12f)
+        val bottomGestureStartPx = heightPx * 0.68f
 
         val settleAnimation = remember { Animatable(0f) }
         val haptics = LocalHapticFeedback.current
@@ -196,7 +197,7 @@ fun DawnChapterSwipeSurface(
                             val startsInAdvanceZone = down.position.y >= bottomGestureStartPx
 
                             while (true) {
-                                val event = awaitPointerEvent()
+                                val event = awaitPointerEvent(PointerEventPass.Initial)
                                 val change = event.changes.firstOrNull { it.id == down.id }
                                     ?: event.changes.firstOrNull()
                                     ?: break
