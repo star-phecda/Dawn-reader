@@ -77,8 +77,10 @@ fun ReaderTopBar(
             .fillMaxWidth()
             .padding(horizontal = 10.dp),
         shape = RoundedCornerShape(
-            bottomStart = 34.dp,
-            bottomEnd = 34.dp
+            bottomStart = 38.dp,
+            bottomEnd = 38.dp,
+            topStart = 20.dp,
+            topEnd = 20.dp
         ),
         color = colors.controlsBackground.copy(alpha = 0.96f),
         border = BorderStroke(1.dp, colors.accent.copy(alpha = 0.22f)),
@@ -90,19 +92,25 @@ fun ReaderTopBar(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = statusBarPadding.calculateTopPadding())
-                    .padding(horizontal = 4.dp, vertical = 8.dp),
+                    .padding(horizontal = 8.dp, vertical = 10.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // Back button
-                IconButton(
-                    onClick = onBack,
-                    modifier = Modifier.size(buttonSize)
+                Surface(
+                    shape = CircleShape,
+                    color = colors.accent.copy(alpha = 0.12f),
+                    tonalElevation = 2.dp
                 ) {
+                    IconButton(
+                        onClick = onBack,
+                        modifier = Modifier.size(buttonSize)
+                    ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Go back",
                         tint = colors.icon
                     )
+                    }
                 }
 
                 // Title and info - centered
@@ -149,10 +157,16 @@ fun ReaderTopBar(
                 }
 
                 // Bookmark button
-                IconButton(
-                    onClick = onBookmarkClick,
-                    modifier = Modifier.size(buttonSize)
+                Surface(
+                    shape = CircleShape,
+                    color = if (isBookmarked) colors.accent.copy(alpha = 0.18f)
+                    else colors.accent.copy(alpha = 0.08f),
+                    tonalElevation = 2.dp
                 ) {
+                    IconButton(
+                        onClick = onBookmarkClick,
+                        modifier = Modifier.size(buttonSize)
+                    ) {
                     Icon(
                         imageVector = if (isBookmarked)
                             Icons.Default.Bookmark
@@ -161,6 +175,7 @@ fun ReaderTopBar(
                         contentDescription = if (isBookmarked) "Remove bookmark" else "Add bookmark",
                         tint = if (isBookmarked) colors.accent else colors.icon
                     )
+                    }
                 }
             }
 
@@ -169,7 +184,7 @@ fun ReaderTopBar(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(4.dp)
+                        .height(6.dp)
                         .padding(horizontal = 18.dp, vertical = 1.dp)
                         .clip(RoundedCornerShape(99.dp))
                         .background(colors.progressTrack.copy(alpha = 0.26f))
