@@ -40,17 +40,19 @@ import com.emptycastle.novery.ui.theme.DawnSiteGold
 import com.emptycastle.novery.ui.theme.DawnSitePink
 import kotlin.math.abs
 
+private enum class ChapterSwipeDirection { PREVIOUS, NEXT }
+
 private data class ChapterSettleRequest(
     val target: Float,
-    val advance: Boolean
+    val direction: ChapterSwipeDirection?
 )
 
 /**
- * End-of-chapter upward drag.
+ * Full-reader chapter swipe.
  *
- * Normal vertical reading remains vertical scrolling until the user is near the chapter end.
- * The gesture starts anywhere in the lower 28% of the page; it is never tied to
- * the visible hint surface or a button edge.
+ * A deliberate vertical drag of roughly 40% of the reader height navigates chapters.
+ * The gesture may begin anywhere on the reader. Shorter drags remain normal reading/tap
+ * interactions.
  */
 @Composable
 fun DawnChapterSwipeSurface(
@@ -72,8 +74,7 @@ fun DawnChapterSwipeSurface(
         val widthPx = constraints.maxWidth.toFloat().coerceAtLeast(1f)
         val heightPx = constraints.maxHeight.toFloat().coerceAtLeast(1f)
         val touchSlopPx = 8.dp.value * LocalDensity.current.density
-        val thresholdPx = maxOf(84f, heightPx * 0.12f)
-        val bottomGestureStartPx = heightPx * 0.68f
+        val thresholdPx = maxOf(84f, heightPx * 0.40f)
 
         val settleAnimation = remember { Animatable(0f) }
         val haptics = LocalHapticFeedback.current
@@ -98,7 +99,11 @@ fun DawnChapterSwipeSurface(
                 request.target,
                 if (reduceMotion) tween(150) else spring(stiffness = 700f)
             )
-            if (request.advance) onNext()
+            when (request.direction) {
+                ChapterSwipeDirection.PREVIOUS -> onPrevious()
+                ChapterSwipeDirection.NEXT -> onNext()
+                null -> Unit
+            }
             dragOffsetY = 0f
             crossedThreshold = false
             settleRequest = null
@@ -182,7 +187,9 @@ fun DawnChapterSwipeSurface(
                     .pointerInput(
                         chapterKey,
                         enabled,
+                        hasPreviousChapter,
                         hasNextChapter,
+                        allowPreviousGesture,
                         allowNextGesture,
                         advanceEnabled
                     ) {
@@ -193,8 +200,7 @@ fun DawnChapterSwipeSurface(
                             var lastPosition = down.position
                             var totalDx = 0f
                             var totalDy = 0f
-                            var trackingAdvance = false
-                            val startsInAdvanceZone = down.position.y >= bottomGestureStartPx
+                            var trackingChapterSwipe = false
 
                             while (true) {
                                 val event = awaitPointerEvent(PointerEventPass.Initial)
@@ -207,7 +213,7 @@ fun DawnChapterSwipeSurface(
                                 totalDx += delta.x
                                 totalDy += delta.y
 
-                                if (!trackingAdvance) {
+                                if (!trackingChapterSwipe) {
                                     val movedEnough =
                                         abs(totalDx) > touchSlopPx || abs(totalDy) > touchSlopPx
                                     if (movedEnough) {
@@ -221,16 +227,16 @@ fun DawnChapterSwipeSurface(
                                             verticalIntent &&
                                             wantsAdvance
                                         ) {
-                                            trackingAdvance = true
+                                            trackingChapterSwipe = true
                                         } else {
                                             break
                                         }
                                     }
                                 }
 
-                                if (trackingAdvance) {
+                                if (trackingChapterSwipe) {
                                     change.consume()
-                                    dragOffsetY = (dragOffsetY + delta.y).coerceIn(-heightPx, 0f)
+                                    dragOffsetY = (dragOffsetY + delta.y).coerceIn(-heightPx, heightPx)
                                     val crossed = abs(dragOffsetY) >= thresholdPx
                                     if (crossed && !crossedThreshold) {
                                         crossedThreshold = true
@@ -243,16 +249,28 @@ fun DawnChapterSwipeSurface(
                                 if (!change.pressed) break
                             }
 
-                            if (trackingAdvance) {
+                            if (trackingChapterSwipe) {
                                 val shouldAdvance =
                                     dragOffsetY <= -thresholdPx &&
                                         advanceEnabled &&
                                         hasNextChapter &&
                                         allowNextGesture
+                                val shouldGoPrevious =
+                                    dragOffsetY >= thresholdPx &&
+                                        hasPreviousChapter &&
+                                        allowPreviousGesture
 
                                 settleRequest = ChapterSettleRequest(
-                                    target = if (shouldAdvance) -heightPx else 0f,
-                                    advance = shouldAdvance
+                                    target = when {
+                                        shouldAdvance -> -heightPx
+                                        shouldGoPrevious -> heightPx
+                                        else -> 0f
+                                    },
+                                    direction = when {
+                                        shouldAdvance -> ChapterSwipeDirection.NEXT
+                                        shouldGoPrevious -> ChapterSwipeDirection.PREVIOUS
+                                        else -> null
+                                    }
                                 )
                             } else if (
                                 abs(totalDx) <= touchSlopPx &&
