@@ -19,23 +19,28 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
       - name: Make gradlew executable
         run: chmod +x gradlew
-      - name: Build signed release APK
+      - name: Prepare release signing
         env:
           DAWN_KEYSTORE_BASE64: ${{ secrets.DAWN_KEYSTORE_BASE64 }}
           DAWN_KEYSTORE_PASSWORD: ${{ secrets.DAWN_KEYSTORE_PASSWORD }}
           DAWN_KEY_ALIAS: ${{ secrets.DAWN_KEY_ALIAS }}
           DAWN_KEY_PASSWORD: ${{ secrets.DAWN_KEY_PASSWORD }}
         run: |
-          test -n "$DAWN_KEYSTORE_BASE64" || (echo "DAWN_KEYSTORE_BASE64 is not configured" && exit 1)
-          mkdir -p app/signing
-          echo "$DAWN_KEYSTORE_BASE64" | base64 --decode > app/signing/dawn-release.jks
-          cat > signing.properties <<EOF
+          if [ -n "$DAWN_KEYSTORE_BASE64" ] && [ -n "$DAWN_KEYSTORE_PASSWORD" ] && [ -n "$DAWN_KEY_ALIAS" ] && [ -n "$DAWN_KEY_PASSWORD" ]; then
+            echo "Persistent release signing secrets found; building a signed release APK."
+            mkdir -p app/signing
+            echo "$DAWN_KEYSTORE_BASE64" | base64 --decode > app/signing/dawn-release.jks
+            cat > signing.properties <<EOF
           storeFile=$GITHUB_WORKSPACE/app/signing/dawn-release.jks
           storePassword=$DAWN_KEYSTORE_PASSWORD
           keyAlias=$DAWN_KEY_ALIAS
           keyPassword=$DAWN_KEY_PASSWORD
           EOF
-          ./gradlew assembleRelease
+          else
+            echo "Release signing secrets are not configured; building an unsigned release APK for testing."
+          fi
+      - name: Build release APK
+        run: ./gradlew assembleRelease
       - name: Upload release APK
         uses: actions/upload-artifact@v4
         with:
