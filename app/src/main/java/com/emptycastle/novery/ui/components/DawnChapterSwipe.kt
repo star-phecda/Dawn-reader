@@ -220,7 +220,6 @@ fun DawnChapterSwipeSurface(
                                         val verticalIntent = abs(totalDy) > abs(totalDx)
                                         val wantsAdvance = totalDy < 0f
                                         if (
-                                            startsInAdvanceZone &&
                                             advanceEnabled &&
                                             hasNextChapter &&
                                             allowNextGesture &&
