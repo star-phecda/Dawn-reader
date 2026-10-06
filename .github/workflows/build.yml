@@ -20,6 +20,7 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x gradlew
       - name: Prepare release signing
+        id: signing
         env:
           DAWN_KEYSTORE_BASE64: ${{ secrets.DAWN_KEYSTORE_BASE64 }}
           DAWN_KEYSTORE_PASSWORD: ${{ secrets.DAWN_KEYSTORE_PASSWORD }}
@@ -28,6 +29,8 @@ jobs:
         run: |
           if [ -n "$DAWN_KEYSTORE_BASE64" ] && [ -n "$DAWN_KEYSTORE_PASSWORD" ] && [ -n "$DAWN_KEY_ALIAS" ] && [ -n "$DAWN_KEY_PASSWORD" ]; then
             echo "Persistent release signing secrets found; building a signed release APK."
+            echo "build_task=assembleRelease" >> "$GITHUB_OUTPUT"
+            echo "artifact_path=app/build/outputs/apk/release/*.apk" >> "$GITHUB_OUTPUT"
             mkdir -p app/signing
             echo "$DAWN_KEYSTORE_BASE64" | base64 --decode > app/signing/dawn-release.jks
             cat > signing.properties <<EOF
@@ -37,15 +40,18 @@ jobs:
           keyPassword=$DAWN_KEY_PASSWORD
           EOF
           else
-            echo "Release signing secrets are not configured; building an unsigned release APK for testing."
+            echo "Persistent release signing secrets are not configured."
+            echo "Falling back to the project's historical debug APK build so the artifact is valid and installable."
+            echo "build_task=assembleDebug" >> "$GITHUB_OUTPUT"
+            echo "artifact_path=app/build/outputs/apk/debug/*.apk" >> "$GITHUB_OUTPUT"
           fi
-      - name: Build release APK
-        run: ./gradlew assembleRelease
-      - name: Upload release APK
+      - name: Build APK
+        run: ./gradlew ${{ steps.signing.outputs.build_task }}
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Dawn-release-apk
-          path: app/build/outputs/apk/release/*.apk
+          name: Dawn-apk
+          path: ${{ steps.signing.outputs.artifact_path }}
       - name: Remove signing material
         if: always()
         run: rm -rf app/signing signing.properties
