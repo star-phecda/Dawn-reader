@@ -68,35 +68,31 @@ fun ReaderTopBar(
     modifier: Modifier = Modifier
 ) {
     val statusBarPadding = WindowInsets.statusBars.asPaddingValues()
-    val buttonSize = if (largerTouchTargets) 56.dp else 48.dp
+    val buttonSize = if (largerTouchTargets) 56.dp else 44.dp
     val displayTimeLeft = estimatedTimeLeft?.takeIf { it.isNotBlank() }
     val progress = chapterProgress.coerceIn(0f, 1f)
 
-    // An editorial header, rather than a large capsule with everything centered.
-    // The asymmetric silhouette and shape-morphing action buttons use the
-    // expressive shape/motion system already provided by NoveryTheme.
+    // Keep the expressive asymmetrical silhouette, but give the page back its space.
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp),
+            .padding(horizontal = 10.dp),
         shape = RoundedCornerShape(
-            topStart = 30.dp,
-            topEnd = 30.dp,
-            bottomStart = 30.dp,
-            bottomEnd = 14.dp
+            topStart = 26.dp,
+            topEnd = 26.dp,
+            bottomStart = 26.dp,
+            bottomEnd = 12.dp
         ),
         color = colors.controlsBackground,
-        shadowElevation = 8.dp,
-        tonalElevation = 3.dp
+        shadowElevation = 4.dp,
+        tonalElevation = 2.dp
     ) {
-        Column(
-            modifier = Modifier.padding(bottom = 10.dp)
-        ) {
+        Column(modifier = Modifier.padding(bottom = 6.dp)) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = statusBarPadding.calculateTopPadding())
-                    .padding(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 8.dp),
+                    .padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(
@@ -107,7 +103,7 @@ fun ReaderTopBar(
                         contentColor = colors.accent
                     ),
                     shapes = IconButtonDefaults.shapes(
-                        shape = RoundedCornerShape(18.dp),
+                        shape = RoundedCornerShape(16.dp),
                         pressedShape = RoundedCornerShape(8.dp)
                     )
                 ) {
@@ -117,42 +113,33 @@ fun ReaderTopBar(
                     )
                 }
 
-                Spacer(modifier = Modifier.width(12.dp))
+                Spacer(modifier = Modifier.width(8.dp))
 
-                Column(
+                Row(
                     modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.Center
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(6.dp)
-                    ) {
-                        Text(
-                            text = "DAWN",
-                            style = MaterialTheme.typography.labelMedium.copy(
-                                fontFamily = MonoFontFamily,
-                                letterSpacing = 1.7.sp,
-                                fontWeight = FontWeight.Bold
-                            ),
-                            color = colors.accent
-                        )
-                        Box(
-                            modifier = Modifier
-                                .size(5.dp)
-                                .clip(CircleShape)
-                                .background(colors.accent)
-                        )
-                        Text(
-                            text = "READER",
-                            style = MaterialTheme.typography.labelSmall.copy(
-                                letterSpacing = 1.25.sp
-                            ),
-                            color = colors.textSecondary
-                        )
-                    }
                     Text(
-                        text = "Now reading",
-                        style = MaterialTheme.typography.bodySmall,
+                        text = "DAWN",
+                        style = MaterialTheme.typography.labelMedium.copy(
+                            fontFamily = MonoFontFamily,
+                            letterSpacing = 1.5.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        color = colors.accent
+                    )
+                    Box(
+                        modifier = Modifier
+                            .size(4.dp)
+                            .clip(CircleShape)
+                            .background(colors.accent)
+                    )
+                    Text(
+                        text = "READER",
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            letterSpacing = 1.1.sp
+                        ),
                         color = colors.textSecondary
                     )
                 }
@@ -169,7 +156,7 @@ fun ReaderTopBar(
                         contentColor = if (isBookmarked) colors.onAccent else colors.icon
                     ),
                     shapes = IconButtonDefaults.shapes(
-                        shape = RoundedCornerShape(18.dp),
+                        shape = RoundedCornerShape(16.dp),
                         pressedShape = RoundedCornerShape(8.dp)
                     )
                 ) {
@@ -188,64 +175,67 @@ fun ReaderTopBar(
                 }
             }
 
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 22.dp, end = 22.dp, top = 2.dp)
-            ) {
+            if (chapterTitle.isNotBlank()) {
                 Text(
                     text = chapterTitle,
-                    style = MaterialTheme.typography.headlineSmall.copy(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    style = MaterialTheme.typography.titleMedium.copy(
                         fontFamily = SerifFontFamily,
-                        fontSize = 27.sp,
-                        lineHeight = 31.sp,
-                        letterSpacing = (-0.55).sp
+                        fontSize = 20.sp,
+                        lineHeight = 24.sp,
+                        letterSpacing = (-0.3).sp
                     ),
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 2,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     textAlign = TextAlign.Start,
                     color = colors.text
                 )
+            }
 
-                if (progressStyle != ProgressStyle.NONE) {
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Surface(
-                        shape = RoundedCornerShape(14.dp),
-                        color = colors.accent.copy(alpha = 0.10f)
+            if (progressStyle != ProgressStyle.NONE) {
+                Surface(
+                    modifier = Modifier.padding(
+                        start = 14.dp,
+                        end = 14.dp,
+                        top = 4.dp,
+                        bottom = if (progressStyle == ProgressStyle.BAR) 0.dp else 2.dp
+                    ),
+                    shape = RoundedCornerShape(50),
+                    color = colors.accent.copy(alpha = 0.08f)
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Row(
-                            modifier = Modifier.padding(horizontal = 11.dp, vertical = 7.dp),
-                            horizontalArrangement = Arrangement.spacedBy(4.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            ProgressIndicator(
-                                progress = progress,
-                                chapterNumber = chapterNumber,
-                                totalChapters = totalChapters,
-                                estimatedTimeLeft = displayTimeLeft,
-                                style = progressStyle,
-                                colors = colors
-                            )
-                        }
+                        ProgressIndicator(
+                            progress = progress,
+                            chapterNumber = chapterNumber,
+                            totalChapters = totalChapters,
+                            estimatedTimeLeft = displayTimeLeft,
+                            style = progressStyle,
+                            colors = colors
+                        )
                     }
                 }
             }
 
             if (progressStyle == ProgressStyle.BAR) {
-                Spacer(modifier = Modifier.height(12.dp))
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 22.dp)
-                        .height(5.dp)
+                        .padding(start = 14.dp, end = 14.dp, top = 5.dp)
+                        .height(3.dp)
                         .clip(RoundedCornerShape(50))
                         .background(colors.progressTrack.copy(alpha = 0.28f))
                 ) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth(progress)
-                            .height(5.dp)
+                            .height(3.dp)
                             .clip(RoundedCornerShape(50))
                             .background(colors.accent)
                     )

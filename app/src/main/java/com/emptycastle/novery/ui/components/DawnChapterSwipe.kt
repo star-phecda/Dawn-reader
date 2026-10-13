@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -40,7 +41,24 @@ import com.emptycastle.novery.ui.theme.DawnSiteGold
 import com.emptycastle.novery.ui.theme.DawnSitePink
 import kotlin.math.abs
 
-private enum class ChapterSwipeDirection { PREVIOUS, NEXT }
+internal enum class ChapterSwipeDirection { PREVIOUS, NEXT }
+
+internal fun chapterSwipeDirectionForDrag(
+    totalDx: Float,
+    totalDy: Float,
+    touchSlopPx: Float,
+    canPrevious: Boolean,
+    canNext: Boolean
+): ChapterSwipeDirection? {
+    val movedEnough = abs(totalDx) > touchSlopPx || abs(totalDy) > touchSlopPx
+    if (!movedEnough || abs(totalDy) <= abs(totalDx)) return null
+
+    return when {
+        totalDy < 0f && canNext -> ChapterSwipeDirection.NEXT
+        totalDy > 0f && canPrevious -> ChapterSwipeDirection.PREVIOUS
+        else -> null
+    }
+}
 
 private data class ChapterSettleRequest(
     val target: Float,
@@ -67,7 +85,6 @@ fun DawnChapterSwipeSurface(
     onNext: () -> Unit,
     onTap: (Offset, Float, Float) -> Unit,
     modifier: Modifier = Modifier,
-    advanceEnabled: Boolean = true,
     content: @Composable () -> Unit
 ) {
     BoxWithConstraints(modifier = modifier.fillMaxSize()) {
@@ -112,11 +129,13 @@ fun DawnChapterSwipeSurface(
         val renderedOffsetY = settleRequest?.let { settleAnimation.value } ?: dragOffsetY
         val progress = (abs(renderedOffsetY) / thresholdPx).coerceIn(0f, 1f)
         val draggingUp = renderedOffsetY < 0f
-        val canAdvance = advanceEnabled && hasNextChapter && allowNextGesture
+        val canAdvance = hasNextChapter && allowNextGesture
+        val canGoPrevious = hasPreviousChapter && allowPreviousGesture
 
         Box(modifier = Modifier.fillMaxSize()) {
-            if (canAdvance) {
+            if (canAdvance || canGoPrevious) {
                 val isDragging = abs(renderedOffsetY) > 1f
+                val showingPrevious = if (isDragging) !draggingUp else !canAdvance && canGoPrevious
 
                 // Keep the boundary affordance deliberately small. The gesture itself is
                 // the navigation control; this pill is only a discoverable hint.
@@ -151,9 +170,13 @@ fun DawnChapterSwipeSurface(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
-                            imageVector = Icons.Rounded.KeyboardArrowUp,
-                            contentDescription = "Swipe up for next chapter",
-                            tint = if (draggingUp && progress >= 1f) {
+                            imageVector = if (showingPrevious) {
+                                Icons.Rounded.KeyboardArrowDown
+                            } else {
+                                Icons.Rounded.KeyboardArrowUp
+                            },
+                            contentDescription = "Swipe vertically to change chapters",
+                            tint = if (isDragging && progress >= 1f) {
                                 DawnSitePink
                             } else {
                                 DawnSiteGold
@@ -161,10 +184,11 @@ fun DawnChapterSwipeSurface(
                         )
                         if (isDragging) {
                             Text(
-                                text = if (progress >= 1f) {
-                                    "Release for next chapter"
-                                } else {
-                                    "Next chapter"
+                                text = when {
+                                    progress >= 1f && draggingUp -> "Release for next chapter"
+                                    progress >= 1f -> "Release for previous chapter"
+                                    draggingUp -> "Next chapter"
+                                    else -> "Previous chapter"
                                 },
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurface
@@ -191,7 +215,6 @@ fun DawnChapterSwipeSurface(
                         hasNextChapter,
                         allowPreviousGesture,
                         allowNextGesture,
-                        advanceEnabled
                     ) {
                         if (!enabled) return@pointerInput
 
@@ -217,15 +240,14 @@ fun DawnChapterSwipeSurface(
                                     val movedEnough =
                                         abs(totalDx) > touchSlopPx || abs(totalDy) > touchSlopPx
                                     if (movedEnough) {
-                                        val verticalIntent = abs(totalDy) > abs(totalDx)
-                                        val wantsAdvance = totalDy < 0f
-                                        if (
-                                            advanceEnabled &&
-                                            hasNextChapter &&
-                                            allowNextGesture &&
-                                            verticalIntent &&
-                                            wantsAdvance
-                                        ) {
+                                        val direction = chapterSwipeDirectionForDrag(
+                                            totalDx = totalDx,
+                                            totalDy = totalDy,
+                                            touchSlopPx = touchSlopPx,
+                                            canPrevious = canGoPrevious,
+                                            canNext = canAdvance
+                                        )
+                                        if (direction != null) {
                                             trackingChapterSwipe = true
                                         } else {
                                             break
@@ -249,15 +271,8 @@ fun DawnChapterSwipeSurface(
                             }
 
                             if (trackingChapterSwipe) {
-                                val shouldAdvance =
-                                    dragOffsetY <= -thresholdPx &&
-                                        advanceEnabled &&
-                                        hasNextChapter &&
-                                        allowNextGesture
-                                val shouldGoPrevious =
-                                    dragOffsetY >= thresholdPx &&
-                                        hasPreviousChapter &&
-                                        allowPreviousGesture
+                                val shouldAdvance = dragOffsetY <= -thresholdPx && canAdvance
+                                val shouldGoPrevious = dragOffsetY >= thresholdPx && canGoPrevious
 
                                 settleRequest = ChapterSettleRequest(
                                     target = when {
