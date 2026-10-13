@@ -45,6 +45,8 @@ jobs:
             echo "build_task=assembleDebug" >> "$GITHUB_OUTPUT"
             echo "artifact_path=app/build/outputs/apk/debug/*.apk" >> "$GITHUB_OUTPUT"
           fi
+      - name: Run unit tests
+        run: ./gradlew testDebugUnitTest
       - name: Build APK
         run: ./gradlew ${{ steps.signing.outputs.build_task }}
       - name: Upload APK
