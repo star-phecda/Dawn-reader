@@ -68,80 +68,118 @@ fun ReaderTopBar(
     modifier: Modifier = Modifier
 ) {
     val statusBarPadding = WindowInsets.statusBars.asPaddingValues()
-    val buttonSize = if (largerTouchTargets) 56.dp else 44.dp
+    val buttonSize = if (largerTouchTargets) 56.dp else 40.dp
     val displayTimeLeft = estimatedTimeLeft?.takeIf { it.isNotBlank() }
     val progress = chapterProgress.coerceIn(0f, 1f)
+    val animatedProgress by animateFloatAsState(
+        targetValue = progress,
+        animationSpec = tween(durationMillis = 220),
+        label = "readerHeaderProgress"
+    )
+    val titleHidden = chapterTitle.isBlank()
 
-    // Keep the expressive asymmetrical silhouette, but give the page back its space.
+    // Match the bottom toolbar's floating, compact feel without sacrificing reader context.
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 10.dp),
+            .padding(horizontal = 12.dp),
         shape = RoundedCornerShape(
             topStart = 26.dp,
             topEnd = 26.dp,
             bottomStart = 26.dp,
-            bottomEnd = 12.dp
+            bottomEnd = 14.dp
         ),
         color = colors.controlsBackground,
-        shadowElevation = 4.dp,
+        border = BorderStroke(1.dp, colors.accent.copy(alpha = 0.10f)),
+        shadowElevation = 3.dp,
         tonalElevation = 2.dp
     ) {
-        Column(modifier = Modifier.padding(bottom = 6.dp)) {
+        Column(modifier = Modifier.padding(bottom = 4.dp)) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = statusBarPadding.calculateTopPadding())
-                    .padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp),
-                verticalAlignment = Alignment.CenterVertically
+                    .padding(start = 6.dp, end = 6.dp, top = 3.dp, bottom = 3.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 IconButton(
                     onClick = onBack,
                     modifier = Modifier.size(buttonSize),
                     colors = IconButtonDefaults.filledIconButtonColors(
-                        containerColor = colors.accent.copy(alpha = 0.14f),
+                        containerColor = colors.accent.copy(alpha = 0.13f),
                         contentColor = colors.accent
                     ),
                     shapes = IconButtonDefaults.shapes(
-                        shape = RoundedCornerShape(16.dp),
-                        pressedShape = RoundedCornerShape(8.dp)
+                        shape = RoundedCornerShape(15.dp),
+                        pressedShape = RoundedCornerShape(24.dp)
                     )
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Go back"
+                        contentDescription = "Go back",
+                        modifier = Modifier.size(20.dp)
                     )
                 }
 
-                Spacer(modifier = Modifier.width(8.dp))
-
-                Row(
-                    modifier = Modifier.weight(1f),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(horizontal = 2.dp),
+                    verticalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
                     Text(
-                        text = "DAWN",
-                        style = MaterialTheme.typography.labelMedium.copy(
-                            fontFamily = MonoFontFamily,
-                            letterSpacing = 1.5.sp,
-                            fontWeight = FontWeight.Bold
-                        ),
-                        color = colors.accent
+                        text = chapterTitle.takeIf { it.isNotBlank() } ?: "DAWN READER",
+                        modifier = Modifier.fillMaxWidth(),
+                        style = if (titleHidden) {
+                            MaterialTheme.typography.labelLarge.copy(
+                                fontFamily = MonoFontFamily,
+                                letterSpacing = 1.1.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        } else {
+                            MaterialTheme.typography.titleSmall.copy(
+                                fontFamily = SerifFontFamily,
+                                fontSize = 16.sp,
+                                lineHeight = 19.sp,
+                                letterSpacing = (-0.2).sp
+                            )
+                        },
+                        fontWeight = if (titleHidden) FontWeight.Bold else FontWeight.SemiBold,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        color = if (titleHidden) colors.accent else colors.text
                     )
-                    Box(
-                        modifier = Modifier
-                            .size(4.dp)
-                            .clip(CircleShape)
-                            .background(colors.accent)
-                    )
-                    Text(
-                        text = "READER",
-                        style = MaterialTheme.typography.labelSmall.copy(
-                            letterSpacing = 1.1.sp
-                        ),
-                        color = colors.textSecondary
-                    )
+
+                    if (progressStyle != ProgressStyle.NONE) {
+                        Surface(
+                            shape = RoundedCornerShape(50),
+                            color = colors.accent.copy(alpha = 0.07f)
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                ProgressIndicator(
+                                    progress = progress,
+                                    chapterNumber = chapterNumber,
+                                    totalChapters = totalChapters,
+                                    estimatedTimeLeft = displayTimeLeft,
+                                    style = progressStyle,
+                                    colors = colors
+                                )
+                            }
+                        }
+                    } else {
+                        Text(
+                            text = "CHAPTER $chapterNumber",
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                letterSpacing = 0.8.sp
+                            ),
+                            color = colors.textSecondary
+                        )
+                    }
                 }
 
                 IconButton(
@@ -151,13 +189,13 @@ fun ReaderTopBar(
                         containerColor = if (isBookmarked) {
                             colors.accent
                         } else {
-                            colors.accent.copy(alpha = 0.10f)
+                            colors.accent.copy(alpha = 0.09f)
                         },
                         contentColor = if (isBookmarked) colors.onAccent else colors.icon
                     ),
                     shapes = IconButtonDefaults.shapes(
-                        shape = RoundedCornerShape(16.dp),
-                        pressedShape = RoundedCornerShape(8.dp)
+                        shape = RoundedCornerShape(15.dp),
+                        pressedShape = RoundedCornerShape(24.dp)
                     )
                 ) {
                     Icon(
@@ -170,56 +208,9 @@ fun ReaderTopBar(
                             "Remove bookmark"
                         } else {
                             "Add bookmark"
-                        }
+                        },
+                        modifier = Modifier.size(20.dp)
                     )
-                }
-            }
-
-            if (chapterTitle.isNotBlank()) {
-                Text(
-                    text = chapterTitle,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        fontFamily = SerifFontFamily,
-                        fontSize = 20.sp,
-                        lineHeight = 24.sp,
-                        letterSpacing = (-0.3).sp
-                    ),
-                    fontWeight = FontWeight.SemiBold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    textAlign = TextAlign.Start,
-                    color = colors.text
-                )
-            }
-
-            if (progressStyle != ProgressStyle.NONE) {
-                Surface(
-                    modifier = Modifier.padding(
-                        start = 14.dp,
-                        end = 14.dp,
-                        top = 4.dp,
-                        bottom = if (progressStyle == ProgressStyle.BAR) 0.dp else 2.dp
-                    ),
-                    shape = RoundedCornerShape(50),
-                    color = colors.accent.copy(alpha = 0.08f)
-                ) {
-                    Row(
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                        horizontalArrangement = Arrangement.spacedBy(4.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        ProgressIndicator(
-                            progress = progress,
-                            chapterNumber = chapterNumber,
-                            totalChapters = totalChapters,
-                            estimatedTimeLeft = displayTimeLeft,
-                            style = progressStyle,
-                            colors = colors
-                        )
-                    }
                 }
             }
 
@@ -227,15 +218,15 @@ fun ReaderTopBar(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 14.dp, end = 14.dp, top = 5.dp)
-                        .height(3.dp)
+                        .padding(start = 14.dp, end = 14.dp, top = 1.dp)
+                        .height(2.dp)
                         .clip(RoundedCornerShape(50))
                         .background(colors.progressTrack.copy(alpha = 0.28f))
                 ) {
                     Box(
                         modifier = Modifier
-                            .fillMaxWidth(progress)
-                            .height(3.dp)
+                            .fillMaxWidth(animatedProgress)
+                            .height(2.dp)
                             .clip(RoundedCornerShape(50))
                             .background(colors.accent)
                     )
@@ -260,25 +251,25 @@ private fun ProgressIndicator(
         ProgressStyle.BAR -> {
             Text(
                 text = "CHAPTER $chapterNumber OF $totalChapters",
-                style = MaterialTheme.typography.labelMedium,
+                style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.SemiBold,
                 color = colors.accent
             )
             Text(
                 text = "• ${(progress * 100).toInt()}%",
-                style = MaterialTheme.typography.labelMedium,
+                style = MaterialTheme.typography.labelSmall,
                 color = colors.textSecondary
             )
             if (estimatedTimeLeft != null) {
                 Icon(
                     imageVector = Icons.Default.Timer,
                     contentDescription = null,
-                    modifier = Modifier.size(14.dp),
+                    modifier = Modifier.size(12.dp),
                     tint = colors.textSecondary
                 )
                 Text(
                     text = estimatedTimeLeft,
-                    style = MaterialTheme.typography.labelMedium,
+                    style = MaterialTheme.typography.labelSmall,
                     color = colors.textSecondary
                 )
             }
@@ -287,19 +278,19 @@ private fun ProgressIndicator(
         ProgressStyle.PERCENTAGE -> {
             Text(
                 text = "${(progress * 100).toInt()}%",
-                style = MaterialTheme.typography.labelLarge,
+                style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.Bold,
                 color = colors.accent
             )
             Text(
                 text = "• Ch. $chapterNumber/$totalChapters",
-                style = MaterialTheme.typography.labelMedium,
+                style = MaterialTheme.typography.labelSmall,
                 color = colors.textSecondary
             )
             if (estimatedTimeLeft != null) {
                 Text(
                     text = "• $estimatedTimeLeft",
-                    style = MaterialTheme.typography.labelMedium,
+                    style = MaterialTheme.typography.labelSmall,
                     color = colors.textSecondary
                 )
             }
@@ -308,19 +299,19 @@ private fun ProgressIndicator(
         ProgressStyle.PAGES -> {
             Text(
                 text = "~${(progress * 100).toInt()}%",
-                style = MaterialTheme.typography.labelMedium,
+                style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.SemiBold,
                 color = colors.accent
             )
             Text(
                 text = "• Ch. $chapterNumber/$totalChapters",
-                style = MaterialTheme.typography.labelMedium,
+                style = MaterialTheme.typography.labelSmall,
                 color = colors.textSecondary
             )
             if (estimatedTimeLeft != null) {
                 Text(
                     text = "• $estimatedTimeLeft left",
-                    style = MaterialTheme.typography.labelMedium,
+                    style = MaterialTheme.typography.labelSmall,
                     color = colors.textSecondary
                 )
             }
@@ -335,7 +326,7 @@ private fun ProgressIndicator(
                 Spacer(modifier = Modifier.width(5.dp))
                 Text(
                     text = estimatedTimeLeft,
-                    style = MaterialTheme.typography.labelMedium,
+                    style = MaterialTheme.typography.labelSmall,
                     color = colors.textSecondary
                 )
             }
@@ -345,18 +336,18 @@ private fun ProgressIndicator(
             Icon(
                 imageVector = Icons.Default.Timer,
                 contentDescription = null,
-                modifier = Modifier.size(14.dp),
+                modifier = Modifier.size(12.dp),
                 tint = colors.accent
             )
             Text(
                 text = estimatedTimeLeft ?: "${(progress * 100).toInt()}%",
-                style = MaterialTheme.typography.labelLarge,
+                style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.SemiBold,
                 color = colors.accent
             )
             Text(
                 text = "• Ch. $chapterNumber",
-                style = MaterialTheme.typography.labelMedium,
+                style = MaterialTheme.typography.labelSmall,
                 color = colors.textSecondary
             )
         }
