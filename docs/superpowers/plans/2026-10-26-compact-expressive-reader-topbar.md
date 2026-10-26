@@ -32,6 +32,7 @@
 
 **Files:**
 - Modify: `app/src/main/java/com/emptycastle/novery/ui/screens/reader/components/ReaderOverlays.kt`
+- Modify: `DAWN_REDESIGN_NOTES.md` to align the active interaction direction with the retained vertical gesture
 
 **Implementation decisions:**
 - Use a compact asymmetric floating capsule with a subtle outline and elevation.
@@ -39,6 +40,7 @@
 - Reduce default icon targets to 40 dp while retaining 56 dp when larger touch targets are enabled.
 - Use the existing ProgressIndicator modes with smaller label typography; animate the BAR indicator over 220 ms.
 - Keep `DawnChapterSwipeSurface` and `DawnChapterSwipeTest` untouched.
+- Document vertical swiping as active and horizontal swiping as deferred.
 
 **Verification:**
 - Run `./gradlew testDebugUnitTest`.
