@@ -201,13 +201,7 @@ fun DawnChapterSwipeSurface(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .graphicsLayer {
-                        translationY = renderedOffsetY
-                        val lift = progress * 0.010f
-                        scaleX = 1f - lift
-                        scaleY = 1f - lift
-                        shadowElevation = progress * 14f
-                    }
+                    // Measure touches before the content is translated with the finger.
                     .pointerInput(
                         chapterKey,
                         enabled,
@@ -219,7 +213,7 @@ fun DawnChapterSwipeSurface(
                         if (!enabled) return@pointerInput
 
                         awaitEachGesture {
-                            val down = awaitFirstDown(requireUnconsumed = false)
+                            val down = awaitFirstDown(pass = PointerEventPass.Initial, requireUnconsumed = false)
                             var lastPosition = down.position
                             var totalDx = 0f
                             var totalDy = 0f
@@ -293,6 +287,13 @@ fun DawnChapterSwipeSurface(
                                 onTap(down.position, widthPx, heightPx)
                             }
                         }
+                    }
+                    .graphicsLayer {
+                        translationY = renderedOffsetY
+                        val lift = progress * 0.010f
+                        scaleX = 1f - lift
+                        scaleY = 1f - lift
+                        shadowElevation = progress * 14f
                     }
             ) {
                 content()

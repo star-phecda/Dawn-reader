@@ -82,24 +82,19 @@ fun ReaderTopBar(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp),
-        shape = RoundedCornerShape(
-            topStart = 26.dp,
-            topEnd = 26.dp,
-            bottomStart = 26.dp,
-            bottomEnd = 14.dp
-        ),
+            .padding(horizontal = 12.dp)
+            .padding(top = statusBarPadding.calculateTopPadding() + 6.dp),
+        shape = RoundedCornerShape(percent = 50),
         color = colors.controlsBackground,
-        border = BorderStroke(1.dp, colors.accent.copy(alpha = 0.10f)),
-        shadowElevation = 3.dp,
-        tonalElevation = 2.dp
+        border = BorderStroke(1.dp, colors.accent.copy(alpha = 0.18f)),
+        shadowElevation = 4.dp,
+        tonalElevation = 3.dp
     ) {
-        Column(modifier = Modifier.padding(bottom = 4.dp)) {
+        Column(modifier = Modifier.padding(horizontal = 4.dp, vertical = 4.dp)) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = statusBarPadding.calculateTopPadding())
-                    .padding(start = 6.dp, end = 6.dp, top = 3.dp, bottom = 3.dp),
+                    .padding(start = 4.dp, end = 4.dp, top = 1.dp, bottom = 1.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
@@ -111,8 +106,8 @@ fun ReaderTopBar(
                         contentColor = colors.accent
                     ),
                     shapes = IconButtonDefaults.shapes(
-                        shape = RoundedCornerShape(15.dp),
-                        pressedShape = RoundedCornerShape(24.dp)
+                        shape = RoundedCornerShape(percent = 50),
+                        pressedShape = RoundedCornerShape(16.dp)
                     )
                 ) {
                     Icon(
@@ -194,8 +189,8 @@ fun ReaderTopBar(
                         contentColor = if (isBookmarked) colors.onAccent else colors.icon
                     ),
                     shapes = IconButtonDefaults.shapes(
-                        shape = RoundedCornerShape(15.dp),
-                        pressedShape = RoundedCornerShape(24.dp)
+                        shape = RoundedCornerShape(percent = 50),
+                        pressedShape = RoundedCornerShape(16.dp)
                     )
                 ) {
                     Icon(
@@ -218,7 +213,7 @@ fun ReaderTopBar(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 14.dp, end = 14.dp, top = 1.dp)
+                        .padding(start = 14.dp, end = 14.dp, top = 1.dp, bottom = 1.dp)
                         .height(2.dp)
                         .clip(RoundedCornerShape(50))
                         .background(colors.progressTrack.copy(alpha = 0.28f))

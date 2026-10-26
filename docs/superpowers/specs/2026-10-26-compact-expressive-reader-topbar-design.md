@@ -9,7 +9,7 @@ Make Dawn's reader top bar compact and recognizably expressive, matching the flo
 
 ## Approach
 
-Use a shallow, floating asymmetric capsule rather than a tall, full-width stacked header. Back and bookmark actions stay at the sides; the chapter title becomes the focal point; chapter/progress metadata becomes a smaller secondary line; the BAR style uses a thin animated progress indicator. Retain the existing ReaderColors palette and Material 3 icon-button shape morphing. Remove the separate DAWN / READER brand row when a chapter title is shown, but keep a compact DAWN READER fallback when the user hides the chapter title.
+Use a shallow, floating pill-shaped capsule with fully rounded ends rather than a tall, full-width stacked header. Keep the status-bar inset outside the pill so it does not make the capsule itself taller. Back and bookmark actions use expressive circular buttons; the chapter title becomes the focal point; chapter/progress metadata becomes a smaller secondary line; the BAR style uses a thin animated progress indicator. Retain the existing ReaderColors palette and Material 3 icon-button shape morphing. Remove the separate DAWN / READER brand row when a chapter title is shown, but keep a compact DAWN READER fallback when the user hides the chapter title.
 
 The alternative considered was a single-row icon toolbar. It was not chosen because long chapter titles and the existing progress-style settings would have too little room. The capsule keeps those behaviors while taking less vertical space.
 
