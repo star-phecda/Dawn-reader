@@ -11,15 +11,14 @@ Dawn is moving beyond a conventional reader layout into an interaction-led visua
 - Avoid continuous decorative animation and large blur effects so the style remains performant on mid-range Android hardware.
 
 ## Reader interaction
-- Swipe left to advance to the next chapter.
-- Swipe right to return to the previous chapter.
-- The current chapter physically follows the finger.
-- The adjacent direction is revealed underneath while dragging.
-- Crossing the threshold produces haptic feedback; releasing commits the transition.
-- Releasing before the threshold springs the chapter back into place.
-- Vertical movement remains ordinary reading scroll.
-- The gesture is available in immersive reading mode and is disabled while reader controls, chapter sheets or TTS interaction are active.
 
+- Keep the current full-reader vertical chapter gesture as the active design.
+- Swipe upward to advance to the next chapter; swipe downward to return to the previous chapter.
+- The reader page follows the finger during a deliberate vertical drag.
+- Crossing the chapter-change threshold gives haptic feedback; releasing commits the navigation, while a shorter drag springs back.
+- Short vertical movement remains normal reading scroll; horizontal chapter swiping is deferred rather than part of the current interaction.
+- The gesture is disabled while chapter-list or TTS interaction is active.
+  
 ## Existing Dawn foundations
 - Deep-night palette with cyan, electric blue, violet and magenta accents.
 - Material 3 Expressive components underneath the authored layer.
