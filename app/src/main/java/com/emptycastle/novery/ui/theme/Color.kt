@@ -96,10 +96,10 @@ val Orange700 = Color(0xFF6B5011)
 val Orange800 = Color(0xFF503C0C)
 val Orange900 = Color(0xFF352707)
 
-val Success = Color(0xFF56E3A1)
-val SuccessLight = Color(0xFF8AF0C1)
-val Error = Color(0xFFFF6B8A)
-val ErrorLight = Color(0xFFFF9AAF)
+val Success = DawnSageInk
+val SuccessLight = DawnSage
+val Error = DawnError
+val ErrorLight = DawnRose
 val Warning = SunGold500
 val Info = DawnBlue
 

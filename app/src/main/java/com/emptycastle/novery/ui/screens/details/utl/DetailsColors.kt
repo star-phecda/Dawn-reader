@@ -6,7 +6,7 @@ import com.emptycastle.novery.ui.theme.DawnPeachInk
 import com.emptycastle.novery.ui.theme.DawnRoseInk
 import com.emptycastle.novery.ui.theme.DawnSageInk
 import com.emptycastle.novery.ui.theme.DawnSkyInk
-import com.emptycastle.novery.ui.theme.Error
+import com.emptycastle.novery.ui.theme.DawnError
 
 /**
  * Color palette used throughout the Details screen.
@@ -16,12 +16,12 @@ object DetailsColors {
     val Pink = DawnRoseInk
     val Success = DawnSageInk
     val Warning = DawnGoldInk
-    val Dropped = Error
+    val Dropped = DawnError
 
     val StatusReading = DawnSkyInk
     val StatusSpicy = DawnPeachInk
     val StatusCompleted = DawnSageInk
     val StatusOnHold = DawnGoldInk
     val StatusPlanToRead = DawnLilacInk
-    val StatusDropped = Error
+    val StatusDropped = DawnError
 }
