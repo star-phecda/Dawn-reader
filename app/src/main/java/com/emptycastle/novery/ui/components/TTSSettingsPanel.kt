@@ -1,5 +1,19 @@
 package com.emptycastle.novery.ui.components
 
+import com.emptycastle.novery.ui.theme.DawnButter
+import com.emptycastle.novery.ui.theme.DawnLilac
+import com.emptycastle.novery.ui.theme.DawnNavy
+import com.emptycastle.novery.ui.theme.DawnNavy3
+import com.emptycastle.novery.ui.theme.DawnPanel
+import com.emptycastle.novery.ui.theme.DawnPanelHi
+import com.emptycastle.novery.ui.theme.DawnSage
+import com.emptycastle.novery.ui.theme.DawnSky
+import com.emptycastle.novery.ui.theme.DawnSoftBlue
+import com.emptycastle.novery.ui.theme.Ink50
+import com.emptycastle.novery.ui.theme.Ink300
+import com.emptycastle.novery.ui.theme.Ink500
+import com.emptycastle.novery.ui.theme.Ink600
+
 import android.content.Intent
 import android.provider.Settings
 import androidx.compose.animation.AnimatedContent
@@ -90,34 +104,34 @@ import com.emptycastle.novery.tts.VoiceManager
 // =============================================================================
 
 private object TTSTheme {
-    val background = Color(0xFF0A0A0B)
-    val surface = Color(0xFF141416)
-    val surfaceVariant = Color(0xFF1C1C1F)
-    val surfaceElevated = Color(0xFF232328)
+    val background = DawnNavy
+    val surface = DawnPanel
+    val surfaceVariant = DawnNavy3
+    val surfaceElevated = DawnPanelHi
 
-    val primary = Color(0xFFFF6B35)
-    val primaryMuted = Color(0xFFFF6B35).copy(alpha = 0.15f)
-    val primarySubtle = Color(0xFFFF6B35).copy(alpha = 0.08f)
+    val primary = DawnButter
+    val primaryMuted = DawnButter.copy(alpha = 0.15f)
+    val primarySubtle = DawnButter.copy(alpha = 0.08f)
 
-    val textPrimary = Color(0xFFFAFAFA)
-    val textSecondary = Color(0xFFA1A1AA)
-    val textMuted = Color(0xFF71717A)
-    val textDisabled = Color(0xFF52525B)
+    val textPrimary = Ink50
+    val textSecondary = Ink300
+    val textMuted = Ink500
+    val textDisabled = Ink600
 
-    val divider = Color(0xFF27272A)
-    val border = Color(0xFF3F3F46)
+    val divider = DawnNavy3
+    val border = DawnPanelHi
 
-    // Accent colors for different sections
-    val emerald = Color(0xFF10B981)
-    val emeraldMuted = Color(0xFF10B981).copy(alpha = 0.15f)
-    val violet = Color(0xFF8B5CF6)
-    val violetMuted = Color(0xFF8B5CF6).copy(alpha = 0.15f)
-    val amber = Color(0xFFF59E0B)
-    val amberMuted = Color(0xFFF59E0B).copy(alpha = 0.15f)
-    val blue = Color(0xFF3B82F6)
-    val blueMuted = Color(0xFF3B82F6).copy(alpha = 0.15f)
-    val cyan = Color(0xFF06B6D4)
-    val cyanMuted = Color(0xFF06B6D4).copy(alpha = 0.15f)
+    // Pastel accents distinguish settings groups without introducing a second visual identity.
+    val emerald = DawnSage
+    val emeraldMuted = DawnSage.copy(alpha = 0.15f)
+    val violet = DawnLilac
+    val violetMuted = DawnLilac.copy(alpha = 0.15f)
+    val amber = DawnButter
+    val amberMuted = DawnButter.copy(alpha = 0.15f)
+    val blue = DawnSky
+    val blueMuted = DawnSky.copy(alpha = 0.15f)
+    val cyan = DawnSoftBlue
+    val cyanMuted = DawnSoftBlue.copy(alpha = 0.15f)
 
     val cornerRadiusMedium = 20.dp
     val cornerRadiusSmall = 14.dp

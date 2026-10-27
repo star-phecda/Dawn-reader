@@ -1,5 +1,14 @@
 package com.emptycastle.novery.ui.components
 
+import com.emptycastle.novery.ui.theme.DawnButter
+import com.emptycastle.novery.ui.theme.DawnNavy
+import com.emptycastle.novery.ui.theme.DawnNavy3
+import com.emptycastle.novery.ui.theme.DawnPanelHi
+import com.emptycastle.novery.ui.theme.Ink50
+import com.emptycastle.novery.ui.theme.Ink300
+import com.emptycastle.novery.ui.theme.Ink500
+import com.emptycastle.novery.ui.theme.Ink600
+
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
@@ -78,21 +87,21 @@ import androidx.compose.ui.unit.dp
 // =============================================================================
 
 private object PlayerColors {
-    val surface = Color(0xFF18181B)
-    val surfaceVariant = Color(0xFF27272A)
+    val surface = DawnNavy
+    val surfaceVariant = DawnPanelHi
 
-    val accent = Color(0xFFFF6B35)
-    val accentGlow = Color(0xFFFF6B35).copy(alpha = 0.2f)
+    val accent = DawnButter
+    val accentGlow = DawnButter.copy(alpha = 0.2f)
 
-    val iconPrimary = Color(0xFFFAFAFA)
-    val iconSecondary = Color(0xFFA1A1AA)
-    val iconDisabled = Color(0xFF52525B)
+    val iconPrimary = Ink50
+    val iconSecondary = Ink300
+    val iconDisabled = Ink600
 
-    val textSecondary = Color(0xFFA1A1AA)
-    val textMuted = Color(0xFF71717A)
+    val textSecondary = Ink300
+    val textMuted = Ink500
 
-    val progressTrack = Color(0xFF3F3F46)
-    val progressActive = Color(0xFFFF6B35)
+    val progressTrack = DawnNavy3
+    val progressActive = DawnButter
 }
 
 private object PlayerSizes {

@@ -1,5 +1,7 @@
 package com.emptycastle.novery.ui.components
 
+import com.emptycastle.novery.ui.theme.DawnSageInk
+
 import android.content.Intent
 import android.provider.Settings
 import androidx.compose.animation.AnimatedVisibility
@@ -511,7 +513,7 @@ private fun VoiceListItem(
 private fun QualityBadge(quality: VoiceQuality) {
     val (color, text) = when (quality) {
         VoiceQuality.PREMIUM -> Orange500 to "Premium"
-        VoiceQuality.HIGH -> Color(0xFF4CAF50) to "HD"
+        VoiceQuality.HIGH -> DawnSageInk to "HD"
         VoiceQuality.NORMAL -> Zinc500 to "Standard"
         VoiceQuality.LOW -> Zinc600 to "Basic"
         VoiceQuality.UNKNOWN -> Zinc600 to ""

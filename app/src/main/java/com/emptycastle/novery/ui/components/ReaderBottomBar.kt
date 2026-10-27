@@ -1,5 +1,17 @@
 package com.emptycastle.novery.ui.components
 
+import com.emptycastle.novery.ui.theme.DawnButter
+import com.emptycastle.novery.ui.theme.DawnGoldInk
+import com.emptycastle.novery.ui.theme.DawnNavy
+import com.emptycastle.novery.ui.theme.DawnNavy3
+import com.emptycastle.novery.ui.theme.DawnPanel
+import com.emptycastle.novery.ui.theme.DawnPanelHi
+import com.emptycastle.novery.ui.theme.DawnSage
+import com.emptycastle.novery.ui.theme.Ink50
+import com.emptycastle.novery.ui.theme.Ink300
+import com.emptycastle.novery.ui.theme.Ink500
+import com.emptycastle.novery.ui.theme.Ink600
+
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
@@ -101,27 +113,27 @@ import com.emptycastle.novery.domain.model.TextAlign as ReaderTextAlign
 // =============================================================================
 
 private object BarTheme {
-    val background = Color(0xFF0B0A10)
-    val surface = Color(0xFF17131B)
-    val surfaceVariant = Color(0xFF211A25)
-    val surfaceElevated = Color(0xFF2B2030)
+    val background = DawnNavy
+    val surface = DawnPanel
+    val surfaceVariant = DawnNavy3
+    val surfaceElevated = DawnPanelHi
 
-    val primary = Color(0xFFFF1493)
-    val primaryMuted = Color(0xFFFF1493).copy(alpha = 0.17f)
-    val primarySubtle = Color(0xFFFF1493).copy(alpha = 0.08f)
+    val primary = DawnButter
+    val primaryMuted = DawnButter.copy(alpha = 0.17f)
+    val primarySubtle = DawnButter.copy(alpha = 0.08f)
 
-    val textPrimary = Color(0xFFFAFAFA)
-    val textSecondary = Color(0xFFA1A1AA)
-    val textMuted = Color(0xFF71717A)
-    val textDisabled = Color(0xFF52525B)
+    val textPrimary = Ink50
+    val textSecondary = Ink300
+    val textMuted = Ink500
+    val textDisabled = Ink600
 
-    val divider = Color(0xFF27272A)
-    val border = Color(0xFFAB8248).copy(alpha = 0.34f)
+    val divider = DawnNavy3
+    val border = DawnGoldInk.copy(alpha = 0.34f)
 
-    val success = Color(0xFF22C55E)
-    val successMuted = Color(0xFF22C55E).copy(alpha = 0.15f)
+    val success = DawnSage
+    val successMuted = DawnSage.copy(alpha = 0.15f)
 
-    val warning = Color(0xFFFFBE55)
+    val warning = DawnButter
 
     val cornerRadius = 32.dp
     val cornerRadiusMedium = 24.dp

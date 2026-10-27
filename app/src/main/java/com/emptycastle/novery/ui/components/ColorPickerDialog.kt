@@ -1,5 +1,14 @@
 package com.emptycastle.novery.ui.components
 
+import com.emptycastle.novery.ui.theme.DawnButter
+import com.emptycastle.novery.ui.theme.DawnGoldInk
+import com.emptycastle.novery.ui.theme.DawnLilac
+import com.emptycastle.novery.ui.theme.DawnRose
+import com.emptycastle.novery.ui.theme.DawnSage
+import com.emptycastle.novery.ui.theme.DawnSky
+import com.emptycastle.novery.ui.theme.DawnSoftBlue
+import com.emptycastle.novery.ui.theme.DawnPeach
+
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -491,6 +500,15 @@ private fun getContrastColor(color: Color): Color {
  * Preset colors for quick selection
  */
 private val presetColors = listOf(
+    // Dawn's warm-paper and album-art pastel palette
+    DawnButter,
+    DawnGoldInk,
+    DawnLilac,
+    DawnRose,
+    DawnSky,
+    DawnPeach,
+    DawnSoftBlue,
+    DawnSage,
     // Reds
     Color(0xFFEF4444), // Red-500
     Color(0xFFF43F5E), // Rose-500

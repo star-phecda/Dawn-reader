@@ -1,5 +1,12 @@
 package com.emptycastle.novery.ui.screens.settings
 
+import com.emptycastle.novery.ui.theme.DawnError
+import com.emptycastle.novery.ui.theme.DawnGoldInk
+import com.emptycastle.novery.ui.theme.DawnLilacInk
+import com.emptycastle.novery.ui.theme.DawnPeachInk
+import com.emptycastle.novery.ui.theme.DawnSageInk
+import com.emptycastle.novery.ui.theme.DawnSkyInk
+
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
@@ -1713,13 +1720,13 @@ private fun getLibraryShelfIcon(filter: LibraryFilter): ImageVector {
 private fun getLibraryShelfColor(filter: LibraryFilter): Color {
     return when (filter) {
         LibraryFilter.ALL -> MaterialTheme.colorScheme.primary
-        LibraryFilter.SPICY -> Color(0xFFF97316)
-        LibraryFilter.DOWNLOADED -> Color(0xFF06B6D4)
-        LibraryFilter.READING -> Color(0xFF3B82F6)
-        LibraryFilter.COMPLETED -> Color(0xFF22C55E)
-        LibraryFilter.ON_HOLD -> Color(0xFFF59E0B)
-        LibraryFilter.PLAN_TO_READ -> Color(0xFF8B5CF6)
-        LibraryFilter.DROPPED -> Color(0xFFEF4444)
+        LibraryFilter.SPICY -> DawnPeachInk
+        LibraryFilter.DOWNLOADED -> DawnSkyInk
+        LibraryFilter.READING -> DawnSkyInk
+        LibraryFilter.COMPLETED -> DawnSageInk
+        LibraryFilter.ON_HOLD -> DawnGoldInk
+        LibraryFilter.PLAN_TO_READ -> DawnLilacInk
+        LibraryFilter.DROPPED -> DawnError
     }
 }
 

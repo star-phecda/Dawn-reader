@@ -1,5 +1,15 @@
 package com.emptycastle.novery.ui.screens.notification
 
+import com.emptycastle.novery.ui.theme.DawnButter
+import com.emptycastle.novery.ui.theme.DawnGoldInk
+import com.emptycastle.novery.ui.theme.DawnLilac
+import com.emptycastle.novery.ui.theme.DawnLilacInk
+import com.emptycastle.novery.ui.theme.DawnSage
+import com.emptycastle.novery.ui.theme.DawnSageInk
+import com.emptycastle.novery.ui.theme.DawnSky
+import com.emptycastle.novery.ui.theme.DawnSkyInk
+import com.emptycastle.novery.ui.theme.Ink500
+
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.EaseInOutCubic
@@ -101,16 +111,16 @@ import com.emptycastle.novery.ui.components.TwoStageSwipeToDelete
 // ============================================================================
 
 private object NotificationColors {
-    val NewChapters = Color(0xFF10B981)
-    val NewChaptersLight = Color(0xFF34D399)
-    val NewChaptersDark = Color(0xFF059669)
-    val Download = Color(0xFF3B82F6)
-    val DownloadLight = Color(0xFF60A5FA)
-    val Continue = Color(0xFFE85609)
-    val ContinueLight = Color(0xFFF97316)
-    val MarkSeen = Color(0xFF8B5CF6)
-    val MarkSeenLight = Color(0xFFA78BFA)
-    val Acknowledged = Color(0xFF6B7280)
+    val NewChapters = DawnSageInk
+    val NewChaptersLight = DawnSage
+    val NewChaptersDark = Color(0xFF33593A)
+    val Download = DawnSkyInk
+    val DownloadLight = DawnSky
+    val Continue = DawnGoldInk
+    val ContinueLight = DawnButter
+    val MarkSeen = DawnLilacInk
+    val MarkSeenLight = DawnLilac
+    val Acknowledged = Ink500
 }
 
 // ============================================================================

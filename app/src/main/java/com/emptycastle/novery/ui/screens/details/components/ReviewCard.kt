@@ -1,5 +1,7 @@
 package com.emptycastle.novery.ui.screens.details.components
 
+import com.emptycastle.novery.ui.theme.DawnGoldInk
+
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
@@ -308,7 +310,7 @@ private fun UserAvatar(
 @Composable
 private fun LevelBadge(level: Int) {
     val color = when {
-        level >= 15 -> Color(0xFFFFD700)
+        level >= 15 -> DawnGoldInk
         level >= 10 -> Color(0xFFC0C0C0)
         level >= 5 -> Color(0xFFCD7F32)
         else -> MaterialTheme.colorScheme.tertiary

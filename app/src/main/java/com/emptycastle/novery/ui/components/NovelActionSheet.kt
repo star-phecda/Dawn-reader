@@ -1,5 +1,13 @@
 package com.emptycastle.novery.ui.components
 
+import com.emptycastle.novery.ui.theme.DawnError
+import com.emptycastle.novery.ui.theme.DawnGoldInk
+import com.emptycastle.novery.ui.theme.DawnLilacInk
+import com.emptycastle.novery.ui.theme.DawnPeachInk
+import com.emptycastle.novery.ui.theme.DawnRoseInk
+import com.emptycastle.novery.ui.theme.DawnSageInk
+import com.emptycastle.novery.ui.theme.DawnSkyInk
+
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -110,17 +118,17 @@ import kotlinx.coroutines.launch
 // ================================================================
 
 private object ActionSheetColors {
-    val Pink = Color(0xFFE91E63)
-    val Success = Color(0xFF22C55E)
-    val Star = Color(0xFFFBBF24)
-    val Error = Color(0xFFEF4444)
+    val Pink = DawnRoseInk
+    val Success = DawnSageInk
+    val Star = DawnGoldInk
+    val Error = DawnError
 
-    val StatusReading = Color(0xFF3B82F6)
-    val StatusSpicy = Color(0xFFF97316)
-    val StatusCompleted = Color(0xFF22C55E)
-    val StatusOnHold = Color(0xFFF59E0B)
-    val StatusPlanToRead = Color(0xFF8B5CF6)
-    val StatusDropped = Color(0xFFEF4444)
+    val StatusReading = DawnSkyInk
+    val StatusSpicy = DawnPeachInk
+    val StatusCompleted = DawnSageInk
+    val StatusOnHold = DawnGoldInk
+    val StatusPlanToRead = DawnLilacInk
+    val StatusDropped = DawnError
 
     fun forStatus(status: ReadingStatus) = when (status) {
         ReadingStatus.READING -> StatusReading

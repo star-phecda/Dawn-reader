@@ -1,5 +1,14 @@
 package com.emptycastle.novery.ui.screens.profile
 
+import com.emptycastle.novery.ui.theme.DawnButter
+import com.emptycastle.novery.ui.theme.DawnGoldInk
+import com.emptycastle.novery.ui.theme.DawnLilacInk
+import com.emptycastle.novery.ui.theme.DawnRoseInk
+import com.emptycastle.novery.ui.theme.DawnSageInk
+import com.emptycastle.novery.ui.theme.DawnSkyInk
+import com.emptycastle.novery.ui.theme.Error
+import com.emptycastle.novery.ui.theme.Ink500
+
 import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.EaseInOutCubic
@@ -97,26 +106,26 @@ import kotlinx.coroutines.flow.collectLatest
 // ============================================================================
 
 private object ProfileColors {
-    val StreakOrange = Color(0xFFFF6B35)
-    val StreakYellow = Color(0xFFFFB800)
-    val GoalPrimary = Color(0xFF6366F1)
-    val GoalSecondary = Color(0xFF8B5CF6)
-    val ChapterBlue = Color(0xFF3B82F6)
-    val TimeGreen = Color(0xFF10B981)
-    val DaysAmber = Color(0xFFF59E0B)
-    val AchievementGold = Color(0xFFFFD700)
-    val LevelPurple = Color(0xFF9333EA)
-    val InsightCyan = Color(0xFF06B6D4)
+    val StreakOrange = DawnGoldInk
+    val StreakYellow = DawnButter
+    val GoalPrimary = DawnLilacInk
+    val GoalSecondary = DawnRoseInk
+    val ChapterBlue = DawnSkyInk
+    val TimeGreen = DawnSageInk
+    val DaysAmber = DawnGoldInk
+    val AchievementGold = DawnGoldInk
+    val LevelPurple = DawnLilacInk
+    val InsightCyan = DawnSkyInk
 
     fun getLevelColor(level: Int): Color = when (level) {
-        1 -> Color(0xFF94A3B8)
-        2 -> Color(0xFF22C55E)
-        3 -> Color(0xFF3B82F6)
-        4 -> Color(0xFF8B5CF6)
-        5 -> Color(0xFFF59E0B)
-        6 -> Color(0xFFEF4444)
+        1 -> Ink500
+        2 -> DawnSageInk
+        3 -> DawnSkyInk
+        4 -> DawnLilacInk
+        5 -> DawnGoldInk
+        6 -> Error
         7 -> AchievementGold
-        else -> Color(0xFFE879F9)
+        else -> DawnRoseInk
     }
 }
 
@@ -1221,7 +1230,7 @@ private fun MostReadNovelCard(
     onClick: () -> Unit
 ) {
     val rankColor = when (rank) {
-        1 -> Color(0xFFFFD700)
+        1 -> ProfileColors.AchievementGold
         2 -> Color(0xFFC0C0C0)
         3 -> Color(0xFFCD7F32)
         else -> MaterialTheme.colorScheme.onSurfaceVariant
