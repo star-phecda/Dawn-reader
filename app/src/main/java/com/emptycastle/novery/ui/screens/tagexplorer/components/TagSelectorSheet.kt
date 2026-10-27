@@ -1,5 +1,19 @@
 package com.emptycastle.novery.ui.screens.tagexplorer.components
 
+import com.emptycastle.novery.ui.theme.DawnButter
+import com.emptycastle.novery.ui.theme.DawnGoldInk
+import com.emptycastle.novery.ui.theme.DawnLilac
+import com.emptycastle.novery.ui.theme.DawnLilacInk
+import com.emptycastle.novery.ui.theme.DawnPeach
+import com.emptycastle.novery.ui.theme.DawnPeachInk
+import com.emptycastle.novery.ui.theme.DawnRose
+import com.emptycastle.novery.ui.theme.DawnRoseInk
+import com.emptycastle.novery.ui.theme.DawnSage
+import com.emptycastle.novery.ui.theme.DawnSageInk
+import com.emptycastle.novery.ui.theme.DawnSky
+import com.emptycastle.novery.ui.theme.DawnSkyInk
+import com.emptycastle.novery.ui.theme.DawnSoftBlue
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -64,24 +78,24 @@ import kotlinx.coroutines.launch
 
 private object TagColors {
     private val colorPalette = mapOf(
-        TagNormalizer.TagCategory.ACTION to (Color(0xFFEF4444) to Color(0xFFF87171)),
-        TagNormalizer.TagCategory.ADVENTURE to (Color(0xFFF97316) to Color(0xFFFB923C)),
-        TagNormalizer.TagCategory.ROMANCE to (Color(0xFFEC4899) to Color(0xFFF472B6)),
-        TagNormalizer.TagCategory.FANTASY to (Color(0xFF8B5CF6) to Color(0xFFA78BFA)),
-        TagNormalizer.TagCategory.SCI_FI to (Color(0xFF06B6D4) to Color(0xFF22D3EE)),
-        TagNormalizer.TagCategory.MYSTERY to (Color(0xFF6366F1) to Color(0xFF818CF8)),
-        TagNormalizer.TagCategory.HORROR to (Color(0xFF7C3AED) to Color(0xFF9333EA)),
-        TagNormalizer.TagCategory.COMEDY to (Color(0xFFF59E0B) to Color(0xFFFBBF24)),
-        TagNormalizer.TagCategory.DRAMA to (Color(0xFF10B981) to Color(0xFF34D399)),
-        TagNormalizer.TagCategory.MARTIAL_ARTS to (Color(0xFFDC2626) to Color(0xFFEF4444)),
-        TagNormalizer.TagCategory.CULTIVATION to (Color(0xFF8B5CF6) to Color(0xFFA78BFA)),
-        TagNormalizer.TagCategory.ISEKAI to (Color(0xFF3B82F6) to Color(0xFF60A5FA)),
-        TagNormalizer.TagCategory.LITRPG to (Color(0xFF10B981) to Color(0xFF34D399)),
-        TagNormalizer.TagCategory.BL to (Color(0xFFEC4899) to Color(0xFFF472B6)),
-        TagNormalizer.TagCategory.GL to (Color(0xFFEC4899) to Color(0xFFF472B6))
+        TagNormalizer.TagCategory.ACTION to (DawnRoseInk to DawnRose),
+        TagNormalizer.TagCategory.ADVENTURE to (DawnPeachInk to DawnPeach),
+        TagNormalizer.TagCategory.ROMANCE to (DawnRoseInk to DawnRose),
+        TagNormalizer.TagCategory.FANTASY to (DawnLilacInk to DawnLilac),
+        TagNormalizer.TagCategory.SCI_FI to (DawnSkyInk to DawnSky),
+        TagNormalizer.TagCategory.MYSTERY to (DawnGoldInk to DawnSoftBlue),
+        TagNormalizer.TagCategory.HORROR to (DawnRoseInk to DawnLilac),
+        TagNormalizer.TagCategory.COMEDY to (DawnGoldInk to DawnButter),
+        TagNormalizer.TagCategory.DRAMA to (DawnSageInk to DawnSage),
+        TagNormalizer.TagCategory.MARTIAL_ARTS to (DawnPeachInk to DawnButter),
+        TagNormalizer.TagCategory.CULTIVATION to (DawnLilacInk to DawnLilac),
+        TagNormalizer.TagCategory.ISEKAI to (DawnSkyInk to DawnSoftBlue),
+        TagNormalizer.TagCategory.LITRPG to (DawnSageInk to DawnSky),
+        TagNormalizer.TagCategory.BL to (DawnRoseInk to DawnRose),
+        TagNormalizer.TagCategory.GL to (DawnLilacInk to DawnRose)
     )
 
-    private val defaultColor = Color(0xFF6366F1) to Color(0xFF818CF8)
+    private val defaultColor = DawnLilacInk to DawnLilac
 
     fun getColors(tag: TagNormalizer.TagCategory): Pair<Color, Color> {
         return colorPalette[tag] ?: defaultColor

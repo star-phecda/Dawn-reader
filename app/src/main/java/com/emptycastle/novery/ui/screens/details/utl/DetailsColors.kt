@@ -1,6 +1,5 @@
 package com.emptycastle.novery.ui.screens.details.util
 
-import androidx.compose.ui.graphics.Color
 import com.emptycastle.novery.ui.theme.DawnGoldInk
 import com.emptycastle.novery.ui.theme.DawnLilacInk
 import com.emptycastle.novery.ui.theme.DawnPeachInk

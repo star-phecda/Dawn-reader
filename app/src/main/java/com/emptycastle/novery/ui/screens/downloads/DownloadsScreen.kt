@@ -1,5 +1,7 @@
 package com.emptycastle.novery.ui.screens.downloads
 
+import com.emptycastle.novery.ui.theme.DawnSageInk
+
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -1287,7 +1289,7 @@ private fun CurrentDownloadCard(
                                 Text(
                                     text = "✓ ${download.successCount}",
                                     style = MaterialTheme.typography.labelSmall,
-                                    color = Color(0xFF10B981)
+                                    color = DawnSageInk
                                 )
                             }
                             if (download.failedCount > 0) {
@@ -1717,7 +1719,7 @@ private fun DownloadedNovelCard(
                 ) {
                     Surface(
                         shape = RoundedCornerShape(6.dp),
-                        color = Color(0xFF10B981).copy(alpha = 0.12f)
+                        color = DawnSageInk.copy(alpha = 0.12f)
                     ) {
                         Row(
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
@@ -1728,13 +1730,13 @@ private fun DownloadedNovelCard(
                                 imageVector = Icons.Rounded.CheckCircle,
                                 contentDescription = null,
                                 modifier = Modifier.size(12.dp),
-                                tint = Color(0xFF10B981)
+                                tint = DawnSageInk
                             )
                             Text(
                                 text = "${novel.downloadedChapters}",
                                 style = MaterialTheme.typography.labelSmall,
                                 fontWeight = FontWeight.SemiBold,
-                                color = Color(0xFF10B981)
+                                color = DawnSageInk
                             )
                         }
                     }

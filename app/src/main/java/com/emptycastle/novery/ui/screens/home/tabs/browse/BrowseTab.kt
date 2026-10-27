@@ -1,5 +1,19 @@
 package com.emptycastle.novery.ui.screens.home.tabs.browse
 
+import com.emptycastle.novery.ui.theme.DawnButter
+import com.emptycastle.novery.ui.theme.DawnGoldInk
+import com.emptycastle.novery.ui.theme.DawnLilac
+import com.emptycastle.novery.ui.theme.DawnLilacInk
+import com.emptycastle.novery.ui.theme.DawnPeach
+import com.emptycastle.novery.ui.theme.DawnPeachInk
+import com.emptycastle.novery.ui.theme.DawnRose
+import com.emptycastle.novery.ui.theme.DawnRoseInk
+import com.emptycastle.novery.ui.theme.DawnSage
+import com.emptycastle.novery.ui.theme.DawnSageInk
+import com.emptycastle.novery.ui.theme.DawnSky
+import com.emptycastle.novery.ui.theme.DawnSkyInk
+import com.emptycastle.novery.ui.theme.DawnSoftBlue
+
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
@@ -148,16 +162,16 @@ fun Modifier.shimmerEffect(): Modifier =
 
 private object ProviderColors {
     private val colorPalette = listOf(
-        Color(0xFF6366F1) to Color(0xFF818CF8),
-        Color(0xFF8B5CF6) to Color(0xFFA78BFA),
-        Color(0xFFEC4899) to Color(0xFFF472B6),
-        Color(0xFFF43F5E) to Color(0xFFFB7185),
-        Color(0xFFF97316) to Color(0xFFFB923C),
-        Color(0xFF10B981) to Color(0xFF34D399),
-        Color(0xFF14B8A6) to Color(0xFF2DD4BF),
-        Color(0xFF06B6D4) to Color(0xFF22D3EE),
-        Color(0xFF3B82F6) to Color(0xFF60A5FA),
-        Color(0xFF8B5CF6) to Color(0xFFC084FC),
+        DawnLilacInk to DawnLilac,
+        DawnRoseInk to DawnRose,
+        DawnPeachInk to DawnPeach,
+        DawnGoldInk to DawnButter,
+        DawnSageInk to DawnSage,
+        DawnSkyInk to DawnSky,
+        DawnGoldInk to DawnSoftBlue,
+        DawnRoseInk to DawnLilac,
+        DawnSkyInk to DawnSoftBlue,
+        DawnPeachInk to DawnRose
     )
 
     fun getColors(providerName: String): Pair<Color, Color> {

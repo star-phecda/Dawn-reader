@@ -23,6 +23,7 @@ val DawnSkyInk = Color(0xFF356779)
 val DawnLilacInk = Color(0xFF584B7A)
 val DawnPeachInk = Color(0xFF8B512E)
 val DawnSageInk = Color(0xFF426849)
+val DawnError = Color(0xFFAF414C)
 
 // Reusable expressive card palette for non-library surfaces as well.
 val DawnPastelPalette = listOf(DawnLilac, DawnRose, DawnSky, DawnPeach, DawnSoftBlue)

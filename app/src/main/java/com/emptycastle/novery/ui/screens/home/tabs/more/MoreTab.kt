@@ -1,6 +1,5 @@
 package com.emptycastle.novery.ui.screens.home.tabs.more
 
-import com.emptycastle.novery.ui.theme.DawnButter
 import com.emptycastle.novery.ui.theme.DawnGoldInk
 import com.emptycastle.novery.ui.theme.DawnLilacInk
 import com.emptycastle.novery.ui.theme.DawnRoseInk

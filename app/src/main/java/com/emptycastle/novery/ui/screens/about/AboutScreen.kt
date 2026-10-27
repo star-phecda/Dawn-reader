@@ -1,5 +1,7 @@
 package com.emptycastle.novery.ui.screens.about
 
+import com.emptycastle.novery.ui.theme.DawnSageInk
+
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.animation.AnimatedContent
@@ -431,7 +433,7 @@ private fun UpdateCard(
                                 Icons.Outlined.CheckCircle,
                                 contentDescription = null,
                                 modifier = Modifier.size(20.dp),
-                                tint = Color(0xFF10B981)
+                                tint = DawnSageInk
                             )
                             Text(
                                 text = "You're on the latest version",
