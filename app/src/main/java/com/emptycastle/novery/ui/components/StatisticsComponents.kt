@@ -1,5 +1,7 @@
 package com.emptycastle.novery.ui.components
 
+import com.emptycastle.novery.ui.theme.DawnGoldInk
+
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -69,7 +71,7 @@ fun StreakCard(
     isStreakActive: Boolean = true
 ) {
     val fireColor = if (isStreakActive) {
-        Color(0xFFFF6B35)
+        DawnGoldInk
     } else {
         MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
     }

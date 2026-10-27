@@ -1,5 +1,10 @@
 package com.emptycastle.novery.ui.screens.reader.theme
 
+import com.emptycastle.novery.ui.theme.DawnButter
+import com.emptycastle.novery.ui.theme.DawnGoldInk
+import com.emptycastle.novery.ui.theme.DawnPaperMuted
+import com.emptycastle.novery.ui.theme.DawnPaperRaised
+
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.emptycastle.novery.domain.model.ReaderTheme
@@ -418,33 +423,33 @@ data class ReaderColors(
 
         fun lightTheme(): ReaderColors = ReaderColors(
             background = DawnSiteCream,
-            surface = Color(0xFFFFFAF4),
+            surface = DawnPaperRaised,
             text = DawnSiteInk,
-            textSecondary = Color(0xFF625A61),
+            textSecondary = Color(0xFF625D52),
 
-            accent = DawnSitePink,
-            accentDark = Color(0xFFC20D6C),
-            accentLight = Color(0xFFFF79B8),
+            accent = DawnSiteGold,
+            accentDark = DawnGoldInk,
+            accentLight = DawnButter,
 
-            divider = Color(0xFFD9D0C8),
-            border = Color(0xFFC8BCB1),
-            icon = Color(0xFF4B444B),
-            iconSecondary = Color(0xFF7A6F77),
+            divider = Color(0xFFE2DCCE),
+            border = Color(0xFFD4CDBE),
+            icon = DawnSiteInk,
+            iconSecondary = Color(0xFF6B6558),
 
             buttonBackground = DawnSiteInk,
             buttonText = DawnSiteCream,
-            ripple = DawnSitePink,
+            ripple = DawnButter,
 
-            sentenceHighlight = DawnSitePink.copy(alpha = 0.24f),
-            segmentHighlight = DawnSitePink.copy(alpha = 0.07f),
-            selectionBackground = DawnSiteGold.copy(alpha = 0.3f),
+            sentenceHighlight = DawnButter.copy(alpha = 0.28f),
+            segmentHighlight = DawnButter.copy(alpha = 0.10f),
+            selectionBackground = DawnSiteGold.copy(alpha = 0.24f),
             selectionHandle = DawnSiteGold,
 
             success = Color(0xFF2E9D71),
             warning = DawnSiteGold,
             error = Color(0xFFD45B68),
 
-            chapterDividerBackground = Color(0xFFEFE6DC),
+            chapterDividerBackground = DawnPaperMuted,
             chapterHeaderText = DawnSiteInk,
 
             codeBackground = Color(0xFFEEE8E1),
@@ -454,18 +459,18 @@ data class ReaderColors(
             systemMessageText = DawnSiteInk,
             systemMessageAccent = DawnSiteGold,
 
-            progressTrack = Color(0xFFD9D0C8),
-            progressIndicator = DawnSitePink,
+            progressTrack = Color(0xFFE2DCCE),
+            progressIndicator = DawnSiteGold,
 
             scrim = Color.Black.copy(alpha = 0.32f),
-            controlsBackground = Color(0xFFF9F4ED).copy(alpha = ReaderDefaults.ControlsBackgroundAlpha),
+            controlsBackground = DawnPaperRaised.copy(alpha = ReaderDefaults.ControlsBackgroundAlpha),
 
             metadata = ThemeMetadata(
                 id = "light",
                 displayName = "Light",
                 isDark = false,
                 category = ThemeCategory.STANDARD,
-                description = "Warm editorial paper with bold pink accents"
+                description = "Warm editorial paper with butter-gold accents"
             )
         )
 

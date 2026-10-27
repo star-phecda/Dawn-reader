@@ -13,6 +13,19 @@ val DawnRose = Color(0xFFFAD8DA)
 val DawnSky = Color(0xFFB7E7F5)
 val DawnLilac = Color(0xFFE8DEFF)
 val DawnPeach = Color(0xFFF8D8C0)
+val DawnSoftBlue = Color(0xFFD8E3FC)
+val DawnSage = Color(0xFFD7E9CF)
+
+// Deeper companions keep text/icons legible on pastel surfaces.
+val DawnGoldInk = Color(0xFF72540B)
+val DawnRoseInk = Color(0xFF874955)
+val DawnSkyInk = Color(0xFF356779)
+val DawnLilacInk = Color(0xFF584B7A)
+val DawnPeachInk = Color(0xFF8B512E)
+val DawnSageInk = Color(0xFF426849)
+
+// Reusable expressive card palette for non-library surfaces as well.
+val DawnPastelPalette = listOf(DawnLilac, DawnRose, DawnSky, DawnPeach, DawnSoftBlue)
 
 val DawnNavy = Color(0xFF171611)
 val DawnNavy2 = Color(0xFF201F19)
@@ -21,10 +34,10 @@ val DawnPanel = Color(0xFF302E25)
 val DawnPanelHi = Color(0xFF3A372D)
 
 val DawnCyan = DawnButter
-val DawnBlue = Color(0xFF8DB5D8)
+val DawnBlue = DawnSkyInk
 val DawnViolet = Color(0xFFA899D8)
-val DawnMagenta = Color(0xFFD990A0)
-val DawnPink = Color(0xFFC87989)
+val DawnMagenta = DawnRoseInk
+val DawnPink = DawnRoseInk
 val DawnLavender = Color(0xFFD2C5F0)
 
 // Backwards-compatible names used by the original codebase.
@@ -115,7 +128,7 @@ val DawnInk = DawnWarmInk
 // Site-inspired identity palette: Finn's bold pink/ink + Phecda's warm paper/gold.
 val DawnSiteCream = DawnPaper
 val DawnSiteInk = DawnWarmInk
-val DawnSitePink = Color(0xFFFF1493)
-val DawnSiteGold = Color(0xFFAB8248)
-val DawnSiteNight = Color(0xFF0B0A10)
-val DawnSiteSurface = Color(0xFF17131B)
+val DawnSitePink = DawnRoseInk
+val DawnSiteGold = DawnGoldInk
+val DawnSiteNight = DawnNavy
+val DawnSiteSurface = DawnPanel

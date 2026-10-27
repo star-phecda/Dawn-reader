@@ -1,5 +1,14 @@
 package com.emptycastle.novery.ui.screens.home.tabs.more
 
+import com.emptycastle.novery.ui.theme.DawnButter
+import com.emptycastle.novery.ui.theme.DawnGoldInk
+import com.emptycastle.novery.ui.theme.DawnLilacInk
+import com.emptycastle.novery.ui.theme.DawnRoseInk
+import com.emptycastle.novery.ui.theme.DawnSageInk
+import com.emptycastle.novery.ui.theme.DawnSkyInk
+import com.emptycastle.novery.ui.theme.Error
+import com.emptycastle.novery.ui.theme.Ink500
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -115,7 +124,7 @@ fun MoreTab(
                 icon = Icons.Rounded.Insights,
                 title = "Reading Stats",
                 subtitle = "View your reading progress and achievements",
-                iconTint = Color(0xFF6366F1),
+                iconTint = DawnLilacInk,
                 onClick = onNavigateToProfile,
                 modifier = Modifier.padding(horizontal = dimensions.gridPadding)
             )
@@ -130,7 +139,7 @@ fun MoreTab(
                 } else {
                     "Manage offline content"
                 },
-                iconTint = Color(0xFF10B981),
+                iconTint = DawnSageInk,
                 badge = if (uiState.activeDownloads > 0) "${uiState.activeDownloads}" else null,
                 onClick = onNavigateToDownloads,
                 modifier = Modifier.padding(horizontal = dimensions.gridPadding)
@@ -142,7 +151,7 @@ fun MoreTab(
                 icon = Icons.Rounded.Storage,
                 title = "Storage & Backup",
                 subtitle = "Manage cache and database backups",
-                iconTint = Color(0xFFF59E0B),
+                iconTint = DawnGoldInk,
                 onClick = onNavigateToStorage,
                 modifier = Modifier.padding(horizontal = dimensions.gridPadding)
             )
@@ -153,7 +162,7 @@ fun MoreTab(
                 icon = Icons.Rounded.Settings,
                 title = "Settings",
                 subtitle = "Theme, reading preferences, and more",
-                iconTint = Color(0xFF8B5CF6),
+                iconTint = DawnRoseInk,
                 onClick = onNavigateToSettings,
                 modifier = Modifier.padding(horizontal = dimensions.gridPadding)
             )
@@ -225,13 +234,13 @@ private fun MoreHeader(
                 Surface(
                     shape = RoundedCornerShape(20.dp),
                     color = if (isStreakActive) {
-                        Color(0xFFFF6B35).copy(alpha = 0.16f)
+                        DawnGoldInk.copy(alpha = 0.16f)
                     } else {
                         MaterialTheme.colorScheme.surfaceContainerHigh
                     },
                     border = BorderStroke(
                         1.dp,
-                        if (isStreakActive) Color(0xFFFF6B35).copy(alpha = 0.22f)
+                        if (isStreakActive) DawnGoldInk.copy(alpha = 0.22f)
                         else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f)
                     )
                 ) {
@@ -244,14 +253,14 @@ private fun MoreHeader(
                             imageVector = Icons.Rounded.LocalFireDepartment,
                             contentDescription = null,
                             modifier = Modifier.size(19.dp),
-                            tint = if (isStreakActive) Color(0xFFFF6B35)
+                            tint = if (isStreakActive) DawnGoldInk
                             else MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Text(
                             text = "$currentStreak",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
-                            color = if (isStreakActive) Color(0xFFFF6B35)
+                            color = if (isStreakActive) DawnGoldInk
                             else MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
@@ -275,19 +284,19 @@ private fun QuickStatsSummary(
         QuickStatItem(
             value = "$totalChapters",
             label = "Chapters",
-            color = Color(0xFF3B82F6),
+            color = DawnSkyInk,
             modifier = Modifier.weight(1f)
         )
         QuickStatItem(
             value = "${totalHours}h",
             label = "Reading",
-            color = Color(0xFF10B981),
+            color = DawnSageInk,
             modifier = Modifier.weight(1f)
         )
         QuickStatItem(
             value = "$downloadCount",
             label = "Offline",
-            color = Color(0xFF8B5CF6),
+            color = DawnRoseInk,
             modifier = Modifier.weight(1f)
         )
     }
@@ -447,12 +456,12 @@ private fun MoreMenuItem(
 }
 
 private fun getLevelColor(level: Int): Color = when (level) {
-    1 -> Color(0xFF94A3B8)
-    2 -> Color(0xFF22C55E)
-    3 -> Color(0xFF3B82F6)
-    4 -> Color(0xFF8B5CF6)
-    5 -> Color(0xFFF59E0B)
-    6 -> Color(0xFFEF4444)
-    7 -> Color(0xFFFFD700)
-    else -> Color(0xFFE879F9)
+    1 -> Ink500
+    2 -> DawnSageInk
+    3 -> DawnSkyInk
+    4 -> DawnRoseInk
+    5 -> DawnGoldInk
+    6 -> Error
+    7 -> DawnGoldInk
+    else -> DawnRoseInk
 }

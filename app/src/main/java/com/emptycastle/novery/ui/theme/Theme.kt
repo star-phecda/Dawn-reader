@@ -35,12 +35,12 @@ private val DarkColorScheme = darkColorScheme(
     onPrimaryContainer = DawnCyan,
     secondary = DawnMagenta,
     onSecondary = DawnNavy,
-    secondaryContainer = Color(0xFF3B1831),
-    onSecondaryContainer = Color(0xFFFFD9EC),
+    secondaryContainer = Color(0xFF4B3034),
+    onSecondaryContainer = DawnRose,
     tertiary = DawnViolet,
     onTertiary = DawnNavy,
-    tertiaryContainer = Color(0xFF28204A),
-    onTertiaryContainer = Color(0xFFE6E0FF),
+    tertiaryContainer = Color(0xFF3C354A),
+    onTertiaryContainer = DawnLavender,
     background = DawnNavy,
     onBackground = Ink50,
     surface = DawnPanel,
@@ -59,8 +59,8 @@ private val DarkColorScheme = darkColorScheme(
     onError = Color.White,
     errorContainer = Color(0xFF551D2D),
     onErrorContainer = Color(0xFFFFB8C5),
-    outline = Color(0xFF4E5A78),
-    outlineVariant = Color(0xFF283553),
+    outline = Color(0xFF615B4E),
+    outlineVariant = Color(0xFF464236),
     scrim = Color.Black
 )
 
@@ -181,9 +181,9 @@ private fun createCustomLightColorScheme(colors: CustomThemeColors): ColorScheme
     val primary = Color(colors.primaryColor)
     val secondary = Color(colors.secondaryColor)
 
-    // For light mode, we use lighter backgrounds
-    val background = Color(0xFFFAFAFA)
-    val surface = Color.White
+    // Keep custom light themes on the same warm paper foundation.
+    val background = DawnPaper
+    val surface = DawnPaperRaised
 
     val onPrimary = getContrastColor(primary)
     val onSecondary = getContrastColor(secondary)
