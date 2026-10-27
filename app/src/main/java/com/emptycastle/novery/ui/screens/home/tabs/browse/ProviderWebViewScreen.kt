@@ -1,5 +1,10 @@
 package com.emptycastle.novery.ui.screens.home.tabs.browse
 
+import com.emptycastle.novery.ui.theme.DawnGoldInk
+import com.emptycastle.novery.ui.theme.DawnLilacInk
+import com.emptycastle.novery.ui.theme.DawnSageInk
+import com.emptycastle.novery.ui.theme.DawnSkyInk
+
 import android.R.attr.name
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
@@ -140,11 +145,11 @@ import kotlinx.serialization.json.Json
 // ============================================================================
 
 private object WebViewColors {
-    val Success = Color(0xFF10B981)
-    val Warning = Color(0xFFF59E0B)
-    val Info = Color(0xFF3B82F6)
-    val Secure = Color(0xFF22C55E)
-    val Generic = Color(0xFF8B5CF6)  // Purple for generic/unknown sites
+    val Success = DawnSageInk
+    val Warning = DawnGoldInk
+    val Info = DawnSkyInk
+    val Secure = DawnSageInk
+    val Generic = DawnLilacInk
 }
 
 // ============================================================================

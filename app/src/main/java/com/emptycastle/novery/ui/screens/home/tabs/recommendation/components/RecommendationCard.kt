@@ -1,5 +1,7 @@
 package com.emptycastle.novery.ui.screens.home.tabs.recommendation.components
 
+import com.emptycastle.novery.ui.theme.DawnButter
+
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -227,7 +229,7 @@ fun RecommendationCard(
                                     Icon(
                                         imageVector = Icons.Filled.Star,
                                         contentDescription = null,
-                                        tint = Color(0xFFFFD54F),
+                                        tint = DawnButter,
                                         modifier = Modifier.size(13.dp)
                                     )
                                     Text(

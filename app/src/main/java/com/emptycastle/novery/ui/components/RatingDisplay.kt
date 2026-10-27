@@ -1,5 +1,10 @@
 package com.emptycastle.novery.ui.components
 
+import com.emptycastle.novery.ui.theme.DawnError
+import com.emptycastle.novery.ui.theme.DawnGoldInk
+import com.emptycastle.novery.ui.theme.DawnPeachInk
+import com.emptycastle.novery.ui.theme.DawnSageInk
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -28,11 +33,12 @@ import com.emptycastle.novery.util.RatingColor
 import com.emptycastle.novery.util.RatingDisplayStyle
 import com.emptycastle.novery.util.RatingUtils
 
-private val RatingExcellent = Color(0xFF22C55E)  // Green
-private val RatingGood = Color(0xFF84CC16)       // Lime
-private val RatingAverage = Color(0xFFF59E0B)    // Amber
-private val RatingPoor = Color(0xFFF97316)       // Orange
-private val RatingVeryPoor = Color(0xFFEF4444)   // Red
+// A warm, accessible quality scale: sage -> gold -> peach -> rose-red.
+private val RatingExcellent = DawnSageInk
+private val RatingGood = Color(0xFF577D50)
+private val RatingAverage = DawnGoldInk
+private val RatingPoor = DawnPeachInk
+private val RatingVeryPoor = DawnError
 
 /**
  * Display rating as stars with optional value text

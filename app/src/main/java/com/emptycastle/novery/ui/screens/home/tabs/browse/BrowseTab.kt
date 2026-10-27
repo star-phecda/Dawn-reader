@@ -2080,12 +2080,12 @@ private fun ProviderCard(
 private fun CookieStatusBadge(status: CloudflareManager.CookieStatus) {
     val (color, icon, label) = when (status) {
         CloudflareManager.CookieStatus.VALID -> Triple(
-            Color(0xFF10B981),
+            DawnSageInk,
             Icons.Rounded.VerifiedUser,
             "Active"
         )
         CloudflareManager.CookieStatus.EXPIRED -> Triple(
-            Color(0xFFF59E0B),
+            DawnGoldInk,
             Icons.Rounded.Warning,
             "Expired"
         )
